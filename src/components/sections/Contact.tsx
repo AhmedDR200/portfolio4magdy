@@ -13,9 +13,9 @@ const INITIAL_STATE = Object.fromEntries(
 );
 
 const emailjsConfig = {
-  serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID,
-  templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-  accessToken: import.meta.env.VITE_EMAILJS_ACCESS_TOKEN,
+  serviceId: "service_1d47nfn",
+  templateId: "template_qbmuscb",
+  accessToken: "JSIBmi-lVZ7nVkyT1",
 };
 
 const Contact = () => {
@@ -66,12 +66,17 @@ const Contact = () => {
   };
 
   return (
-    <div
-      className={`flex flex-col-reverse gap-10 overflow-hidden xl:mt-12 xl:flex-row`}
-    >
+    <div className="flex flex-col gap-10 overflow-hidden">
+      <motion.div
+        variants={slideIn("up", "tween", 0.2, 1)}
+        className="h-[320px] w-full sm:h-[420px] lg:h-[520px]"
+      >
+        <EarthCanvas />
+      </motion.div>
+
       <motion.div
         variants={slideIn("left", "tween", 0.2, 1)}
-        className="bg-black-100 flex-[0.75] rounded-2xl p-8"
+        className="bg-black-100 mx-auto w-full max-w-3xl rounded-2xl p-6 sm:p-8"
       >
         <Header useMotion={false} {...config.contact} />
 
@@ -108,13 +113,6 @@ const Contact = () => {
             {loading ? "Sending..." : "Send"}
           </button>
         </form>
-      </motion.div>
-
-      <motion.div
-        variants={slideIn("right", "tween", 0.2, 1)}
-        className="h-[350px] md:h-[550px] xl:h-auto xl:flex-1"
-      >
-        <EarthCanvas />
       </motion.div>
     </div>
   );

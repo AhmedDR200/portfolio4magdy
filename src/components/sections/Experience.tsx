@@ -16,10 +16,11 @@ const ExperienceCard: React.FC<TExperience> = (experience) => {
   return (
     <VerticalTimelineElement
       contentStyle={{
-        background: "#1d1836",
+        background: "#0F1810",
         color: "#fff",
+        border: "1px solid rgba(0, 255, 136, 0.15)",
       }}
-      contentArrowStyle={{ borderRight: "7px solid  #232631" }}
+      contentArrowStyle={{ borderRight: "7px solid #0F1810" }}
       date={experience.date}
       iconStyle={{ background: experience.iconBg }}
       icon={
@@ -34,12 +35,24 @@ const ExperienceCard: React.FC<TExperience> = (experience) => {
     >
       <div>
         <h3 className="text-[24px] font-bold text-white">{experience.title}</h3>
-        <p
-          className="text-secondary text-[16px] font-semibold"
-          style={{ margin: 0 }}
-        >
-          {experience.companyName}
-        </p>
+        {experience.companyUrl ? (
+          <a
+            href={experience.companyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-secondary text-[16px] font-semibold hover:text-white hover:underline"
+            style={{ margin: 0 }}
+          >
+            {experience.companyName} ↗
+          </a>
+        ) : (
+          <p
+            className="text-secondary text-[16px] font-semibold"
+            style={{ margin: 0 }}
+          >
+            {experience.companyName}
+          </p>
+        )}
       </div>
 
       <ul className="ml-5 mt-5 list-disc space-y-2">
@@ -72,4 +85,4 @@ const Experience = () => {
   );
 };
 
-export default SectionWrapper(Experience, "work");
+export default SectionWrapper(Experience, "experience");

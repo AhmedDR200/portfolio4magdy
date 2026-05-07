@@ -1,11 +1,13 @@
 import { BrowserRouter } from "react-router-dom";
+import Lenis from "lenis";
 
 import {
   About,
   Contact,
+  DeploySimulator,
   Experience,
-  Feedbacks,
   Hero,
+  PhotoHero,
   Navbar,
   Tech,
   Works,
@@ -21,18 +23,39 @@ const App = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+
+    let rafId = 0;
+    const raf = (time: number) => {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    };
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
+  }, []);
+
   return (
     <BrowserRouter>
-      <div className="bg-primary relative z-0">
-        <div className="bg-hero-pattern bg-cover bg-center bg-no-repeat">
-          <Navbar />
+      <div className="bg-primary relative z-0 overflow-x-hidden">
+        <Navbar />
+        <PhotoHero />
+        <div className="hero-grid">
           <Hero />
         </div>
         <About />
         <Experience />
         <Tech />
         <Works />
-        <Feedbacks />
+        <DeploySimulator />
         <div className="relative z-0">
           <Contact />
           <StarsCanvas />

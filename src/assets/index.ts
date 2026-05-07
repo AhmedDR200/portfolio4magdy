@@ -1,4 +1,4 @@
-import logo from "./logo.png";
+import logo from "./myLogo/mylogo.png";
 import backend from "./backend.png";
 import creator from "./creator.png";
 import mobile from "./mobile.png";
@@ -21,10 +21,18 @@ import tailwind from "./tech/tailwind.png";
 import typescript from "./tech/typescript.png";
 import threejs from "./tech/threejs.svg";
 
-import meta from "./company/meta.png";
-import shopify from "./company/shopify.png";
-import starbucks from "./company/starbucks.png";
-import tesla from "./company/tesla.png";
+import mePhoto from "./photo/me.png";
+
+import madkhol from "./company/madkhol.svg";
+import basicsengage from "./company/basicsengage.svg";
+import appgain from "./company/appgain.svg";
+
+import connectgain from "./projects/conn.webp";
+import ikhair from "./projects/kha.webp";
+import marrakesh from "./projects/marr.webp";
+import peakpharma from "./projects/peak.webp";
+import zhafraAttendees from "./projects/zarror.webp";
+import alzhafraAdmin from "./projects/zaf.webp";
 
 import carrent from "./carrent.png";
 import jobit from "./jobit.png";
@@ -52,10 +60,16 @@ export {
   tailwind,
   typescript,
   threejs,
-  meta,
-  shopify,
-  starbucks,
-  tesla,
+  mePhoto,
+  madkhol,
+  basicsengage,
+  appgain,
+  connectgain,
+  ikhair,
+  marrakesh,
+  peakpharma,
+  zhafraAttendees,
+  alzhafraAdmin,
   carrent,
   jobit,
   tripguide,

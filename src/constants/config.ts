@@ -40,13 +40,13 @@ type TConfig = {
 
 export const config: TConfig = {
   html: {
-    title: "John Doe — 3D Portfolio",
-    fullName: "John Doe",
-    email: "johndoe@mail.com",
+    title: "Ahmed Magdy — Software Engineer",
+    fullName: "Ahmed Magdy",
+    email: "alshwwhy212@gmail.com",
   },
   hero: {
-    name: "John Doe",
-    p: ["I develop 3D visuals, user", "interfaces and web applications"],
+    name: "Ahmed Magdy",
+    p: ["I build scalable backend systems,", "APIs, and real-time services"],
   },
   contact: {
     p: "Get in touch",
@@ -67,11 +67,17 @@ export const config: TConfig = {
     about: {
       p: "Introduction",
       h2: "Overview.",
-      content: `I'm a skilled software developer with experience in TypeScript and
-      JavaScript, and expertise in frameworks like React, Node.js, and
-      Three.js. I'm a quick learner and collaborate closely with clients to
-      create efficient, scalable, and user-friendly solutions that solve
-      real-world problems. Let's work together to bring your ideas to life!`,
+      content: `Strategic and results-oriented Software Engineer with a proven
+      track record of designing, developing, and delivering scalable,
+      high-performance software solutions across diverse technologies and
+      architectures. Adept at translating complex business requirements into
+      robust technical implementations, optimizing system performance, and
+      ensuring software reliability and security. Experienced in full
+      software development lifecycle, from conceptualization and architecture
+      design to deployment and maintenance. Passionate about continuous
+      improvement, modern engineering practices, and mentoring teams to
+      achieve excellence. Driven by innovation and committed to building
+      impactful, future-ready digital solutions.`,
     },
     experience: {
       p: "What I have done so far",
@@ -84,11 +90,10 @@ export const config: TConfig = {
     works: {
       p: "My work",
       h2: "Projects.",
-      content: `Following projects showcases my skills and experience through
-    real-world examples of my work. Each project is briefly described with
-    links to code repositories and live demos in it. It reflects my
-    ability to solve complex problems, work with different technologies,
-    and manage projects effectively.`,
+      content: `A selection of backend systems and integrations I've built across
+      fintech, AI, and SaaS products. Each entry highlights the problem,
+      the stack, and the impact — from cutting API latency in half to
+      shipping AI-powered features used by thousands of users.`,
     },
   },
 };
