@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Tilt from "react-parallax-tilt";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, FileText, TrendingUp, X } from "lucide-react";
@@ -157,7 +158,9 @@ const CaseStudyModal: React.FC<{
     };
   }, [project, onClose]);
 
-  return (
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
     <AnimatePresence>
       {project && project.caseStudy && (
         <motion.div
@@ -272,7 +275,8 @@ const CaseStudyModal: React.FC<{
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };
 
