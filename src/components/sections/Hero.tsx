@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { styles } from "../../constants/styles";
 import { config } from "../../constants/config";
+import VisitorGreeting from "../atoms/VisitorGreeting";
 
 const ROLES = [
   "Backend Engineer.",
@@ -98,6 +99,10 @@ const Hero = () => {
         </div>
 
         <div>
+          <div>
+            <VisitorGreeting />
+          </div>
+
           <motion.a
             href="https://madkhol.com"
             target="_blank"

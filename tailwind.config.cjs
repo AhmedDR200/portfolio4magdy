@@ -5,12 +5,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#0A0E0A",
-        secondary: "#4A8055",
-        tertiary: "#0F1810",
-        "black-100": "#050805",
-        "black-200": "#000000",
-        "white-100": "#C8FFD0",
+        primary: "rgb(var(--color-primary) / <alpha-value>)",
+        secondary: "rgb(var(--color-secondary) / <alpha-value>)",
+        tertiary: "rgb(var(--color-tertiary) / <alpha-value>)",
+        "black-100": "rgb(var(--color-black-100) / <alpha-value>)",
+        "black-200": "rgb(var(--color-black-200) / <alpha-value>)",
+        "white-100": "rgb(var(--color-white-100) / <alpha-value>)",
         accent: "#00FF88",
         "accent-blue": "#00CC66",
         "accent-cyan": "#00FFAA",

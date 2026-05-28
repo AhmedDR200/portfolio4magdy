@@ -13,12 +13,40 @@ import { SectionWrapper } from "../../hoc";
 import { fadeIn, textVariant } from "../../utils/motion";
 import { styles } from "../../constants/styles";
 
-const STAGES = ["Lint", "Test", "Build", "Deploy"] as const;
+const STAGES = ["Lint", "Test", "Build", "Deploy", "Health Check"] as const;
 const STAGE_DURATION = 1800;
 const TOTAL_DURATION = STAGES.length * STAGE_DURATION;
 const BUG_LIFETIME = 1800;
 const BUG_SPAWN_INTERVAL = 650;
 const FAIL_THRESHOLD = 4;
+
+type LogType = "info" | "success" | "warn";
+type LogLine = { t: number; text: string; type: LogType };
+
+const PIPELINE_LOGS: LogLine[] = [
+  { t: 120, text: "$ eslint . --max-warnings 0", type: "info" },
+  { t: 650, text: "✓ 0 errors, 0 warnings", type: "success" },
+  { t: 1200, text: "✓ prettier --check passed", type: "success" },
+  { t: 1950, text: "$ jest --coverage", type: "info" },
+  { t: 2550, text: "PASS  src/auth/auth.service.spec.ts", type: "success" },
+  { t: 2950, text: "PASS  src/orders/orders.controller.spec.ts", type: "success" },
+  { t: 3350, text: "✓ 128 tests passed · coverage 92%", type: "success" },
+  { t: 3750, text: "$ docker build -t api:$(git rev-parse --short HEAD) .", type: "info" },
+  { t: 4400, text: "=> exporting layers", type: "info" },
+  { t: 5050, text: "✓ image built · 142MB", type: "success" },
+  { t: 5550, text: "$ kubectl rollout restart deploy/api", type: "info" },
+  { t: 6100, text: "waiting for rollout: 2 of 3 pods ready...", type: "warn" },
+  { t: 6750, text: "✓ deployment.apps/api successfully rolled out", type: "success" },
+  { t: 7350, text: "GET /healthz → 200 OK (12ms)", type: "success" },
+  { t: 7900, text: "GET /readyz → 200 OK (8ms)", type: "success" },
+  { t: 8500, text: "✓ health checks green · traffic shifted to new build", type: "success" },
+];
+
+const LOG_COLORS: Record<LogType, string> = {
+  info: "text-secondary",
+  success: "text-[#00FF88]",
+  warn: "text-[#FFB700]",
+};
 
 type Bug = { id: number; x: number; y: number; spawnedAt: number };
 type Status = "idle" | "running" | "success" | "failed";
@@ -66,12 +94,15 @@ const DeploySimulator = () => {
   const [squashed, setSquashed] = useState(0);
   const [missed, setMissed] = useState(0);
   const [stats, setStats] = useState<SavedStats>(loadStats);
+  const [logs, setLogs] = useState<LogLine[]>([]);
 
   const startTimeRef = useRef<number>(0);
   const lastSpawnRef = useRef<number>(0);
   const bugIdRef = useRef<number>(0);
   const rafRef = useRef<number>(0);
   const missedRef = useRef<number>(0);
+  const logCountRef = useRef<number>(0);
+  const logEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     missedRef.current = missed;
@@ -84,6 +115,12 @@ const DeploySimulator = () => {
       if (!startTimeRef.current) startTimeRef.current = now;
       const t = now - startTimeRef.current;
       setElapsed(t);
+
+      const visibleCount = PIPELINE_LOGS.filter((l) => l.t <= t).length;
+      if (visibleCount !== logCountRef.current) {
+        logCountRef.current = visibleCount;
+        setLogs(PIPELINE_LOGS.slice(0, visibleCount));
+      }
 
       if (now - lastSpawnRef.current > BUG_SPAWN_INTERVAL) {
         lastSpawnRef.current = now;
@@ -120,6 +157,10 @@ const DeploySimulator = () => {
 
   useEffect(() => {
     if (status === "success") {
+      setLogs((prev) => [
+        ...prev,
+        { t: TOTAL_DURATION, text: "🚀 Shipped to production", type: "success" },
+      ]);
       const next: SavedStats = {
         deploys: stats.deploys + 1,
         bestSquashed: Math.max(stats.bestSquashed, squashed),
@@ -128,6 +169,14 @@ const DeploySimulator = () => {
       setStats(next);
       localStorage.setItem("deploy-sim-stats", JSON.stringify(next));
     } else if (status === "failed") {
+      setLogs((prev) => [
+        ...prev,
+        {
+          t: TOTAL_DURATION,
+          text: "✗ rollback triggered — too many bugs reached prod",
+          type: "warn",
+        },
+      ]);
       const next: SavedStats = {
         ...stats,
         uptime: Math.max(0, stats.uptime - 5),
@@ -135,7 +184,14 @@ const DeploySimulator = () => {
       setStats(next);
       localStorage.setItem("deploy-sim-stats", JSON.stringify(next));
     }
+    // Runs once per terminal status transition; stats/squashed are read as
+    // the latest snapshot intentionally.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
+
+  useEffect(() => {
+    logEndRef.current?.scrollIntoView({ block: "nearest" });
+  }, [logs]);
 
   const start = () => {
     startTimeRef.current = 0;
@@ -145,6 +201,8 @@ const DeploySimulator = () => {
     setSquashed(0);
     setMissed(0);
     missedRef.current = 0;
+    setLogs([]);
+    logCountRef.current = 0;
     setStatus("running");
   };
 
@@ -173,8 +231,10 @@ const DeploySimulator = () => {
         variants={fadeIn("", "", 0.1, 1)}
         className="text-secondary mt-4 max-w-3xl text-[15px] leading-[28px] sm:text-[17px] sm:leading-[30px]"
       >
-        Squash the bugs before they reach prod. Survive four pipeline stages
-        without missing {FAIL_THRESHOLD} and you ship a clean build.
+        Squash the bugs before they reach prod. Survive five pipeline stages —
+        lint, test, build, deploy and health check — without missing{" "}
+        {FAIL_THRESHOLD} and you ship a clean build. Watch the deploy logs
+        stream live as the pipeline runs.
       </motion.p>
 
       <motion.div
@@ -273,6 +333,36 @@ const DeploySimulator = () => {
                 </button>
               </div>
             )}
+          </div>
+
+          <div className="bg-black-200 mt-4 rounded-xl border border-white/10">
+            <div className="flex items-center gap-2 border-b border-white/10 px-4 py-2">
+              <span className="h-3 w-3 rounded-full bg-[#FF0044]" />
+              <span className="h-3 w-3 rounded-full bg-[#FFB700]" />
+              <span className="h-3 w-3 rounded-full bg-[#00FF88]" />
+              <span className="text-secondary ml-2 text-[11px] sm:text-[12px]">
+                pipeline.log
+              </span>
+            </div>
+            <div className="h-[150px] overflow-y-auto px-4 py-3 font-mono text-[11px] leading-[20px] sm:text-[12.5px]">
+              {logs.length === 0 ? (
+                <span className="text-secondary">
+                  {status === "idle"
+                    ? "// push to deploy to start the pipeline"
+                    : "// booting runner..."}
+                </span>
+              ) : (
+                logs.map((line, i) => (
+                  <div key={i} className={LOG_COLORS[line.type]}>
+                    <span className="text-secondary mr-2 select-none">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    {line.text}
+                  </div>
+                ))
+              )}
+              <div ref={logEndRef} />
+            </div>
           </div>
 
           <div className="text-secondary mt-3 flex items-center justify-between text-[11px] sm:text-[14px]">

@@ -4,13 +4,70 @@
 @tailwind components;
 @tailwind utilities;
 
+:root,
+[data-theme="dark"] {
+  --color-primary: 10 14 10;
+  --color-secondary: 74 128 85;
+  --color-tertiary: 15 24 16;
+  --color-black-100: 5 8 5;
+  --color-black-200: 0 0 0;
+  --color-white-100: 200 255 208;
+  --color-fg: 255 255 255;
+  --color-grid-bg: 10 14 10;
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --color-primary: 238 242 238;
+  --color-secondary: 47 92 58;
+  --color-tertiary: 255 255 255;
+  --color-black-100: 226 232 226;
+  --color-black-200: 245 247 245;
+  --color-white-100: 20 48 27;
+  --color-fg: 10 14 10;
+  --color-grid-bg: 238 242 238;
+  color-scheme: light;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
   scroll-behavior: smooth;
-  color-scheme: dark;
+}
+
+body {
+  background-color: rgb(var(--color-primary));
+}
+
+/* In light mode, literal white text/borders would disappear on light
+   surfaces, so remap them to the theme foreground. Higher specificity
+   than Tailwind's single-class utilities, so these win without !important. */
+[data-theme="light"] .text-white {
+  color: rgb(var(--color-fg));
+}
+[data-theme="light"] .border-white\/10 {
+  border-color: rgb(var(--color-fg) / 0.12);
+}
+[data-theme="light"] .border-white\/5 {
+  border-color: rgb(var(--color-fg) / 0.08);
+}
+[data-theme="light"] .text-white\/90,
+[data-theme="light"] .text-white\/80,
+[data-theme="light"] .text-white\/60 {
+  color: rgb(var(--color-fg) / 0.75);
+}
+
+/* Reduce-motion: kill CSS animations/transitions and pin scroll behavior.
+   Framer Motion components additionally read the settings context. */
+[data-reduce-motion="true"] *,
+[data-reduce-motion="true"] *::before,
+[data-reduce-motion="true"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
 }
 
 .hash-span {
@@ -28,7 +85,7 @@
 }
 
 .hero-grid {
-  background-color: #0A0E0A;
+  background-color: rgb(var(--color-grid-bg));
   background-image: linear-gradient(
       rgba(0, 255, 136, 0.06) 1px,
       transparent 1px

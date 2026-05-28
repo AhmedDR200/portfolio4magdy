@@ -9,6 +9,7 @@ import Hero from "./sections/Hero";
 import PhotoHero from "./sections/PhotoHero";
 import Navbar from "./layout/Navbar";
 import About from "./sections/About";
+import Architecture from "./sections/Architecture";
 import Tech from "./sections/Tech";
 import Experience from "./sections/Experience";
 import Works from "./sections/Works";
@@ -22,6 +23,7 @@ export {
   PhotoHero,
   Navbar,
   About,
+  Architecture,
   Tech,
   Experience,
   Works,

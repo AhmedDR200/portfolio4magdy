@@ -19,6 +19,20 @@ export type TTestimonial = {
   image: string;
 } & Required<Pick<TCommonProps, "name">>;
 
+export type TMetric = {
+  value: string;
+  label: string;
+};
+
+export type TCaseStudy = {
+  role: string;
+  timeline: string;
+  problem: string;
+  approach: string[];
+  stack: string[];
+  impact: TMetric[];
+};
+
 export type TProject = {
   description: string;
   tags: {
@@ -27,6 +41,8 @@ export type TProject = {
   }[];
   image: string;
   sourceCodeLink: string;
+  metric?: TMetric;
+  caseStudy?: TCaseStudy;
 } & Required<Pick<TCommonProps, "name">>;
 
 export type TTechnology = Required<Omit<TCommonProps, "title">>;

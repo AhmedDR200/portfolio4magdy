@@ -179,6 +179,36 @@ const projects: TProject[] = [
     image: madkhol,
     sourceCodeLink:
       "https://apps.apple.com/eg/app/madkhol-%D9%85%D8%AF%D8%AE%D9%88%D9%84/id6476918304",
+    metric: { value: "30%", label: "faster API responses" },
+    caseStudy: {
+      role: "Backend Engineer",
+      timeline: "May 2025 – Present",
+      problem:
+        "An investment & robo-advisory platform needed reliable portfolio management and financial analytics, but a growing monolith made changes risky and APIs were getting slow under load.",
+      approach: [
+        "Decomposed the backend into microservices for portfolios, strategies and analytics with clear service-to-service contracts.",
+        "Optimized hot query paths and added Redis caching for the heaviest read endpoints.",
+        "Hardened transaction flows and added regression coverage to stop recurring financial errors.",
+        "Containerized services and ran them on Kubernetes with RabbitMQ for async work.",
+      ],
+      stack: [
+        "Node.js",
+        "NestJS",
+        "Python",
+        "FastAPI",
+        "MySQL",
+        "MongoDB",
+        "Redis",
+        "Docker",
+        "Kubernetes",
+        "RabbitMQ",
+      ],
+      impact: [
+        { value: "30%", label: "faster API responses" },
+        { value: "40%", label: "fewer transaction errors" },
+        { value: "30+", label: "critical bugs fixed" },
+      ],
+    },
   },
   {
     name: "BasicsEngage Platform",
@@ -191,6 +221,34 @@ const projects: TProject[] = [
     ],
     image: basicsengage,
     sourceCodeLink: "https://www.basicsengage.com",
+    metric: { value: "1000+", label: "users on AI email gen" },
+    caseStudy: {
+      role: "Backend Engineer",
+      timeline: "Oct 2024 – May 2025",
+      problem:
+        "The product needed AI-assisted email generation and deep automation integrations, without blocking the API on slow third-party calls.",
+      approach: [
+        "Integrated GPT-3.5 Turbo behind a queue so generation runs async with retries and rate limiting.",
+        "Built Zapier integrations to support a large catalog of automation workflows.",
+        "Designed backend APIs that cleanly separate AI features from core CRUD.",
+        "Used Redis and S3 for caching, queueing and asset storage.",
+      ],
+      stack: [
+        "Node.js",
+        "Express.js",
+        "MongoDB",
+        "Redis",
+        "OpenAI API",
+        "Zapier",
+        "AWS S3",
+        "WebSocket",
+      ],
+      impact: [
+        { value: "1000+", label: "users served" },
+        { value: "150+", label: "monthly automations" },
+        { value: "Async", label: "AI pipeline, no API blocking" },
+      ],
+    },
   },
   {
     name: "Appgain Notify Server",
@@ -203,6 +261,35 @@ const projects: TProject[] = [
     ],
     image: appgain,
     sourceCodeLink: "https://appgain.io",
+    metric: { value: "50%", label: "faster notifications" },
+    caseStudy: {
+      role: "Backend Engineer",
+      timeline: "Jul 2023 – Oct 2024",
+      problem:
+        "The push & messaging server powering engagement across Appgain apps was a latency bottleneck and needed to deliver real-time messages reliably at scale.",
+      approach: [
+        "Profiled and optimized the notify server's hot paths to halve response times.",
+        "Built real-time delivery over WebSockets for the Toki social app (auth, payments, virtual gifts).",
+        "Shipped an AWS Uploader WebSDK for secure S3 uploads with retries and progress tracking.",
+        "Added Prometheus metrics for visibility into delivery and error rates.",
+      ],
+      stack: [
+        "Node.js",
+        "Express.js",
+        "Python",
+        "Flask",
+        "MongoDB",
+        "Redis",
+        "WebSockets",
+        "Prometheus",
+        "AWS",
+      ],
+      impact: [
+        { value: "50%", label: "faster response times" },
+        { value: "Real-time", label: "reliable delivery" },
+        { value: "Secure", label: "resumable S3 uploads" },
+      ],
+    },
   },
   {
     name: "ConnectGain",
@@ -216,6 +303,7 @@ const projects: TProject[] = [
     image: connectgain,
     sourceCodeLink:
       "https://play.google.com/store/apps/details?id=com.appgain.connectgain",
+    metric: { value: "Real-time", label: "notification flows" },
   },
   {
     name: "Peak Pharma",
@@ -229,6 +317,7 @@ const projects: TProject[] = [
     image: peakpharma,
     sourceCodeLink:
       "https://play.google.com/store/apps/details?id=com.appgain.peakPharma",
+    metric: { value: "B2B", label: "orders, invoices & analytics" },
   },
   {
     name: "iKhair (Quantatil)",
@@ -242,6 +331,7 @@ const projects: TProject[] = [
     image: ikhair,
     sourceCodeLink:
       "https://play.google.com/store/apps/details?id=com.quantatil.ikhar",
+    metric: { value: "Real-time", label: "messaging & auth" },
   },
   {
     name: "Alzhafra Admin",
@@ -255,6 +345,7 @@ const projects: TProject[] = [
     image: alzhafraAdmin,
     sourceCodeLink:
       "https://play.google.com/store/apps/details?id=com.appgain.alzhafra_admin_app",
+    metric: { value: "Admin", label: "content & analytics" },
   },
   {
     name: "Zhafra Attendees",
@@ -268,6 +359,7 @@ const projects: TProject[] = [
     image: zhafraAttendees,
     sourceCodeLink:
       "https://play.google.com/store/apps/details?id=com.appgain.zhafra_attendees_app",
+    metric: { value: "Event", label: "check-in & attendee data" },
   },
   {
     name: "Marrakesh Consumer",
@@ -281,6 +373,7 @@ const projects: TProject[] = [
     image: marrakesh,
     sourceCodeLink:
       "https://play.google.com/store/apps/details?id=com.appgain.marrakeshconsumer",
+    metric: { value: "Secure", label: "auth & checkout flows" },
   },
 ];
 

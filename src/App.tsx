@@ -3,6 +3,7 @@ import Lenis from "lenis";
 
 import {
   About,
+  Architecture,
   Contact,
   DeploySimulator,
   Experience,
@@ -15,8 +16,12 @@ import {
 } from "./components";
 import { useEffect } from "react";
 import { config } from "./constants/config";
+import { SettingsProvider, useSettings } from "./context/Settings";
+import KonamiEasterEgg from "./components/layout/KonamiEasterEgg";
 
-const App = () => {
+const AppContent = () => {
+  const { reduceMotion } = useSettings();
+
   useEffect(() => {
     if (document.title !== config.html.title) {
       document.title = config.html.title;
@@ -24,6 +29,8 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    if (reduceMotion) return;
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -41,7 +48,7 @@ const App = () => {
       cancelAnimationFrame(rafId);
       lenis.destroy();
     };
-  }, []);
+  }, [reduceMotion]);
 
   return (
     <BrowserRouter>
@@ -54,15 +61,23 @@ const App = () => {
         <About />
         <Experience />
         <Tech />
+        <Architecture />
         <Works />
         <DeploySimulator />
         <div className="relative z-0">
           <Contact />
-          <StarsCanvas />
+          {!reduceMotion && <StarsCanvas />}
         </div>
       </div>
+      <KonamiEasterEgg />
     </BrowserRouter>
   );
 };
+
+const App = () => (
+  <SettingsProvider>
+    <AppContent />
+  </SettingsProvider>
+);
 
 export default App;

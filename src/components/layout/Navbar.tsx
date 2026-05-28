@@ -1,12 +1,58 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
-import { Cake, Code2, Sparkles, User } from "lucide-react";
+import { Cake, Code2, Moon, Sparkles, Sun, User, Zap, ZapOff } from "lucide-react";
 
 import { styles } from "../../constants/styles";
 import { navLinks } from "../../constants";
 import { logo, menu, close } from "../../assets";
 import { config } from "../../constants/config";
+import { useSettings } from "../../context/Settings";
+
+const SettingsControls = ({ size = "md" }: { size?: "md" | "lg" }) => {
+  const { theme, reduceMotion, toggleTheme, toggleReduceMotion } =
+    useSettings();
+  const dim = size === "lg" ? "h-11 w-11" : "h-9 w-9";
+  const icon = size === "lg" ? "h-5 w-5" : "h-[18px] w-[18px]";
+
+  return (
+    <div className="flex items-center gap-2">
+      <button
+        type="button"
+        onClick={toggleTheme}
+        aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+        title={theme === "dark" ? "Light mode" : "Dark mode"}
+        className={`bg-tertiary flex ${dim} items-center justify-center rounded-full border border-white/10 text-white transition-all hover:scale-105 hover:border-[#00FF88]/50`}
+      >
+        {theme === "dark" ? (
+          <Sun className={`${icon} text-[#FFB700]`} />
+        ) : (
+          <Moon className={`${icon} text-[#00CC66]`} />
+        )}
+      </button>
+      <button
+        type="button"
+        onClick={toggleReduceMotion}
+        aria-pressed={reduceMotion}
+        aria-label={
+          reduceMotion ? "Enable animations" : "Reduce motion & animations"
+        }
+        title={reduceMotion ? "Animations off" : "Reduce motion"}
+        className={`bg-tertiary flex ${dim} items-center justify-center rounded-full border transition-all hover:scale-105 ${
+          reduceMotion
+            ? "border-[#00FF88]/50 text-[#00FF88]"
+            : "border-white/10 text-white hover:border-[#00FF88]/50"
+        }`}
+      >
+        {reduceMotion ? (
+          <ZapOff className={icon} />
+        ) : (
+          <Zap className={icon} />
+        )}
+      </button>
+    </div>
+  );
+};
 
 const TAGLINES: { text: string; Icon: React.FC<{ className?: string }> }[] = [
   { text: "Software Engineer", Icon: Code2 },
@@ -160,6 +206,8 @@ const Navbar = () => {
             ))}
           </ul>
 
+          <SettingsControls />
+
           <a
             href={CV_PATH}
             download
@@ -249,6 +297,10 @@ const Navbar = () => {
               </ul>
 
               <div className="flex flex-col gap-5">
+                <div className="flex items-center justify-center gap-3">
+                  <SettingsControls size="lg" />
+                </div>
+
                 <a
                   href={CV_PATH}
                   download
