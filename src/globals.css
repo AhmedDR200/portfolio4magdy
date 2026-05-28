@@ -99,7 +99,7 @@ body {
   background: rgba(0, 255, 136, 0.25) !important;
 }
 .vertical-timeline-element-date {
-  color: #C8FFD0 !important;
+  color: rgb(var(--color-fg) / 0.7) !important;
 }
 .line-clamp-2 {
   -webkit-line-clamp: 2;

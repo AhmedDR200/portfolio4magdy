@@ -28,6 +28,24 @@ const AppContent = () => {
     }
   }, []);
 
+  // Always start at the top on (re)load. Disable the browser's automatic
+  // scroll restoration and drop any leftover hash so we don't jump to a
+  // mid-page section. Runs before Lenis initializes so smooth scroll starts
+  // from the top. In-page anchor nav still works (it sets the hash on click).
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    if (window.location.hash) {
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search
+      );
+    }
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     if (reduceMotion) return;
 
