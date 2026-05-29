@@ -7,7 +7,6 @@ import {
   Contact,
   DeploySimulator,
   Experience,
-  Hero,
   PhotoHero,
   Navbar,
   Tech,
@@ -73,9 +72,6 @@ const AppContent = () => {
       <div className="bg-primary relative z-0 overflow-x-hidden">
         <Navbar />
         <PhotoHero />
-        <div className="hero-grid">
-          <Hero />
-        </div>
         <About />
         <Experience />
         <Tech />

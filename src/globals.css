@@ -76,6 +76,134 @@ body {
   display: block;
 }
 
+/* RGB-split glitch (green/cyan) for the hero name. Pseudo-element copies
+   sit behind the white text and jitter on hover. Transforms/opacity only. */
+.glitch {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.glitch::before {
+  color: #00ffaa;
+  z-index: -1;
+}
+
+.glitch::after {
+  color: #00ff88;
+  z-index: -2;
+}
+
+.glitch:hover::before {
+  opacity: 0.85;
+  animation: glitch-cyan 0.45s steps(2, end) infinite;
+}
+
+.glitch:hover::after {
+  opacity: 0.85;
+  animation: glitch-green 0.45s steps(2, end) infinite;
+}
+
+@keyframes glitch-cyan {
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 1px);
+  }
+  40% {
+    transform: translate(-2px, -1px);
+  }
+  60% {
+    transform: translate(2px, 1px);
+  }
+  80% {
+    transform: translate(1px, -1px);
+  }
+}
+
+@keyframes glitch-green {
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(2px, -1px);
+  }
+  40% {
+    transform: translate(2px, 1px);
+  }
+  60% {
+    transform: translate(-2px, -1px);
+  }
+  80% {
+    transform: translate(-1px, 1px);
+  }
+}
+
+/* Reduce-motion: drop the glitch copies entirely so only plain text shows. */
+[data-reduce-motion="true"] .glitch::before,
+[data-reduce-motion="true"] .glitch::after {
+  content: none;
+  animation: none;
+}
+
+/* Diagonal green light sweep across a button on hover. Clipped by the
+   element's own overflow:hidden; animates a single translate. */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 75%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(0, 255, 136, 0.35) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  pointer-events: none;
+  will-change: left;
+}
+
+.shine:hover::before {
+  animation: shine-sweep 0.8s ease;
+}
+
+@keyframes shine-sweep {
+  0% {
+    left: -150%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+/* Reduce-motion: no sweep (bg/border hover styles still apply). */
+[data-reduce-motion="true"] .shine::before {
+  animation: none;
+}
+
 .line-clamp-2,
 .line-clamp-3,
 .line-clamp-4 {

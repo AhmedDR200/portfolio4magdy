@@ -5,7 +5,6 @@ import {
   ComputersCanvas,
   StarsCanvas,
 } from "./canvas";
-import Hero from "./sections/Hero";
 import PhotoHero from "./sections/PhotoHero";
 import Navbar from "./layout/Navbar";
 import About from "./sections/About";
@@ -19,7 +18,6 @@ import Contact from "./sections/Contact";
 import CanvasLoader from "./layout/Loader";
 
 export {
-  Hero,
   PhotoHero,
   Navbar,
   About,

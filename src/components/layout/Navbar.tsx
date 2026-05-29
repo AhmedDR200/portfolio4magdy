@@ -211,7 +211,7 @@ const Navbar = () => {
           <a
             href={CV_PATH}
             download
-            className="rounded-full border border-[#00FF88]/40 bg-[#00FF88]/10 px-4 py-2 text-[14px] font-semibold text-white transition-all hover:scale-105 hover:border-[#00FF88] hover:bg-[#00FF88]/20"
+            className="shine rounded-full border border-[#00FF88]/40 bg-[#00FF88]/10 px-4 py-2 text-[14px] font-semibold text-white transition-all hover:scale-105 hover:border-[#00FF88] hover:bg-[#00FF88]/20"
           >
             Download CV
           </a>
@@ -221,7 +221,7 @@ const Navbar = () => {
           <a
             href={CV_PATH}
             download
-            className="rounded-full border border-[#00FF88]/40 bg-[#00FF88]/10 px-3 py-1.5 text-[13px] font-semibold text-white"
+            className="shine rounded-full border border-[#00FF88]/40 bg-[#00FF88]/10 px-3 py-1.5 text-[13px] font-semibold text-white"
           >
             CV
           </a>
@@ -305,7 +305,7 @@ const Navbar = () => {
                   href={CV_PATH}
                   download
                   onClick={() => setToggle(false)}
-                  className="flex items-center justify-center rounded-full border border-[#00FF88]/50 bg-[#00FF88]/15 px-5 py-3 text-[15px] font-bold text-white"
+                  className="shine flex items-center justify-center rounded-full border border-[#00FF88]/50 bg-[#00FF88]/15 px-5 py-3 text-[15px] font-bold text-white"
                 >
                   ⬇ Download CV
                 </a>
