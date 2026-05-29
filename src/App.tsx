@@ -12,6 +12,7 @@ import {
   Tech,
   Works,
   StarsCanvas,
+  Footer,
 } from "./components";
 import { useEffect } from "react";
 import { config } from "./constants/config";
@@ -82,6 +83,7 @@ const AppContent = () => {
           <Contact />
           {!reduceMotion && <StarsCanvas />}
         </div>
+        <Footer />
       </div>
       <KonamiEasterEgg />
     </BrowserRouter>

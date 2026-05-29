@@ -16,10 +16,12 @@ import Feedbacks from "./sections/Feedbacks";
 import DeploySimulator from "./sections/DeploySimulator";
 import Contact from "./sections/Contact";
 import CanvasLoader from "./layout/Loader";
+import Footer from "./layout/Footer";
 
 export {
   PhotoHero,
   Navbar,
+  Footer,
   About,
   Architecture,
   Tech,

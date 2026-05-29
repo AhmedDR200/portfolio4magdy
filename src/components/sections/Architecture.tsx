@@ -56,7 +56,7 @@ const NODES: ArchNode[] = [
     description:
       "Web and mobile clients talk to a single versioned API surface. Responses are cache-friendly and paginated to keep payloads small.",
     stack: ["REST", "WebSocket", "JWT"],
-    metric: "1000+ active users served",
+    metric: "15k+ active users served",
   },
   {
     id: "gateway",

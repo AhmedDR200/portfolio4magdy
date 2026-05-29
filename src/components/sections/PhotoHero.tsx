@@ -104,7 +104,7 @@ const PhotoHero = () => {
         <div className="from-primary/60 absolute inset-0 bg-gradient-to-r via-transparent to-transparent" />
       </div>
 
-      <div className="absolute inset-0 z-10 mx-auto flex max-w-[1400px] flex-col justify-end px-6 pb-24 sm:px-10 sm:pb-28 lg:pb-32">
+      <div className="hero-on-photo absolute inset-0 z-10 mx-auto flex max-w-[1400px] flex-col justify-end px-6 pb-24 sm:px-10 sm:pb-28 lg:pb-32">
         <div className="flex flex-col gap-10 sm:flex-row sm:items-end sm:justify-between sm:gap-12">
           <div className="flex flex-col">
             <VisitorGreeting />
@@ -186,7 +186,7 @@ const PhotoHero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.9 }}
-        className="absolute bottom-6 right-6 z-10 flex flex-col items-center gap-2 sm:right-10"
+        className="hero-on-photo absolute bottom-6 right-6 z-10 flex flex-col items-center gap-2 sm:right-10"
       >
         <span className="text-[10px] uppercase tracking-[0.4em] text-white/60 sm:text-[11px]">
           Scroll

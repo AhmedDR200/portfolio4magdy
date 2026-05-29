@@ -4,6 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "AA Majara";
+  src: url("/fonts/aa-majara.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-majara {
+  font-family: "AA Majara", "Comic Sans MS", cursive;
+}
+
 :root,
 [data-theme="dark"] {
   --color-primary: 10 14 10;
@@ -57,6 +69,25 @@ body {
 [data-theme="light"] .text-white\/80,
 [data-theme="light"] .text-white\/60 {
   color: rgb(var(--color-fg) / 0.75);
+}
+
+/* The hero overlays text on an always-dark grayscale photo, so its text must
+   stay light in BOTH themes. These selectors carry an extra .hero-on-photo
+   ancestor, so they out-specify the generic light-theme remaps above. */
+[data-theme="light"] .hero-on-photo .text-white {
+  color: #fff;
+}
+[data-theme="light"] .hero-on-photo .text-white\/90 {
+  color: rgba(255, 255, 255, 0.9);
+}
+[data-theme="light"] .hero-on-photo .text-white\/80 {
+  color: rgba(255, 255, 255, 0.8);
+}
+[data-theme="light"] .hero-on-photo .text-white\/60 {
+  color: rgba(255, 255, 255, 0.6);
+}
+[data-theme="light"] .hero-on-photo .text-secondary {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* Reduce-motion: kill CSS animations/transitions and pin scroll behavior.
@@ -202,6 +233,23 @@ body {
 /* Reduce-motion: no sweep (bg/border hover styles still apply). */
 [data-reduce-motion="true"] .shine::before {
   animation: none;
+}
+
+/* Blinking block cursor for the navbar terminal-prompt tagline. */
+.nav-cursor {
+  animation: nav-cursor-blink 1s steps(1, start) infinite;
+}
+
+@keyframes nav-cursor-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Reduce-motion: solid cursor, no blink. */
+[data-reduce-motion="true"] .nav-cursor {
+  animation: none;
+  opacity: 1;
 }
 
 .line-clamp-2,

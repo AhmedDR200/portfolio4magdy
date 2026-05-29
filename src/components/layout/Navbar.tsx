@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
-import { Cake, Code2, Moon, Sparkles, Sun, User, Zap, ZapOff } from "lucide-react";
+import { Moon, Sun, Zap, ZapOff } from "lucide-react";
 
-import { styles } from "../../constants/styles";
 import { navLinks } from "../../constants";
 import { logo, menu, close } from "../../assets";
 import { config } from "../../constants/config";
@@ -12,17 +11,17 @@ import { useSettings } from "../../context/Settings";
 const SettingsControls = ({ size = "md" }: { size?: "md" | "lg" }) => {
   const { theme, reduceMotion, toggleTheme, toggleReduceMotion } =
     useSettings();
-  const dim = size === "lg" ? "h-11 w-11" : "h-9 w-9";
+  const dim = size === "lg" ? "h-10 w-10" : "h-8 w-8";
   const icon = size === "lg" ? "h-5 w-5" : "h-[18px] w-[18px]";
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="bg-tertiary/60 flex items-center gap-1 rounded-full border border-white/10 p-1 backdrop-blur">
       <button
         type="button"
         onClick={toggleTheme}
         aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
         title={theme === "dark" ? "Light mode" : "Dark mode"}
-        className={`bg-tertiary flex ${dim} items-center justify-center rounded-full border border-white/10 text-white transition-all hover:scale-105 hover:border-[#00FF88]/50`}
+        className={`flex ${dim} items-center justify-center rounded-full text-white transition-colors hover:bg-white/10`}
       >
         {theme === "dark" ? (
           <Sun className={`${icon} text-[#FFB700]`} />
@@ -30,6 +29,7 @@ const SettingsControls = ({ size = "md" }: { size?: "md" | "lg" }) => {
           <Moon className={`${icon} text-[#00CC66]`} />
         )}
       </button>
+      <span className="h-5 w-px bg-white/10" aria-hidden="true" />
       <button
         type="button"
         onClick={toggleReduceMotion}
@@ -38,10 +38,10 @@ const SettingsControls = ({ size = "md" }: { size?: "md" | "lg" }) => {
           reduceMotion ? "Enable animations" : "Reduce motion & animations"
         }
         title={reduceMotion ? "Animations off" : "Reduce motion"}
-        className={`bg-tertiary flex ${dim} items-center justify-center rounded-full border transition-all hover:scale-105 ${
+        className={`flex ${dim} items-center justify-center rounded-full transition-colors ${
           reduceMotion
-            ? "border-[#00FF88]/50 text-[#00FF88]"
-            : "border-white/10 text-white hover:border-[#00FF88]/50"
+            ? "bg-[#00FF88]/15 text-[#00FF88]"
+            : "text-white hover:bg-white/10"
         }`}
       >
         {reduceMotion ? (
@@ -54,21 +54,25 @@ const SettingsControls = ({ size = "md" }: { size?: "md" | "lg" }) => {
   );
 };
 
-const TAGLINES: { text: string; Icon: React.FC<{ className?: string }> }[] = [
-  { text: "Software Engineer", Icon: Code2 },
-  { text: "A is for Ahmed", Icon: User },
-  { text: "M is for Magdy", Icon: User },
-  { text: "4 is for a very special birthday", Icon: Cake },
-  { text: "AM4 = my whole brand", Icon: Sparkles },
+// Terminal-prompt roles, cycled in the brand cluster. Kebab/lowercase to fit
+// the `ahmed@magdy:~$` shell vibe.
+const ROLES = [
+  "software-engineer",
+  "backend-engineer",
+  "systems-designer",
+  "api-architect",
 ];
 
 const CV_PATH = "/Ahmed_Magdy_CV.pdf";
 
 const Navbar = () => {
+  const { reduceMotion } = useSettings();
   const [active, setActive] = useState<string | null>();
   const [toggle, setToggle] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [taglineIndex, setTaglineIndex] = useState(0);
+  const [hidden, setHidden] = useState(false);
+  const [roleIndex, setRoleIndex] = useState(0);
+  const lastScrollY = useRef(0);
 
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, {
@@ -78,21 +82,38 @@ const Navbar = () => {
   });
 
   useEffect(() => {
+    // No infinite cycling under reduce-motion: pin to the first role.
+    if (reduceMotion) {
+      setRoleIndex(0);
+      return;
+    }
     const id = setInterval(() => {
-      setTaglineIndex((i) => (i + 1) % TAGLINES.length);
+      setRoleIndex((i) => (i + 1) % ROLES.length);
     }, 3200);
     return () => clearInterval(id);
-  }, []);
+  }, [reduceMotion]);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
+
       if (scrollTop > 100) {
         setScrolled(true);
       } else {
         setScrolled(false);
         setActive("");
       }
+
+      // Auto-hide on scroll down / reveal on scroll up. Disabled entirely when
+      // reduce-motion is on, while the mobile drawer is open, or near the top.
+      if (reduceMotion || toggle || scrollTop <= 120) {
+        setHidden(false);
+      } else if (scrollTop > lastScrollY.current) {
+        setHidden(true);
+      } else if (scrollTop < lastScrollY.current) {
+        setHidden(false);
+      }
+      lastScrollY.current = scrollTop;
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -119,105 +140,140 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("scroll", navbarHighlighter);
     };
-  }, []);
+  }, [reduceMotion, toggle]);
 
   useEffect(() => {
     document.body.style.overflow = toggle ? "hidden" : "";
+    if (toggle) setHidden(false);
     return () => {
       document.body.style.overflow = "";
     };
   }, [toggle]);
 
+  useEffect(() => {
+    if (reduceMotion) setHidden(false);
+  }, [reduceMotion]);
+
   return (
     <>
-    <nav
-      className={`${
-        styles.paddingX
-      } fixed top-0 z-20 flex w-full items-center py-5 transition-all duration-300 ${
-        scrolled
-          ? "border-b border-white/5 bg-primary/70 backdrop-blur-md"
-          : "bg-transparent"
-      }`}
+    <motion.nav
+      initial={false}
+      animate={{ y: hidden ? -130 : 0 }}
+      transition={
+        reduceMotion
+          ? { duration: 0 }
+          : { type: "spring", stiffness: 380, damping: 32 }
+      }
+      className="fixed inset-x-0 top-3 z-20 flex justify-center px-4 sm:top-4 sm:px-6"
     >
-      <motion.div
-        style={{ scaleX: progress }}
-        className="absolute bottom-0 left-0 h-[2px] w-full origin-left bg-[#00FF88]"
-      />
+      <div
+        className={`relative flex w-full max-w-7xl items-center justify-between gap-4 rounded-2xl border px-4 py-2.5 transition-all duration-300 sm:px-5 ${
+          scrolled
+            ? "border-white/10 bg-primary/70 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.45)] ring-1 ring-[#00FF88]/10 backdrop-blur-md"
+            : "border-transparent bg-primary/30 backdrop-blur-sm"
+        }`}
+      >
+        {/* Scroll progress, tucked along the bottom edge inside the pill */}
+        <div className="pointer-events-none absolute inset-x-4 bottom-1 h-[2px] overflow-hidden rounded-full sm:inset-x-5">
+          <motion.div
+            style={{ scaleX: progress }}
+            className="h-full w-full origin-left rounded-full bg-[#00FF88]"
+          />
+        </div>
 
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
         <Link
           to="/"
-          className="flex items-center gap-2"
+          className="group flex items-center gap-2"
           onClick={() => {
             window.scrollTo(0, 0);
           }}
         >
-          <img
-            src={logo}
-            alt="logo"
-            className="h-14 w-14 object-contain sm:h-16 sm:w-16"
-          />
+          <span
+            className={`relative flex items-center justify-center rounded-xl ring-1 ring-transparent transition duration-300 group-hover:shadow-[0_0_16px_rgba(0,255,136,0.5)] group-hover:ring-[#00FF88]/40 ${
+              reduceMotion ? "" : "group-hover:scale-105"
+            }`}
+          >
+            <img
+              src={logo}
+              alt="logo"
+              className="h-10 w-10 object-contain transition duration-300 group-hover:drop-shadow-[0_0_8px_rgba(0,255,136,0.6)] sm:h-11 sm:w-11"
+            />
+          </span>
           <p className="flex cursor-pointer items-center text-[18px] font-bold text-white">
-            {config.html.fullName}
-            <span className="hidden items-center sm:inline-flex">
-              &nbsp;|&nbsp;
+            <span
+              dir="rtl"
+              lang="ar"
+              className="font-majara inline-flex items-center text-[22px] leading-none text-white sm:text-[26px]"
+            >
+              مجدي
+            </span>
+            <span className="ml-3 hidden items-center font-mono text-[14px] font-normal lg:inline-flex">
+              <span aria-hidden="true" className="mr-3 h-4 w-px bg-white/10" />
+              <span className="text-[#00FF88]">ahmed@magdy</span>
+              <span className="text-secondary">:~$</span>
               <AnimatePresence mode="wait">
                 <motion.span
-                  key={taglineIndex}
-                  initial={{ opacity: 0, y: 8 }}
+                  key={roleIndex}
+                  initial={reduceMotion ? false : { opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.3 }}
-                  className="text-secondary inline-flex items-center gap-1.5 font-medium"
+                  exit={reduceMotion ? { opacity: 1 } : { opacity: 0, y: -6 }}
+                  transition={{ duration: reduceMotion ? 0 : 0.25 }}
+                  className="ml-1.5 text-white"
                 >
-                  {(() => {
-                    const { Icon } = TAGLINES[taglineIndex];
-                    return <Icon className="h-4 w-4" />;
-                  })()}
-                  {TAGLINES[taglineIndex].text}
+                  {ROLES[roleIndex]}
                 </motion.span>
               </AnimatePresence>
+              <span
+                aria-hidden="true"
+                className="nav-cursor ml-1 inline-block h-4 w-2 translate-y-[2px] bg-[#00FF88]"
+              />
             </span>
           </p>
         </Link>
 
-        <div className="hidden items-center gap-8 sm:flex">
-          <ul className="flex list-none flex-row gap-8">
+        <div className="hidden items-center gap-4 sm:flex lg:gap-6">
+          <ul className="flex list-none flex-row items-center gap-1">
             {navLinks.map((nav) => (
-              <li
-                key={nav.id}
-                className={`relative cursor-pointer text-[18px] font-medium transition-colors hover:text-white ${
-                  active === nav.id ? "text-white" : "text-secondary"
-                }`}
-              >
-                <a href={`#${nav.id}`}>{nav.title}</a>
+              <li key={nav.id} className="relative">
+                <a
+                  href={`#${nav.id}`}
+                  className={`relative z-10 block cursor-pointer rounded-full px-4 py-2 text-[16px] font-medium transition-colors hover:text-white ${
+                    active === nav.id ? "text-white" : "text-secondary"
+                  }`}
+                >
+                  {nav.title}
+                </a>
                 {active === nav.id && (
                   <motion.span
-                    layoutId="nav-underline"
-                    className="absolute -bottom-1.5 left-0 right-0 h-[2px] rounded-full bg-[#00FF88]"
-                    transition={{
-                      type: "spring",
-                      stiffness: 380,
-                      damping: 30,
-                    }}
+                    layoutId="nav-pill"
+                    className="absolute inset-0 -z-0 rounded-full bg-[#00FF88]/15 ring-1 ring-[#00FF88]/25"
+                    transition={
+                      reduceMotion
+                        ? { duration: 0 }
+                        : { type: "spring", stiffness: 380, damping: 30 }
+                    }
                   />
                 )}
               </li>
             ))}
           </ul>
 
-          <SettingsControls />
+          <span className="h-6 w-px bg-white/10" aria-hidden="true" />
 
-          <a
-            href={CV_PATH}
-            download
-            className="shine rounded-full border border-[#00FF88]/40 bg-[#00FF88]/10 px-4 py-2 text-[14px] font-semibold text-white transition-all hover:scale-105 hover:border-[#00FF88] hover:bg-[#00FF88]/20"
-          >
-            Download CV
-          </a>
+          <div className="flex items-center gap-3">
+            <SettingsControls />
+
+            <a
+              href={CV_PATH}
+              download
+              className="shine rounded-full border border-[#00FF88]/40 bg-[#00FF88]/10 px-4 py-2 text-[14px] font-semibold text-white transition-all hover:scale-105 hover:border-[#00FF88] hover:bg-[#00FF88]/20"
+            >
+              Download CV
+            </a>
+          </div>
         </div>
 
-        <div className="flex flex-1 items-center justify-end gap-2 sm:hidden">
+        <div className="flex items-center justify-end gap-2 sm:hidden">
           <a
             href={CV_PATH}
             download
@@ -229,17 +285,17 @@ const Navbar = () => {
             type="button"
             aria-label={toggle ? "Close menu" : "Open menu"}
             onClick={() => setToggle((t) => !t)}
-            className="bg-tertiary/60 relative z-[60] flex h-11 w-11 items-center justify-center rounded-full border border-white/10 backdrop-blur"
+            className="bg-tertiary/60 relative z-[60] flex h-10 w-10 items-center justify-center rounded-full border border-white/10 backdrop-blur"
           >
             <img
               src={toggle ? close : menu}
               alt=""
-              className="h-[22px] w-[22px] object-contain"
+              className="h-[20px] w-[20px] object-contain"
             />
           </button>
         </div>
       </div>
-    </nav>
+    </motion.nav>
 
       <AnimatePresence>
         {toggle && (

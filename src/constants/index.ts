@@ -115,7 +115,7 @@ const experiences: TExperience[] = [
     iconBg: "#ffffff",
     date: "Oct 2024 - May 2025",
     points: [
-      "Integrated GPT-3.5 Turbo for AI-powered email generation, serving 1000+ users.",
+      "Integrated GPT-3.5 Turbo for AI-powered email generation, serving 15k+ users.",
       "Built Zapier integrations supporting 150+ monthly automation workflows.",
       "Designed backend APIs powering AI-driven and automation features.",
       "Stack: Node.js, Express.js, MongoDB, Redis, Docker, AWS S3, AWS SES, WebSocket, OpenAI API, Zapier.",
@@ -213,7 +213,7 @@ const projects: TProject[] = [
   {
     name: "BasicsEngage Platform",
     description:
-      "AI-powered email automation platform integrating GPT-3.5 Turbo for 1000+ users and Zapier workflows supporting 150+ monthly automations across customer tools.",
+      "AI-powered email automation platform integrating GPT-3.5 Turbo for 15k+ users and Zapier workflows supporting 150+ monthly automations across customer tools.",
     tags: [
       { name: "openai", color: "blue-text-gradient" },
       { name: "zapier", color: "green-text-gradient" },
@@ -221,7 +221,7 @@ const projects: TProject[] = [
     ],
     image: basicsengage,
     sourceCodeLink: "https://www.basicsengage.com",
-    metric: { value: "1000+", label: "users on AI email gen" },
+    metric: { value: "15k+", label: "users on AI email gen" },
     caseStudy: {
       role: "Backend Engineer",
       timeline: "Oct 2024 – May 2025",
@@ -244,7 +244,7 @@ const projects: TProject[] = [
         "WebSocket",
       ],
       impact: [
-        { value: "1000+", label: "users served" },
+        { value: "15k+", label: "users served" },
         { value: "150+", label: "monthly automations" },
         { value: "Async", label: "AI pipeline, no API blocking" },
       ],
