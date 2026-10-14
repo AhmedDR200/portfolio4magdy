@@ -49,6 +49,7 @@ const Footer = ({ xray, onXray, powerCut, onPowerCut }: Props) => (
       <div className="flex flex-col items-start gap-3">
         <span className="text-[12px] uppercase tracking-[0.14em] text-smoke">© {new Date().getFullYear()} Ahmed Magdy</span>
         <span className="-mt-2 max-w-[240px] text-[11px] leading-snug text-dim">Horse: {HORSE_CREDIT}</span>
+        <span className="-mt-2 max-w-[240px] text-[11px] leading-snug text-dim">Intro sound: Red Dead Redemption 2 © Rockstar Games, used with permission</span>
         <a href="#top" className="flex h-11 items-center torn bg-frost px-[18px] text-[13px] font-semibold uppercase tracking-[0.08em] text-ink">
           Back to top <Arrow dir="up" className="ml-1.5" />
         </a>

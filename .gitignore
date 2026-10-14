@@ -29,3 +29,10 @@ dist-ssr
 # env
 .env
 
+
+# Local-only media (e.g. the intro sound recorded from your own copy of a game).
+# Never committed, so it never reaches GitHub or Vercel.
+public/local/
+# Videos and recordings dropped in the project root (local reference only).
+/*.mp4
+/*.mov

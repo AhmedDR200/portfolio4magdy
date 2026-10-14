@@ -1,13 +1,31 @@
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
-import { greetings } from "../../constants";
+import { audioContext, INTRO_BEATS, loadLocalTrack, playGunIntro, playLocalTrack, type LocalTrack } from "../../utils/gunfx";
 import { EASE_OUT_CUBIC, markIntroSeen } from "../../utils/motion";
+import { Breech, ShellSide } from "../atoms/IntroArt";
+import SmokeCanvas from "../atoms/SmokeCanvas";
+import Wordmark from "../atoms/Wordmark";
 
-const WORD_MS = 170; // 120 ms on screen + a 50 ms fade
-const LAST_WORD_MS = 300;
+// First-visit intro, on the beats of RDR2's opening: smoke drifting up a black
+// screen and a red shell falling past, the breech of a double-barrel with two
+// shells stamped with my name, the shot, and a hard cut to the logo in red,
+// held, then faded out. Browsers only allow sound after the visitor does
+// something, so it starts on "Press any key" (like the game), unless sound is
+// already allowed; with no answer it plays silently after a few seconds.
+// Esc or Skip jumps straight to the site.
+// The sound is RDR2's original opening (© Rockstar Games, used with their
+// permission), and the whole timeline follows its shot; if it can't load, the
+// synthesized sounds in utils/gunfx play instead.
+
+const BREECH_BEFORE_S = 0.85; // the breech shows this long before the shot
+const HOLD_S = 5.4; // the logo on screen after the shot
+const FADE_S = 0.5;
+const SILENT_AFTER_MS = 7000;
 const LIFT_S = 0.9;
+const RED = "200 16 46";
 
+type Phase = "gate" | "open" | "breech" | "logo" | "out" | "lift";
 type Props = {
   /** Called when the curtain starts lifting, so the hero can rise with it. */
   onReveal: () => void;
@@ -15,90 +33,199 @@ type Props = {
   onDone: () => void;
 };
 
-// First-visit loader: greetings flash on a frost curtain, ending on أهلاً, then
-// the curtain lifts away with a curved bottom edge.
 const Intro = ({ onReveal, onDone }: Props) => {
-  const [index, setIndex] = useState(0);
-  const [lifting, setLifting] = useState(false);
+  const [phase, setPhase] = useState<Phase>("gate");
+  const timers = useRef<number[]>([]);
+  const started = useRef(false);
+  const local = useRef<Promise<LocalTrack | null> | null>(null);
+
+  const lift = useCallback(() => {
+    timers.current.forEach((t) => window.clearTimeout(t));
+    timers.current = [];
+    setPhase("lift");
+    onReveal();
+  }, [onReveal]);
+
+  const start = useCallback(
+    async (withSound: boolean) => {
+      if (started.current) return;
+      started.current = true;
+      const ctx = withSound ? audioContext() : null;
+      let fire = INTRO_BEATS.fire;
+      if (ctx) {
+        try {
+          await ctx.resume();
+          const track = await local.current;
+          if (track) {
+            const delay = 0.05;
+            playLocalTrack(ctx, track, delay);
+            fire = track.fire + delay;
+          } else {
+            playGunIntro(ctx);
+          }
+        } catch {
+          // No sound: the picture still plays.
+        }
+      }
+      setPhase("open");
+      const at = (s: number, fn: () => void) => timers.current.push(window.setTimeout(fn, s * 1000));
+      at(fire - BREECH_BEFORE_S, () => setPhase("breech"));
+      at(fire, () => setPhase("logo"));
+      at(fire + HOLD_S, () => setPhase("out"));
+      at(fire + HOLD_S + FADE_S, lift);
+    },
+    [lift]
+  );
 
   useEffect(() => {
     markIntroSeen();
     const root = document.documentElement;
     root.style.overflow = "hidden";
+    // Some browsers already allow sound here: then there's nothing to ask.
+    const ctx = audioContext();
+    // Fetch and decode a local recording while the gate is up.
+    if (ctx) local.current = loadLocalTrack(ctx);
+    if (ctx?.state === "running") start(true);
+    const silent = window.setTimeout(() => start(false), SILENT_AFTER_MS);
     return () => {
       root.style.overflow = "";
+      window.clearTimeout(silent);
+      timers.current.forEach((t) => window.clearTimeout(t));
     };
-  }, []);
+  }, [start]);
 
+  // While the intro is up, keys belong to it, not to the site's shortcuts.
   useEffect(() => {
-    if (lifting) return;
-    const isLast = index === greetings.length - 1;
-    const id = window.setTimeout(
-      () => {
-        if (isLast) {
-          setLifting(true);
-          onReveal();
-        } else {
-          setIndex((i) => i + 1);
-        }
-      },
-      isLast ? LAST_WORD_MS : WORD_MS
-    );
-    return () => window.clearTimeout(id);
-  }, [index, lifting, onReveal]);
-
-  const word = greetings[index];
-  const wordFont =
-    word.lang === "ar"
-      ? "font-arabic text-[1.15em]"
-      : word.lang === "ja"
-        ? "font-sans font-extrabold text-[0.7em]"
-        : "";
+    if (phase === "lift") return;
+    const onKey = (e: KeyboardEvent) => {
+      e.stopImmediatePropagation();
+      if (e.key === "Escape") lift();
+      else if (phase === "gate" && !e.metaKey && !e.ctrlKey && !e.altKey) start(true);
+    };
+    window.addEventListener("keydown", onKey, true);
+    return () => window.removeEventListener("keydown", onKey, true);
+  }, [phase, start, lift]);
 
   return (
     <motion.div
-      aria-hidden="true"
-      className="fixed inset-0 z-[100] bg-frost text-ink"
+      aria-label="Opening: press any key"
+      role="dialog"
+      className="theme-dark fixed inset-0 z-[100] overflow-hidden bg-black text-paper"
       initial={false}
-      animate={{ y: lifting ? "-128%" : "0%" }}
+      animate={{ y: phase === "lift" ? "-128%" : "0%" }}
       transition={{ duration: LIFT_S, ease: EASE_OUT_CUBIC }}
       onAnimationComplete={() => {
-        if (lifting) onDone();
+        if (phase === "lift") onDone();
       }}
+      onPointerDown={() => phase === "gate" && start(true)}
     >
       {/* The bottom edge sags into a curve mid-lift, then flattens. */}
       <motion.span
-        className="absolute left-[-15%] top-[calc(100%-2px)] h-[33vh] w-[130%] origin-top rounded-b-[50%] bg-frost"
+        className="absolute left-[-15%] top-[calc(100%-2px)] h-[33vh] w-[130%] origin-top rounded-b-[50%] bg-black"
         initial={{ scaleY: 0.35 }}
-        animate={lifting ? { scaleY: [0.35, 1, 0.15] } : { scaleY: 0.35 }}
+        animate={phase === "lift" ? { scaleY: [0.35, 1, 0.15] } : { scaleY: 0.35 }}
         transition={{ duration: LIFT_S, times: [0, 0.45, 1], ease: "easeOut" }}
       />
-      <motion.p
-        key={index}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: lifting ? 0 : 1 }}
-        transition={{ duration: lifting ? 0.15 : 0.11 }}
-        className="absolute inset-0 m-0 flex items-center justify-center gap-5 font-display text-[clamp(56px,9vw,120px)] uppercase leading-none sm:gap-7"
-      >
-        <span className="h-3 w-3 rounded-full bg-ink sm:h-[18px] sm:w-[18px]" />
-        <span lang={word.lang} className={wordFont}>
-          {word.text}
-        </span>
-      </motion.p>
-      {/* A loading-screen tip, like the game's. */}
-      <div className="absolute bottom-8 left-6 right-6 flex flex-col gap-1.5 sm:bottom-12 sm:left-12">
-        <span className="font-fellsc text-[14px] tracking-[0.2em] opacity-70">Tip</span>
-        <span className="flex flex-wrap items-center gap-2 font-fell text-[18px] sm:text-[22px]">
-          Press
-          <kbd className="inline-flex h-7 min-w-[28px] items-center justify-center rounded-[5px] border-[1.6px] border-ink px-1.5 font-mono text-[12px] font-bold">
-            H
+
+      <AnimatePresence>
+        {phase === "gate" && (
+          <motion.button
+            key="gate"
+            type="button"
+            onClick={() => start(true)}
+            exit={{ opacity: 0, transition: { duration: 0.2 } }}
+            className="absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-4 text-center"
+          >
+            <motion.span
+              animate={{ opacity: [0.45, 1, 0.45] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              className="font-fellsc text-[18px] tracking-[0.32em] sm:text-[22px]"
+            >
+              <span className="[@media(pointer:coarse)]:hidden">Press any key</span>
+              <span className="hidden [@media(pointer:coarse)]:inline">Tap to start</span>
+            </motion.span>
+            <span lang="ar" className="font-ruqaa text-[22px] text-smoke">
+              <span className="[@media(pointer:coarse)]:hidden">دوس أي زرار</span>
+              <span className="hidden [@media(pointer:coarse)]:inline">دوس في أي حتة</span>
+            </span>
+            <span className="mt-6 font-fellsc text-[12px] tracking-[0.2em] text-paper/45">Sound on</span>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* The smoke left by the shot before, and a spent shell falling past the lens. */}
+      {phase === "open" && (
+        <div aria-hidden="true" className="absolute inset-0">
+          <SmokeCanvas from={{ x: 0.6, y: 1.02, spread: 0.26 }} emitFor={1.5} rate={18} alpha={0.55} rise={0.24} className="absolute inset-0" />
+          <motion.div
+            className="absolute w-[38vw] max-w-[520px] [filter:blur(3px)]"
+            initial={{ left: "60%", top: "-45%", rotate: 16 }}
+            animate={{ left: "32%", top: ["-45%", "-8%", "-45%"], rotate: -30 }}
+            transition={{ duration: 0.75, delay: 1.2, ease: "easeInOut" }}
+          >
+            <ShellSide className="h-auto w-full" />
+          </motion.div>
+        </div>
+      )}
+
+      {phase === "breech" && (
+        <motion.div
+          aria-hidden="true"
+          className="absolute inset-0 flex items-center justify-center"
+          initial={{ opacity: 0, scale: 1 }}
+          animate={{ opacity: 1, scale: 1.06 }}
+          transition={{ opacity: { duration: 0.18 }, scale: { duration: BREECH_BEFORE_S + 0.2, ease: "linear" } }}
+        >
+          <div className="aspect-video w-[min(100vw,177.8vh)]">
+            <Breech play />
+          </div>
+        </motion.div>
+      )}
+
+      {(phase === "logo" || phase === "out") && (
+        <motion.div
+          className="absolute inset-0 flex items-center justify-center"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: phase === "out" ? 0 : 1 }}
+          transition={{ duration: FADE_S }}
+        >
+          {/* The shot's smoke, drifting across behind the logo. */}
+          <SmokeCanvas from={{ x: 0.5, y: 0.8, spread: 0.55 }} emitFor={1.2} rate={10} alpha={0.22} rise={0.09} className="absolute inset-0" />
+          {/* The logo in red, framed like a badge, glowing a little. */}
+          <motion.div
+            initial={{ opacity: 0, scale: 1 }}
+            animate={{ opacity: [0, 1, 0.55, 1, 0.85, 1], scale: 1.035 }}
+            transition={{ opacity: { duration: 0.32, times: [0, 0.12, 0.3, 0.45, 0.7, 1] }, scale: { duration: HOLD_S, ease: "linear" } }}
+            className="relative flex items-center rounded-[0.32em] border-[3px] border-[rgb(200_16_46)] px-[0.45em] py-[0.2em] text-[clamp(40px,5.4vw,78px)] text-paper [filter:drop-shadow(0_0_16px_rgba(200,16,46,0.5))]"
+            style={{ "--frost": RED, "--paper": RED } as CSSProperties}
+          >
+            <Wordmark />
+          </motion.div>
+        </motion.div>
+      )}
+
+      {phase !== "gate" && (
+        <>
+          <div aria-hidden="true" className="grain pointer-events-none absolute inset-0 !opacity-[0.14]" />
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,transparent_55%,rgba(0,0,0,0.75)_100%)]" />
+        </>
+      )}
+
+      {phase !== "lift" && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            lift();
+          }}
+          className="absolute bottom-8 right-6 z-10 flex items-center gap-2.5 font-fellsc text-[13px] tracking-[0.16em] text-paper/55 hover:text-paper sm:bottom-12 sm:right-12"
+        >
+          Skip
+          <kbd className="inline-flex h-6 min-w-[26px] items-center justify-center rounded-[5px] border-[1.4px] border-current px-1.5 font-mono text-[10px] font-bold">
+            Esc
           </kbd>
-          to whistle for your horse.
-        </span>
-        <span lang="ar" dir="rtl" className="text-left font-ruqaa text-[22px]">
-          دوس H عشان تصفّر لحصانك
-        </span>
-      </div>
+        </button>
+      )}
     </motion.div>
   );
 };

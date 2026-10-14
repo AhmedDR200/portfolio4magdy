@@ -17,13 +17,14 @@ const label = "m-0 text-[11px] uppercase tracking-[0.14em] text-smoke";
 
 // The ٢٠٠ تمام YouTube channel, laid out like a channel page: its real banner
 // and stamp, what it covers, and live numbers from YouTube. The channel's own
-// colors and font (Reem Kufi) stay inside this card. No single episode is named.
+// colors and font (Reem Kufi) stay inside this card, and its banner art is the
+// same in both themes; the card itself follows the theme. No single episode is named.
 const Channel = () => (
   <section id="channel" aria-label="YouTube channel" className="py-20 sm:py-28">
     <div className={styles.container}>
       <SectionHeader index="07" label="On YouTube" labelAr="على يوتيوب" title="The Channel" />
 
-      <article className="theme-dark relative mt-12 overflow-hidden rounded-[28px] border border-paper/15 bg-[#121212]">
+      <article className="relative mt-12 overflow-hidden rounded-[28px] border border-paper/15 bg-graphite">
         {/* The channel banner's two worlds, drawn: the code at night, a green
             seam, and the street on paper. The banner's own words are below. */}
         <div aria-hidden="true" className="relative grid h-[130px] grid-cols-2 sm:h-[210px]">
@@ -39,7 +40,7 @@ const Channel = () => (
           alt="٢٠٠ تمام logo: a blue HTTP stamp"
           width={148}
           height={148}
-          className="absolute left-5 top-[82px] h-24 w-24 rounded-full border-[5px] border-[#121212] sm:left-10 sm:top-[136px] sm:h-[148px] sm:w-[148px] sm:border-[6px]"
+          className="absolute left-5 top-[82px] h-24 w-24 rounded-full border-[5px] border-graphite sm:left-10 sm:top-[136px] sm:h-[148px] sm:w-[148px] sm:border-[6px]"
         />
 
         <div className="flex flex-col gap-5 px-5 pt-14 sm:flex-row sm:items-start sm:justify-between sm:gap-6 sm:pl-[216px] sm:pr-10 sm:pt-[18px]">

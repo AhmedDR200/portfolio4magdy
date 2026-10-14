@@ -27,19 +27,6 @@ export const navLinks: TNavLink[] = [
   { id: "contact", title: "Contact" },
 ];
 
-// Intro loader words, shown one after another; the last one is held.
-export const greetings: { text: string; lang: string }[] = [
-  { text: "Hello", lang: "en" },
-  { text: "مرحبا", lang: "ar" },
-  { text: "Bonjour", lang: "fr" },
-  { text: "Hola", lang: "es" },
-  { text: "Ciao", lang: "it" },
-  { text: "こんにちは", lang: "ja" },
-  { text: "Hallo", lang: "de" },
-  { text: "Merhaba", lang: "tr" },
-  { text: "أهلاً", lang: "ar" },
-];
-
 export const heroRoles = ["Systems Designer", "API Architect", "Real-time Engineer"];
 
 export const stackTicker = [

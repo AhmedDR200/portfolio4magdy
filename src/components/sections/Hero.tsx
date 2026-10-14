@@ -110,11 +110,12 @@ const Hero = ({ startHidden, revealed, onMenu, onMap, onWheel, onJournal }: Prop
           <Hud className="hidden pl-12 lg:flex" />
         </div>
 
+        {/* The title sizes to the room beside the print (see the lg/xl font sizes). */}
         <div className="flex flex-col pl-5 sm:ml-auto sm:items-end sm:pl-0 sm:text-right">
-          <p className="m-0 font-display text-[38px] uppercase leading-none sm:text-[clamp(40px,3.9vw,56px)]">
+          <p className="m-0 font-display text-[38px] uppercase leading-none sm:text-[clamp(40px,3.9vw,56px)] lg:text-[length:min(3.9vw,56px,calc((39vw_-_72px)/8.6))] xl:text-[length:min(3.9vw,56px,calc((50vw_-_72px_-_min(15vw,220px))/8.6))]">
             Backend Engineer
           </p>
-          <p className="relative m-0 h-[1.05em] overflow-hidden font-display text-[38px] uppercase leading-none text-frost sm:text-[clamp(40px,3.9vw,56px)]">
+          <p className="relative m-0 h-[1.05em] overflow-hidden font-display text-[38px] uppercase leading-none text-frost sm:text-[clamp(40px,3.9vw,56px)] lg:text-[length:min(3.9vw,56px,calc((39vw_-_72px)/8.6))] xl:text-[length:min(3.9vw,56px,calc((50vw_-_72px_-_min(15vw,220px))/8.6))]">
             <AnimatePresence mode="wait" initial={false}>
               <motion.span
                 key={roleIndex}
