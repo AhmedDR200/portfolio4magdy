@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import { skillGroups } from "../../constants";
 import { styles } from "../../constants/styles";
 import SectionHeader from "../atoms/SectionHeader";
+import KeyCap from "../atoms/KeyCap";
+import { openSatchel } from "../layout/Satchel";
 import { SKILL_HIGHLIGHT_EVENT } from "../layout/SkillWheel";
 
 const total = skillGroups.reduce((n, group) => n + group.items.length, 0);
 
-// The stack as a numbered index: one row per group, daily tools in volt.
-// Hovering a row fills it with volt, like the menu links; so does picking
+// The stack as a numbered index: one row per group, daily tools in frost.
+// Hovering a row fills it with frost, like the menu links; so does picking
 // its group on the skill wheel, for a moment.
 const Skills = () => {
   const [lit, setLit] = useState<number | null>(null);
@@ -30,14 +32,25 @@ const Skills = () => {
   return (
     <section id="skills" aria-label="Skills" className="py-20 sm:py-28">
       <div className={styles.container}>
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <SectionHeader index="03" label="Skills" labelAr="مهاراتي" title="The stack" />
-          <p className="m-0 flex flex-wrap gap-x-5 gap-y-1 text-[12px] text-smoke lg:mb-3">
+        <div className="flex flex-col items-center gap-6">
+          <SectionHeader index="03" label="Skills" labelAr="مهاراتي" title="The Stack" />
+          <p className="m-0 flex flex-wrap justify-center gap-x-5 gap-y-1 text-[12px] text-smoke">
             <span>
-              <b className="text-volt">Volt</b> = daily driver
+              <b className="text-frost">Highlighted</b> = daily driver
             </span>
             <span>Grey = used in production</span>
           </p>
+          <button
+            type="button"
+            onClick={openSatchel}
+            className="group flex items-center gap-3 font-fellsc text-[16px] tracking-[0.12em] text-paper transition-colors hover:text-frost"
+          >
+            <KeyCap>I</KeyCap>
+            What I carry · open the satchel
+            <span lang="ar" className="font-ruqaa text-[18px] tracking-normal text-smoke">
+              الشنطة
+            </span>
+          </button>
         </div>
 
         <ol className="m-0 mt-12 list-none border-t border-paper/15 p-0">
@@ -45,7 +58,7 @@ const Skills = () => {
             <li
               key={group.title}
               data-lit={lit === i}
-              className="group grid grid-cols-[44px_1fr] items-baseline gap-x-4 gap-y-2 rounded-[14px] border-b border-paper/15 px-3 py-5 transition-colors duration-200 hover:border-transparent hover:bg-volt hover:text-ink data-[lit=true]:border-transparent data-[lit=true]:bg-volt data-[lit=true]:text-ink sm:px-5 lg:min-h-[80px] lg:grid-cols-[70px_330px_1fr_90px] lg:items-center lg:gap-5 lg:py-4"
+              className="group grid grid-cols-[44px_1fr] items-baseline gap-x-4 gap-y-2 rounded-[14px] border-b border-paper/15 px-3 py-5 transition-colors duration-200 hover:border-transparent hover:bg-frost hover:text-ink data-[lit=true]:border-transparent data-[lit=true]:bg-frost data-[lit=true]:text-ink sm:px-5 lg:min-h-[80px] lg:grid-cols-[70px_330px_1fr_90px] lg:items-center lg:gap-5 lg:py-4"
             >
               <span className="text-[13px] text-smoke group-hover:text-ink group-data-[lit=true]:text-ink">
                 ({String(i + 1).padStart(2, "0")})
@@ -67,7 +80,7 @@ const Skills = () => {
                       <span
                         className={
                           daily
-                            ? "font-bold text-volt group-hover:text-ink group-data-[lit=true]:text-ink group-hover:underline group-data-[lit=true]:underline group-hover:underline-offset-4 group-data-[lit=true]:underline-offset-4"
+                            ? "font-bold text-frost group-hover:text-ink group-data-[lit=true]:text-ink group-hover:underline group-data-[lit=true]:underline group-hover:underline-offset-4 group-data-[lit=true]:underline-offset-4"
                             : ""
                         }
                       >

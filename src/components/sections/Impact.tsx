@@ -18,7 +18,7 @@ const Impact = () => (
           className="flex flex-col gap-2.5 border-l border-paper/15 px-6 sm:px-7"
         >
           <Medal name={stat.icon} size={52} className="mb-2" />
-          <p className="m-0 font-display text-[clamp(80px,8.4vw,124px)] leading-none text-volt">
+          <p className="m-0 font-display text-[clamp(80px,8.4vw,124px)] leading-none text-frost">
             {stat.value}
           </p>
           <p className="m-0 text-[14px] leading-[1.55]">{stat.label}</p>

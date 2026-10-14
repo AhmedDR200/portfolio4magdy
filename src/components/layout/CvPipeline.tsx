@@ -95,24 +95,24 @@ const CvPipeline = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 24 }}
             transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
-            className="pointer-events-auto w-full max-w-[440px] overflow-hidden rounded-[22px] border border-volt/40 bg-ink/95 text-[12px] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)] backdrop-blur-md"
+            className="pointer-events-auto w-full max-w-[440px] overflow-hidden rounded-[22px] border border-frost/40 bg-ink/95 text-[12px] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)] backdrop-blur-md"
           >
             <div className="flex items-center justify-between gap-3 border-b border-paper/10 px-5 py-3">
               <span className="text-smoke">
-                <span className="text-volt">›</span> gh run watch <span className="text-paper">sync-cv.yml</span>
+                <span className="text-frost">›</span> gh run watch <span className="text-paper">sync-cv.yml</span>
               </span>
               <button
                 type="button"
                 aria-label="Close"
                 onClick={() => setStep(-1)}
-                className="text-[16px] leading-none text-smoke hover:text-volt"
+                className="text-[16px] leading-none text-smoke hover:text-frost"
               >
                 ×
               </button>
             </div>
             <div className="h-[2px] bg-paper/10">
               <div
-                className="h-full bg-volt transition-[width] duration-500 ease-out"
+                className="h-full bg-frost transition-[width] duration-500 ease-out"
                 style={{ width: `${(Math.max(step, 0) / STEPS.length) * 100}%` }}
               />
             </div>
@@ -122,7 +122,7 @@ const CvPipeline = () => {
                 const state = i < step ? "done" : i === step ? "running" : "queued";
                 return (
                   <li key={s.job} className="flex items-baseline gap-3">
-                    <span className={`w-3 shrink-0 ${state === "queued" ? "text-dim" : "text-volt"}`}>
+                    <span className={`w-3 shrink-0 ${state === "queued" ? "text-dim" : "text-frost"}`}>
                       {state === "done" ? "✓" : state === "running" ? SPINNER[frame] : "○"}
                     </span>
                     <span className={`w-[52px] shrink-0 uppercase tracking-[0.1em] ${state === "queued" ? "text-dim" : "text-paper"}`}>
@@ -139,7 +139,7 @@ const CvPipeline = () => {
 
             <div
               className={`flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-paper/10 px-5 py-3 transition-colors ${
-                done ? "bg-volt text-ink" : "text-smoke"
+                done ? "bg-frost text-ink" : "text-smoke"
               }`}
             >
               {done ? (

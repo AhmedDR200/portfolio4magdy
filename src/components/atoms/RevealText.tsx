@@ -30,9 +30,9 @@ type Props = {
   text: string;
   as?: keyof typeof tags;
   className?: string;
-  /** A phrase inside `text` to set in volt. */
+  /** A phrase inside `text` to set in frost. */
   highlight?: string;
-  /** Rendered after the text, e.g. the volt full stop. */
+  /** Rendered after the text, e.g. the frost full stop. */
   suffix?: React.ReactNode;
 };
 
@@ -68,7 +68,7 @@ const RevealText = ({ text, as = "h2", className, highlight, suffix }: Props) =>
         <Fragment key={i}>
           <span
             aria-hidden="true"
-            className={`inline-block whitespace-nowrap ${isHighlighted(i) ? "text-volt" : ""}`}
+            className={`inline-block whitespace-nowrap ${isHighlighted(i) ? "text-frost" : ""}`}
           >
             {Array.from(word).map((char, j) => (
               <motion.span key={j} variants={letter} className="inline-block">

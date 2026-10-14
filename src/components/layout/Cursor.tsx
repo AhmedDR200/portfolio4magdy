@@ -161,7 +161,7 @@ const Cursor = () => {
           animate={{ x: corner.x, y: corner.y }}
           transition={{ type: "spring", stiffness: 520, damping: 34, mass: 0.6 }}
           className={`absolute left-0 top-0 h-3 w-3 transition-colors duration-200 ${BORDERS[i]} ${
-            locked ? "border-volt" : "border-paper"
+            locked ? "border-frost" : "border-paper"
           }`}
         />
       ))}

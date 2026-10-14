@@ -53,9 +53,9 @@ const partOfDay = (h: number) =>
 const standing = (h: number) =>
   h < 7 ? { en: "Probably asleep", awake: false } : h < 9 ? { en: "Waking up", awake: true } : h < 18 ? { en: "At work", awake: true } : { en: "Online", awake: true };
 
-type Props = { className?: string; /** Include the Arabic time (needs the room). */ arabic?: boolean };
-
-const CairoClock = ({ className = "", arabic = true }: Props) => {
+// Cairo's time and weather, ticking every 20 s; shared by the clock pill and
+// the hero's HUD minimap.
+export const useCairo = () => {
   const [now, setNow] = useState(() => new Date());
   const [weather, setWeather] = useState<Weather | null>(null);
 
@@ -73,19 +73,30 @@ const CairoClock = ({ className = "", arabic = true }: Props) => {
   }, []);
 
   const hour = cairoHour(now);
-  const time = new Intl.DateTimeFormat("en-US", { hour: "2-digit", minute: "2-digit", timeZone: "Africa/Cairo" }).format(now);
-  const timeAr = new Intl.DateTimeFormat("ar-EG", { hour: "numeric", minute: "2-digit", hour12: true, timeZone: "Africa/Cairo" })
-    .format(now)
-    .replace(/\s?[صم]$/, "");
-  const sky = weather ? describe(weather) : null;
-  const status = standing(hour);
+  return {
+    hour,
+    weather,
+    sky: weather ? describe(weather) : null,
+    status: standing(hour),
+    time: new Intl.DateTimeFormat("en-US", { hour: "2-digit", minute: "2-digit", timeZone: "Africa/Cairo" }).format(now),
+    timeAr: new Intl.DateTimeFormat("ar-EG", { hour: "numeric", minute: "2-digit", hour12: true, timeZone: "Africa/Cairo" })
+      .format(now)
+      .replace(/\s?[صم]$/, ""),
+  };
+};
+
+type Props = { className?: string; /** Include the Arabic time (needs the room). */ arabic?: boolean };
+
+const CairoClock = ({ className = "", arabic = true }: Props) => {
+  const { hour, weather, sky, status, time, timeAr } = useCairo();
 
   return (
     <span
+      data-xray="cairo-clock"
       className={`inline-flex items-center gap-3 whitespace-nowrap rounded-full border border-paper/20 bg-ink/70 py-2 pl-3 pr-4 text-[12px] backdrop-blur-md ${className}`}
       title={sky && weather ? `Cairo: ${weather.temp}°C, ${sky.label}` : "Cairo"}
     >
-      <Icon name={sky?.icon ?? (hour >= 6 && hour < 18 ? "sun" : "moon")} size={18} className="text-volt" />
+      <Icon name={sky?.icon ?? (hour >= 6 && hour < 18 ? "sun" : "moon")} size={18} className="text-frost" />
       <span className="tracking-[0.06em]">{time}</span>
       {weather && (
         <>
@@ -99,7 +110,7 @@ const CairoClock = ({ className = "", arabic = true }: Props) => {
         </span>
       )}
       <span className="flex items-center gap-1.5 border-l border-paper/15 pl-2.5 text-mist">
-        <span className={`h-[7px] w-[7px] rounded-full ${status.awake ? "bg-volt" : "bg-smoke"}`} />
+        <span className={`h-[7px] w-[7px] rounded-full ${status.awake ? "bg-frost" : "bg-smoke"}`} />
         {status.en}
       </span>
     </span>

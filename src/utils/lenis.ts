@@ -9,11 +9,11 @@ export const setLenis = (lenis: Lenis | null) => {
   current = lenis;
 };
 
-export const scrollToSection = (id: string) => {
+export const scrollToSection = (id: string, immediate = false) => {
   const target = document.getElementById(id);
   if (!target) return;
-  if (current) current.scrollTo(target, { offset: -24, duration: 1.4 });
-  else target.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (current) current.scrollTo(target, { offset: -24, duration: 1.4, immediate, force: true });
+  else target.scrollIntoView({ behavior: immediate ? "instant" : "smooth", block: "start" });
 };
 
 /** Stop or restart smooth scrolling while an overlay covers the page. */

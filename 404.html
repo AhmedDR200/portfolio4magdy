@@ -5,12 +5,21 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
-    <meta name="theme-color" content="#0A0A0A" />
+    <meta name="theme-color" content="#0E1916" />
+    <!-- The theme before the first paint: the saved choice, else the system's. -->
+    <script>
+      try {
+        var t = localStorage.getItem("theme");
+        if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        document.documentElement.dataset.theme = t;
+        if (t === "light") document.querySelector('meta[name="theme-color"]').setAttribute("content", "#E9E5DC");
+      } catch (e) {}
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@300..800&family=Rakkas&family=Rye&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Anton&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=JetBrains+Mono:wght@300..800&family=Rakkas&family=Rye&display=swap"
     />
     <title>404 — This page rode off · Ahmed Magdy</title>
   </head>

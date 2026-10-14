@@ -22,6 +22,9 @@ import Journal from "./layout/Journal";
 import HonorMeter from "./layout/HonorMeter";
 import RideAlong from "./layout/RideAlong";
 import HorseWhistle from "./layout/HorseWhistle";
+import ChapterTravel from "./layout/ChapterTravel";
+import DeadEye from "./layout/DeadEye";
+import Satchel from "./layout/Satchel";
 import Toasts from "./layout/Toasts";
 import Footer from "./layout/Footer";
 import KonamiEasterEgg from "./layout/KonamiEasterEgg";
@@ -51,6 +54,9 @@ export {
   HonorMeter,
   RideAlong,
   HorseWhistle,
+  ChapterTravel,
+  DeadEye,
+  Satchel,
   Toasts,
   Footer,
   KonamiEasterEgg,

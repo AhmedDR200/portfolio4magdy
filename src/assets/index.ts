@@ -12,6 +12,7 @@ import zhafraAttendees from "./projects/zarror.webp";
 import alzhafraAdmin from "./projects/zaf.webp";
 
 import bee3aLockup from "./products/bee3a-lockup-on-dark.svg";
+import bee3aLockupLight from "./products/bee3a-lockup-on-light.svg";
 import tamamAvatar from "./channel/tamam-avatar.png";
 
 export {
@@ -26,5 +27,6 @@ export {
   zhafraAttendees,
   alzhafraAdmin,
   bee3aLockup,
+  bee3aLockupLight,
   tamamAvatar,
 };

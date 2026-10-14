@@ -15,7 +15,7 @@ type Props = {
   onDone: () => void;
 };
 
-// First-visit loader: greetings flash on a volt curtain, ending on أهلاً, then
+// First-visit loader: greetings flash on a frost curtain, ending on أهلاً, then
 // the curtain lifts away with a curved bottom edge.
 const Intro = ({ onReveal, onDone }: Props) => {
   const [index, setIndex] = useState(0);
@@ -58,7 +58,7 @@ const Intro = ({ onReveal, onDone }: Props) => {
   return (
     <motion.div
       aria-hidden="true"
-      className="fixed inset-0 z-[100] bg-volt text-ink"
+      className="fixed inset-0 z-[100] bg-frost text-ink"
       initial={false}
       animate={{ y: lifting ? "-128%" : "0%" }}
       transition={{ duration: LIFT_S, ease: EASE_OUT_CUBIC }}
@@ -68,7 +68,7 @@ const Intro = ({ onReveal, onDone }: Props) => {
     >
       {/* The bottom edge sags into a curve mid-lift, then flattens. */}
       <motion.span
-        className="absolute left-[-15%] top-[calc(100%-2px)] h-[33vh] w-[130%] origin-top rounded-b-[50%] bg-volt"
+        className="absolute left-[-15%] top-[calc(100%-2px)] h-[33vh] w-[130%] origin-top rounded-b-[50%] bg-frost"
         initial={{ scaleY: 0.35 }}
         animate={lifting ? { scaleY: [0.35, 1, 0.15] } : { scaleY: 0.35 }}
         transition={{ duration: LIFT_S, times: [0, 0.45, 1], ease: "easeOut" }}
@@ -85,6 +85,20 @@ const Intro = ({ onReveal, onDone }: Props) => {
           {word.text}
         </span>
       </motion.p>
+      {/* A loading-screen tip, like the game's. */}
+      <div className="absolute bottom-8 left-6 right-6 flex flex-col gap-1.5 sm:bottom-12 sm:left-12">
+        <span className="font-fellsc text-[14px] tracking-[0.2em] opacity-70">Tip</span>
+        <span className="flex flex-wrap items-center gap-2 font-fell text-[18px] sm:text-[22px]">
+          Press
+          <kbd className="inline-flex h-7 min-w-[28px] items-center justify-center rounded-[5px] border-[1.6px] border-ink px-1.5 font-mono text-[12px] font-bold">
+            H
+          </kbd>
+          to whistle for your horse.
+        </span>
+        <span lang="ar" dir="rtl" className="text-left font-ruqaa text-[22px]">
+          دوس H عشان تصفّر لحصانك
+        </span>
+      </div>
     </motion.div>
   );
 };

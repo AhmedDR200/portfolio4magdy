@@ -86,6 +86,7 @@ export const services: TService[] = [
   {
     icon: "gear",
     title: "Backend APIs & services",
+    poster: "Backend APIs",
     description:
       "REST and internal APIs in Node.js, NestJS, Express and FastAPI — designed for clear contracts, caching and safe change.",
     details: [
@@ -98,6 +99,8 @@ export const services: TService[] = [
   {
     icon: "divider",
     title: "System design & microservices",
+    poster: "System Design",
+    stamp: "In demand",
     description:
       "Service boundaries, queues and contracts across microservice platforms — RabbitMQ, Redis, Docker and Kubernetes.",
     details: [
@@ -110,6 +113,7 @@ export const services: TService[] = [
   {
     icon: "bolt",
     title: "Real-time systems",
+    poster: "Real-Time Systems",
     description:
       "WebSockets, pub/sub and push notifications that arrive fast and reliably — like the Appgain Notify Server.",
     details: [
@@ -191,6 +195,7 @@ export const experiences: TExperience[] = [
     companyUrl: "https://madkhol.com",
     date: "May 2025 – Present",
     marker: "Now",
+    paidIn: "APIs 30% faster",
     summary:
       "Backend services for an investment and robo-advisory platform built on microservices: portfolio management, strategies and analytics. APIs 30% faster; transaction errors down 40%.",
     points: [
@@ -207,6 +212,7 @@ export const experiences: TExperience[] = [
     companyUrl: "https://www.basicsengage.com",
     date: "Oct 2024 – May 2025",
     marker: "2024",
+    paidIn: "15k+ users",
     summary:
       "GPT-3.5 Turbo email generation for 15k+ users, Zapier integrations powering 150+ automations a month, and the APIs behind those AI and automation features.",
     points: [
@@ -221,6 +227,7 @@ export const experiences: TExperience[] = [
     companyUrl: "https://appgain.io",
     date: "Jul 2023 – Oct 2024",
     marker: "2023",
+    paidIn: "50% faster",
     summary:
       "Made the Notify Server 50% faster; built auth, payments and real-time features for the Toki social app, an AWS S3 uploader SDK, and the Peak and Marraksh SaaS backends.",
     points: [
@@ -413,3 +420,30 @@ export const projects: TProject[] = [
     metric: { value: "Secure", label: "auth & checkout flows" },
   },
 ];
+
+// The satchel (press I): what I carry. Kit is the hardware, drawn in
+// atoms/KitArt; Tools are the apps, with their marks in atoms/AppLogo.
+export const satchelKit = [
+  { id: "tuf", name: "ASUS TUF A15", sub: "Gaming laptop · 15.6-inch", note: "The heavy one: a numpad, see-through WASD keys and fans big enough for the whole stack in Docker.", uses: ["Docker", "Heavy builds", "Windows"] },
+  { id: "mac", name: "MacBook Air M2", sub: "13-inch · Apple M2", note: "The light one: no fan, all-day battery, and the machine that sends iOS builds to TestFlight.", uses: ["iOS builds", "On the move", "macOS"] },
+  { id: "sam", name: "Samsung 32\"", sub: "Main monitor · 32-inch", note: "The big screen: code on the left, logs and the terminal on the right.", uses: ["Code", "Logs"] },
+  { id: "msi", name: "MSI 25\"", sub: "Second monitor · 25-inch", note: "The side screen: Slack, Jira and the docs, always open.", uses: ["Slack", "Jira", "Docs"] },
+  { id: "kb", name: "Mechanical keyboard", sub: "Wireless · 75% with a knob", note: "Every line of code goes through it. The knob does the volume.", uses: ["Typing", "Volume knob"] },
+  { id: "mouse", name: "Wireless mouse", sub: "Two side buttons", note: "Back and forward through the docs without a reach.", uses: ["Navigation"] },
+  { id: "honor", name: "Honor Magic 6 Pro", sub: "Android phone", note: "Where the Android apps get tested, on a real device.", uses: ["Android testing"] },
+  { id: "iphone", name: "iPhone 17 Pro Max", sub: "iOS phone", note: "Where TestFlight builds land first.", uses: ["iOS testing", "TestFlight"] },
+] as const;
+
+export const satchelTools = [
+  { id: "cursor", name: "Cursor", sub: "AI code editor", note: "Where the code gets written.", uses: ["Editor"] },
+  { id: "claude", name: "Claude", sub: "AI assistant", note: "Pair programmer, reviewer and second opinion.", uses: ["Pairing", "Reviews"] },
+  { id: "jira", name: "Jira", sub: "Tickets and sprints", note: "What's next, and what's blocked.", uses: ["Planning"] },
+  { id: "slack", name: "Slack", sub: "Team chat", note: "Where the team talks.", uses: ["Team"] },
+  { id: "dbeaver", name: "DBeaver", sub: "Database client", note: "MySQL and PostgreSQL in one window.", uses: ["SQL"] },
+  { id: "spotify", name: "Spotify", sub: "Music", note: "The soundtrack to every deploy.", uses: ["Focus"] },
+  { id: "terminal", name: "Terminal", sub: "The shell", note: "git, docker, ssh: the rest happens here.", uses: ["git", "docker", "ssh"] },
+  { id: "docker", name: "Docker", sub: "Containers", note: "Every service runs in one, locally and in production.", uses: ["Containers"] },
+  { id: "mongodb", name: "MongoDB Compass", sub: "MongoDB client", note: "Browsing collections and checking queries.", uses: ["MongoDB"] },
+  { id: "chrome", name: "Chrome", sub: "Browser and DevTools", note: "The network tab is where APIs get debugged.", uses: ["DevTools"] },
+  { id: "testflight", name: "TestFlight", sub: "iOS beta builds", note: "Shipping test builds to the iPhone before the App Store.", uses: ["iOS"] },
+] as const;

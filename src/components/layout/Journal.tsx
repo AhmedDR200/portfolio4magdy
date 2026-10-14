@@ -9,7 +9,7 @@ import Medal from "../atoms/Medal";
 
 type Props = { open: boolean; onOpenChange: Dispatch<SetStateAction<boolean>> };
 
-// Press J: the journal of achievements, unlocked ones in volt. Secret ones
+// Press J: the journal of achievements, unlocked ones in frost. Secret ones
 // stay a mystery until found.
 const Journal = ({ open, onOpenChange }: Props) => {
   const unlocked = useUnlocked();
@@ -53,7 +53,7 @@ const Journal = ({ open, onOpenChange }: Props) => {
             initial={{ y: 24, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
-            className="mx-auto flex max-w-[1100px] flex-col gap-6 rounded-[28px] border border-paper/15 bg-[#0F0F0F] p-5 text-paper sm:p-9"
+            className="mx-auto flex max-w-[1100px] flex-col gap-6 rounded-[28px] border border-paper/15 bg-graphite p-5 text-paper sm:p-9"
           >
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="flex flex-col gap-2">
@@ -70,7 +70,7 @@ const Journal = ({ open, onOpenChange }: Props) => {
               <button
                 type="button"
                 onClick={() => onOpenChange(false)}
-                className="rounded-full border border-paper/25 px-3.5 py-2 text-[12px] uppercase tracking-[0.1em] hover:border-volt hover:text-volt"
+                className="rounded-full border border-paper/25 px-3.5 py-2 text-[12px] uppercase tracking-[0.1em] hover:border-frost hover:text-frost"
               >
                 Close · J
               </button>
@@ -81,7 +81,7 @@ const Journal = ({ open, onOpenChange }: Props) => {
                 {done} / {total} unlocked
               </span>
               <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-paper/10">
-                <span className="block h-full bg-volt transition-[width] duration-700" style={{ width: `${(done / total) * 100}%` }} />
+                <span className="block h-full bg-frost transition-[width] duration-700" style={{ width: `${(done / total) * 100}%` }} />
               </span>
             </div>
 
@@ -93,10 +93,10 @@ const Journal = ({ open, onOpenChange }: Props) => {
                   <li
                     key={a.id}
                     className={`flex items-center gap-3.5 rounded-2xl border p-3.5 ${
-                      has ? "border-paper/10 bg-[#151515]" : "border-paper/5 bg-transparent"
+                      has ? "border-paper/10 bg-ink/60" : "border-paper/5 bg-transparent"
                     }`}
                   >
-                    <Medal name={hidden ? "keyhole" : a.icon} size={46} tone={has ? "volt" : "dim"} />
+                    <Medal name={hidden ? "keyhole" : a.icon} size={46} tone={has ? "frost" : "dim"} />
                     <span className="flex min-w-0 flex-col gap-0.5">
                       <span className={`font-western text-[17px] leading-tight ${has ? "" : "text-dim"}`}>
                         {hidden ? "???" : a.title}

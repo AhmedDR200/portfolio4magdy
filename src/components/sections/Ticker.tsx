@@ -4,13 +4,13 @@ import { stackTicker } from "../../constants";
 
 const items = [...stackTicker, "باك إند"];
 
-// A tilted volt band of the stack, scrolling forever.
+// A tilted frost band of the stack, scrolling forever.
 const Ticker = () => (
   <div className="overflow-hidden py-9">
     <div
       role="region"
       aria-label={`Stack: ${stackTicker.join(", ")}`}
-      className="-ml-[5%] w-[110%] -rotate-2 overflow-hidden bg-volt py-3 text-ink sm:py-4"
+      className="-ml-[5%] w-[110%] -rotate-2 overflow-hidden bg-frost py-3 text-ink sm:py-4"
     >
       <div
         className="animate-marquee flex w-max gap-[34px] pr-[34px] font-display text-[30px] uppercase leading-[1.1] sm:text-[38px]"

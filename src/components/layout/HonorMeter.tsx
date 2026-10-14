@@ -78,7 +78,7 @@ const HonorMeter = () => {
 
   if (!change && honor === 0) return null;
 
-  const starColor = honor > 0 ? "text-volt" : honor < 0 ? "text-smoke" : "text-paper";
+  const starColor = honor > 0 ? "text-frost" : honor < 0 ? "text-smoke" : "text-paper";
 
   return (
     <div className="pointer-events-none fixed bottom-5 right-5 z-[61] flex flex-col items-end gap-2 sm:bottom-8 sm:right-8">
@@ -98,12 +98,12 @@ const HonorMeter = () => {
                 const v = i < 5 ? i - 5 : i - 4;
                 const filled = v < 0 ? honor <= v : honor >= v;
                 return (
-                  <i key={i} className={`h-2.5 rounded-[2px] ${filled ? (v > 0 ? "bg-volt" : "bg-smoke") : "bg-paper/10"}`} />
+                  <i key={i} className={`h-2.5 rounded-[2px] ${filled ? (v > 0 ? "bg-frost" : "bg-smoke") : "bg-paper/10"}`} />
                 );
               })}
               <span className="absolute -bottom-1 -top-1 left-1/2 w-0.5 -translate-x-1/2 bg-paper" />
             </span>
-            <span lang="ar" className={`whitespace-nowrap font-arabic text-[15px] ${honor >= HONOR_MAX ? "text-volt" : ""}`}>
+            <span lang="ar" className={`whitespace-nowrap font-arabic text-[15px] ${honor >= HONOR_MAX ? "text-frost" : ""}`}>
               {standing(honor)}
             </span>
             {change && (
@@ -113,7 +113,7 @@ const HonorMeter = () => {
                 animate={{ opacity: [0, 1, 1, 0], y: [6, -8, -8, -16] }}
                 transition={{ duration: 2.4, times: [0, 0.15, 0.7, 1] }}
                 className={`absolute -top-3 right-5 rounded-full px-2 py-0.5 text-[12px] font-extrabold ${
-                  change.delta > 0 ? "bg-volt text-ink" : "bg-paper text-ink"
+                  change.delta > 0 ? "bg-frost text-ink" : "bg-paper text-ink"
                 }`}
               >
                 {change.delta > 0 ? `+${change.delta}` : change.delta}

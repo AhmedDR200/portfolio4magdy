@@ -18,30 +18,30 @@ const Footer = ({ xray, onXray, powerCut, onPowerCut }: Props) => (
     <div className={`${styles.container} grid gap-8 sm:grid-cols-2 lg:grid-cols-4`}>
       <div className="flex flex-col gap-2">
         <Wordmark className="w-fit text-[37px]" />
-        <p lang="ar" dir="rtl" className="m-0 text-left font-arabic text-[24px] text-volt">
+        <p lang="ar" dir="rtl" className="m-0 text-left font-arabic text-[24px] text-frost">
           {config.motto.ar}
         </p>
       </div>
       <nav aria-label="Footer" className="flex flex-col text-[14px] uppercase tracking-[0.08em]">
         <span className={label}>Menu</span>
         {navLinks.map((link) => (
-          <a key={link.id} href={`#${link.id}`} className="w-fit py-1.5 hover:text-volt">
+          <a key={link.id} href={`#${link.id}`} className="w-fit py-1.5 hover:text-frost">
             {link.title}
           </a>
         ))}
       </nav>
       <nav aria-label="Social" className="flex flex-col text-[14px] uppercase tracking-[0.08em]">
         <span className={label}>Socials</span>
-        <a href={config.socials.github} target="_blank" rel="noopener noreferrer" className="w-fit py-1.5 hover:text-volt">
+        <a href={config.socials.github} target="_blank" rel="noopener noreferrer" className="w-fit py-1.5 hover:text-frost">
           GitHub
         </a>
-        <a href={config.socials.linkedin} target="_blank" rel="noopener noreferrer" className="w-fit py-1.5 hover:text-volt">
+        <a href={config.socials.linkedin} target="_blank" rel="noopener noreferrer" className="w-fit py-1.5 hover:text-frost">
           LinkedIn
         </a>
-        <a href={config.youtube.url} target="_blank" rel="noopener noreferrer" className="w-fit py-1.5 hover:text-volt">
+        <a href={config.youtube.url} target="_blank" rel="noopener noreferrer" className="w-fit py-1.5 hover:text-frost">
           YouTube
         </a>
-        <a href={`mailto:${config.html.email}`} className="w-fit py-1.5 hover:text-volt">
+        <a href={`mailto:${config.html.email}`} className="w-fit py-1.5 hover:text-frost">
           Email
         </a>
       </nav>
@@ -52,7 +52,7 @@ const Footer = ({ xray, onXray, powerCut, onPowerCut }: Props) => (
         <span className="-mt-2 max-w-[240px] text-[11px] leading-snug text-dim">Horse: {HORSE_CREDIT}</span>
         <a
           href="#top"
-          className="flex h-11 items-center rounded-full bg-volt px-[18px] text-[13px] font-semibold uppercase tracking-[0.08em] text-ink"
+          className="flex h-11 items-center torn bg-frost px-[18px] text-[13px] font-semibold uppercase tracking-[0.08em] text-ink"
         >
           Back to top ↑
         </a>
@@ -60,7 +60,7 @@ const Footer = ({ xray, onXray, powerCut, onPowerCut }: Props) => (
           type="button"
           onClick={onXray}
           aria-pressed={xray}
-          className="flex h-11 items-center gap-2.5 rounded-full border border-paper/25 px-[18px] text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors hover:border-volt hover:text-volt"
+          className="flex h-11 items-center gap-2.5 rounded-full border border-paper/25 px-[18px] text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors hover:border-frost hover:text-frost"
         >
           <Icon name="eye" size={18} />
           X-ray mode
@@ -70,7 +70,7 @@ const Footer = ({ xray, onXray, powerCut, onPowerCut }: Props) => (
           type="button"
           onClick={onPowerCut}
           aria-pressed={powerCut}
-          className="flex h-11 items-center gap-2.5 rounded-full border border-paper/25 px-[18px] text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors hover:border-volt hover:text-volt"
+          className="flex h-11 items-center gap-2.5 rounded-full border border-paper/25 px-[18px] text-[13px] font-semibold uppercase tracking-[0.08em] transition-colors hover:border-frost hover:text-frost"
         >
           <Icon name="bulb-off" size={18} />
           {powerCut ? "Lights on" : "Power cut"}
@@ -85,7 +85,7 @@ const Footer = ({ xray, onXray, powerCut, onPowerCut }: Props) => (
         take clicks meant for the buttons above it. */}
     <p
       aria-hidden="true"
-      className="text-fade-volt pointer-events-none m-0 mt-14 select-none whitespace-nowrap text-center font-display text-[18.5vw] uppercase leading-[0.8]"
+      className="text-fade-frost pointer-events-none m-0 mt-14 select-none whitespace-nowrap text-center font-display text-[18.5vw] uppercase leading-[0.8]"
     >
       Ahmedmagdy
     </p>

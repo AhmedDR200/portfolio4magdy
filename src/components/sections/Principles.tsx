@@ -5,11 +5,11 @@ import { styles } from "../../constants/styles";
 import { fadeUp } from "../../utils/motion";
 import SectionHeader from "../atoms/SectionHeader";
 
-// "How I work": four Arabic sayings; the last one, the motto, is set in volt.
+// "How I work": four Arabic sayings; the last one, the motto, is set in frost.
 const Principles = () => (
   <section id="principles" aria-label="How I work" className="py-20 sm:py-28">
     <div className={styles.container}>
-      <SectionHeader index="06" label="How I work" labelAr="بشتغل إزاي" title="How I work" />
+      <SectionHeader index="06" label="How I work" labelAr="بشتغل إزاي" title="How I Work" />
       <ul className="m-0 mt-12 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-4">
         {principles.map((p, i) => {
           const motto = i === principles.length - 1;
@@ -21,10 +21,10 @@ const Principles = () => (
               whileInView="show"
               viewport={{ once: true, amount: 0.4 }}
               className={`flex min-h-[260px] flex-col justify-between gap-7 rounded-[20px] p-7 ${
-                motto ? "bg-volt text-ink" : "bg-graphite"
+                motto ? "bg-frost text-ink" : "bg-graphite"
               }`}
             >
-              <span className={`text-[13px] font-semibold ${motto ? "" : "text-volt"}`}>
+              <span className={`text-[13px] font-semibold ${motto ? "" : "text-frost"}`}>
                 {String(i + 1).padStart(2, "0")}
               </span>
               <div className="flex flex-col gap-3">

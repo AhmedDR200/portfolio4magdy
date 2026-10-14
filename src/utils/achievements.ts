@@ -18,6 +18,7 @@ export const ACHIEVEMENTS: TAchievement[] = [
   { id: "gunslinger", title: "Gunslinger", ar: "استخدمت عجلة المهارات", icon: "cylinder" },
   { id: "fast-traveler", title: "Fast traveler", ar: "سافرت بالخريطة", icon: "compass" },
   { id: "case-closed", title: "Case closed", ar: "فتحت ٣ case studies", icon: "magnifier" },
+  { id: "bonded", title: "Bonded", ar: "بقيت عِشرة عمر مع حصانك", icon: "horseshoe" },
   { id: "old-school", title: "Old school", ar: "عرفت الكود السري", icon: "keyhole", secret: true },
 ];
 
@@ -58,7 +59,7 @@ export const unlock = (id: string) => {
     kicker: achievement.secret ? "Secret achievement" : "Achievement unlocked",
     title: achievement.title,
     ar: achievement.ar,
-    tone: achievement.secret ? "paper" : "volt",
+    tone: achievement.secret ? "paper" : "frost",
     meta: count,
   });
   if (unlocked.length === ACHIEVEMENTS.length) {

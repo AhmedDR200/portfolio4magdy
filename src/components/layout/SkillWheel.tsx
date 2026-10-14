@@ -164,28 +164,27 @@ const SkillWheel = ({ open, onOpenChange }: Props) => {
                   >
                     <path
                       d={slicePath(i, on ? R + 14 : R)}
-                      fill={on ? "#D4FF3A" : "rgba(18,18,18,0.94)"}
-                      stroke={on ? "#D4FF3A" : "rgba(244,244,239,0.16)"}
+                      className={on ? "fill-frost stroke-frost" : "fill-graphite/95 stroke-paper/15"}
                       strokeWidth="1.5"
                     />
-                    <text x={lx} y={ly - 8} textAnchor="middle" fontFamily="Anton, Impact, sans-serif" fontSize="19" fill={on ? "#0A0A0A" : "#F4F4EF"}>
+                    <text x={lx} y={ly - 8} textAnchor="middle" fontFamily="Anton, Impact, sans-serif" fontSize="19" className={on ? "fill-ink" : "fill-paper"}>
                       {g.title.toUpperCase()}
                     </text>
-                    <text x={lx} y={ly + 14} textAnchor="middle" fontFamily="Rakkas, serif" fontSize="15" fill={on ? "#0A0A0A" : "#8C8C86"}>
+                    <text x={lx} y={ly + 14} textAnchor="middle" fontFamily="Rakkas, serif" fontSize="15" className={on ? "fill-ink" : "fill-smoke"}>
                       {g.titleAr}
                     </text>
-                    <text x={lx} y={ly + 32} textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="10.5" fill={on ? "#0A0A0A" : "#8C8C86"}>
+                    <text x={lx} y={ly + 32} textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="10.5" className={on ? "fill-ink" : "fill-smoke"}>
                       {g.items.length} tools
                     </text>
                   </g>
                 );
               })}
-              <circle cx={C} cy={C} r={r - 10} fill="#0A0A0A" stroke="rgba(244,244,239,0.16)" strokeWidth="1.5" />
+              <circle cx={C} cy={C} r={r - 10} className="fill-ink stroke-paper/15" strokeWidth="1.5" />
             </svg>
 
             <div className="pointer-events-none absolute left-1/2 top-1/2 flex w-[34%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1.5 text-center">
               <span className="text-[10px] uppercase tracking-[0.16em] text-smoke">Equip</span>
-              <span className="font-display text-[clamp(20px,4.6vw,32px)] uppercase leading-none text-volt">{group.title}</span>
+              <span className="font-display text-[clamp(20px,4.6vw,32px)] uppercase leading-none text-frost">{group.title}</span>
               {group.daily.length > 0 && (
                 <span className="text-[clamp(10px,1.8vw,12px)] leading-snug">{group.daily.join(" · ")}</span>
               )}
@@ -206,11 +205,11 @@ const SkillWheel = ({ open, onOpenChange }: Props) => {
             <button
               type="button"
               onClick={() => onOpenChange(false)}
-              className="rounded-full border border-paper/25 px-3.5 py-2 hover:border-volt hover:text-volt md:hidden"
+              className="rounded-full border border-paper/25 px-3.5 py-2 hover:border-frost hover:text-frost md:hidden"
             >
               Close
             </button>
-            <span lang="ar" className="font-arabic text-[19px] normal-case tracking-normal text-volt">
+            <span lang="ar" className="font-arabic text-[19px] normal-case tracking-normal text-frost">
               اختار سلاحك
             </span>
           </p>

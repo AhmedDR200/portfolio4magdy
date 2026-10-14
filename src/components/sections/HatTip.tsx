@@ -76,13 +76,13 @@ const HatTip = () => {
           aria-live="polite"
           className={`flex h-14 items-center gap-3.5 rounded-full border py-1.5 pl-1.5 pr-6 transition-colors ${
             done
-              ? "border-volt bg-volt text-ink"
+              ? "border-frost bg-frost text-ink"
               : state === "tipping"
-                ? "border-volt bg-volt/10 text-volt"
-                : "border-paper/30 hover:border-volt hover:text-volt"
+                ? "border-frost bg-frost/10 text-frost"
+                : "border-paper/30 hover:border-frost hover:text-frost"
           }`}
         >
-          <span className={`relative flex h-11 w-11 items-center justify-center rounded-full ${done ? "bg-ink text-volt" : "bg-volt text-ink"}`}>
+          <span className={`relative flex h-11 w-11 items-center justify-center rounded-full ${done ? "bg-ink text-frost" : "bg-frost text-ink"}`}>
             <motion.span
               className="flex"
               animate={state === "tipping" ? { y: -12, rotate: -14 } : { y: 0, rotate: 0 }}
@@ -103,7 +103,7 @@ const HatTip = () => {
               initial={{ y: 14, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -14, opacity: 0 }}
-              className="font-display text-[44px] leading-none text-volt"
+              className="font-display text-[44px] leading-none text-frost"
             >
               {tips.count.toLocaleString("en")}
             </motion.span>

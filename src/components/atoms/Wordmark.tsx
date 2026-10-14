@@ -48,7 +48,7 @@ const Wordmark = ({ className = "", typing = false, ready = true }: Props) => {
       <svg
         viewBox="0 0 60 100"
         aria-hidden="true"
-        className="h-[0.75em] w-[0.45em] shrink-0 overflow-visible text-volt"
+        className="h-[0.75em] w-[0.45em] shrink-0 overflow-visible text-frost"
       >
         <polyline points="8,10 50,50 8,90" fill="none" stroke="currentColor" strokeWidth={16} />
       </svg>
@@ -58,10 +58,10 @@ const Wordmark = ({ className = "", typing = false, ready = true }: Props) => {
       </span>
       <span
         aria-hidden="true"
-        className={`mb-[0.44em] h-[0.12em] w-[0.42em] shrink-0 self-end bg-volt ${done ? "animate-blink" : ""}`}
+        className={`mb-[0.44em] h-[0.12em] w-[0.42em] shrink-0 self-end bg-frost ${done ? "animate-blink" : ""}`}
       />
       {sheriff && (
-        <span title="Sheriff: full honor" className="ml-[0.08em] text-volt">
+        <span title="Sheriff: full honor" className="ml-[0.08em] text-frost">
           <Icon name="star" size={18} />
         </span>
       )}

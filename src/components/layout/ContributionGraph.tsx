@@ -10,7 +10,7 @@ type Calendar = { total: number; days: Day[] };
 const CACHE_KEY = "status-contributions";
 const CACHE_MS = 60 * 60 * 1000;
 
-const LEVELS = ["bg-paper/[0.07]", "bg-volt/25", "bg-volt/50", "bg-volt/75", "bg-volt"];
+const LEVELS = ["bg-paper/[0.07]", "bg-frost/25", "bg-frost/50", "bg-frost/75", "bg-frost"];
 
 // GitHub only serves the contribution calendar through its GraphQL API, which
 // needs a token. This public API reads the same calendar from the profile
@@ -75,7 +75,7 @@ const weekVisibility = (age: number) => (age >= 34 ? "hidden lg:flex" : age >= 2
 const dateLabel = (iso: string) =>
   new Date(`${iso}T00:00:00Z`).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 
-// The GitHub contribution graph, in volt. Hidden if it can't be loaded.
+// The GitHub contribution graph, in frost. Hidden if it can't be loaded.
 const ContributionGraph = ({ enabled }: { enabled: boolean }) => {
   const calendar = useCalendar(enabled);
   if (calendar === null) return null;
@@ -91,7 +91,7 @@ const ContributionGraph = ({ enabled }: { enabled: boolean }) => {
           href={config.socials.github}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[12px] uppercase tracking-[0.12em] text-volt hover:underline"
+          className="text-[12px] uppercase tracking-[0.12em] text-frost hover:underline"
         >
           {total ? `${total} in the last year ↗` : "GitHub ↗"}
         </a>

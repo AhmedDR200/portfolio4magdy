@@ -18,15 +18,15 @@ const WantedBug = () => (
   <svg viewBox="0 0 300 210" className="h-full w-full" role="img" aria-label="Sketch of the wanted bug, a beetle">
     <defs>
       <pattern id="wanted-hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(32)">
-        <line x1="0" y1="0" x2="0" y2="5" stroke="#0A0A0A" strokeWidth="1.7" />
+        <line x1="0" y1="0" x2="0" y2="5" stroke="#0E1916" strokeWidth="1.7" />
       </pattern>
     </defs>
-    <g stroke="rgba(10,10,10,0.2)" strokeWidth="1">
+    <g stroke="rgba(14,25,22,0.2)" strokeWidth="1">
       {[30, 60, 90, 120, 150, 180].map((y) => (
         <line key={y} x1="0" y1={y} x2="300" y2={y} />
       ))}
     </g>
-    <g fontFamily="JetBrains Mono, monospace" fontSize="9" fill="rgba(10,10,10,0.5)">
+    <g fontFamily="JetBrains Mono, monospace" fontSize="9" fill="rgba(14,25,22,0.5)">
       {[7, 6, 5, 4, 3, 2].map((ft, i) => (
         <g key={ft}>
           <text x="7" y={27 + i * 30}>{`${ft}'`}</text>
@@ -34,8 +34,8 @@ const WantedBug = () => (
         </g>
       ))}
     </g>
-    <ellipse cx="150" cy="199" rx="62" ry="5" fill="rgba(10,10,10,0.16)" />
-    <g fill="none" stroke="#0A0A0A" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+    <ellipse cx="150" cy="199" rx="62" ry="5" fill="rgba(14,25,22,0.16)" />
+    <g fill="none" stroke="#0E1916" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
       <path d="M127 78 L104 70 L92 52 L86 47" />
       <path d="M173 78 L196 70 L208 52 L214 47" />
       <path d="M117 112 L86 108 L68 124 L62 126" />
@@ -43,11 +43,11 @@ const WantedBug = () => (
       <path d="M119 150 L91 162 L79 186 L74 190" />
       <path d="M181 150 L209 162 L221 186 L226 190" />
     </g>
-    <g fill="none" stroke="#0A0A0A" strokeWidth="2.6" strokeLinecap="round">
+    <g fill="none" stroke="#0E1916" strokeWidth="2.6" strokeLinecap="round">
       <path d="M141 42 C133 28 119 20 104 11" />
       <path d="M159 42 C167 28 181 20 196 11" />
     </g>
-    <g fill="#0A0A0A">
+    <g fill="#0E1916">
       {[
         [131, 29],
         [121, 22],
@@ -59,18 +59,18 @@ const WantedBug = () => (
         <circle key={`${x}-${y}`} cx={x} cy={y} r="2.6" />
       ))}
     </g>
-    <ellipse cx="150" cy="50" rx="17" ry="13" fill="#0A0A0A" />
-    <ellipse cx="141" cy="47" rx="3" ry="2.4" fill="#F4F4EF" />
-    <ellipse cx="159" cy="47" rx="3" ry="2.4" fill="#F4F4EF" />
-    <path d="M126 66 Q150 58 174 66 L182 86 Q150 96 118 86 Z" fill="#0A0A0A" />
-    <path d="M132 71 Q150 65 168 71" fill="none" stroke="#F4F4EF" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
-    <path d="M149 92 L149 190 Q118 186 108 158 Q100 128 114 98 Q128 90 149 92 Z" fill="url(#wanted-hatch)" stroke="#0A0A0A" strokeWidth="3" />
-    <path d="M151 92 L151 190 Q182 186 192 158 Q200 128 186 98 Q172 90 151 92 Z" fill="url(#wanted-hatch)" stroke="#0A0A0A" strokeWidth="3" />
-    <path d="M114 98 Q100 128 108 158 Q118 186 149 190 L149 181 Q125 177 117 155 Q111 128 123 103 Z" fill="#0A0A0A" />
-    <path d="M186 98 Q200 128 192 158 Q182 186 151 190 L151 181 Q175 177 183 155 Q189 128 177 103 Z" fill="#0A0A0A" />
-    <path d="M126 108 Q120 132 127 160" fill="none" stroke="#F4F4EF" strokeWidth="3.4" strokeLinecap="round" />
-    <path d="M174 108 Q180 132 173 160" fill="none" stroke="#F4F4EF" strokeWidth="3.4" strokeLinecap="round" />
-    <path d="M150 92 L150 190" stroke="#F4F4EF" strokeWidth="2" />
+    <ellipse cx="150" cy="50" rx="17" ry="13" fill="#0E1916" />
+    <ellipse cx="141" cy="47" rx="3" ry="2.4" fill="#EEF2EE" />
+    <ellipse cx="159" cy="47" rx="3" ry="2.4" fill="#EEF2EE" />
+    <path d="M126 66 Q150 58 174 66 L182 86 Q150 96 118 86 Z" fill="#0E1916" />
+    <path d="M132 71 Q150 65 168 71" fill="none" stroke="#EEF2EE" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
+    <path d="M149 92 L149 190 Q118 186 108 158 Q100 128 114 98 Q128 90 149 92 Z" fill="url(#wanted-hatch)" stroke="#0E1916" strokeWidth="3" />
+    <path d="M151 92 L151 190 Q182 186 192 158 Q200 128 186 98 Q172 90 151 92 Z" fill="url(#wanted-hatch)" stroke="#0E1916" strokeWidth="3" />
+    <path d="M114 98 Q100 128 108 158 Q118 186 149 190 L149 181 Q125 177 117 155 Q111 128 123 103 Z" fill="#0E1916" />
+    <path d="M186 98 Q200 128 192 158 Q182 186 151 190 L151 181 Q175 177 183 155 Q189 128 177 103 Z" fill="#0E1916" />
+    <path d="M126 108 Q120 132 127 160" fill="none" stroke="#EEF2EE" strokeWidth="3.4" strokeLinecap="round" />
+    <path d="M174 108 Q180 132 173 160" fill="none" stroke="#EEF2EE" strokeWidth="3.4" strokeLinecap="round" />
+    <path d="M150 92 L150 190" stroke="#EEF2EE" strokeWidth="2" />
   </svg>
 );
 
@@ -90,7 +90,7 @@ const NotFound = () => {
       <Cursor />
       <Toasts />
       <HonorMeter />
-      <main className="relative min-h-[100svh] overflow-hidden bg-ink bg-[repeating-linear-gradient(90deg,transparent_0_118px,rgba(244,244,239,0.035)_118px_120px)] text-paper">
+      <main className="relative min-h-[100svh] overflow-hidden bg-ink bg-[repeating-linear-gradient(90deg,transparent_0_118px,rgba(238,242,238,0.035)_118px_120px)] text-paper">
         <header className="flex items-center justify-between px-5 py-5 sm:px-12 sm:py-7">
           <a href="/" aria-label="Ahmed Magdy, home">
             <Wordmark className="text-[27px] sm:text-[32px]" />
@@ -109,7 +109,7 @@ const NotFound = () => {
               className="relative z-10 mx-auto -mb-6 block h-4 w-4 translate-y-4 rounded-full bg-[#3A3A37] shadow-[0_2px_0_#000,inset_0_-3px_0_rgba(0,0,0,0.4)]"
             />
             <div
-              className="flex flex-col items-center gap-2.5 bg-paper px-7 pb-9 pt-12 text-center text-ink shadow-[inset_0_0_70px_rgba(10,10,10,0.28),0_30px_60px_-20px_rgba(0,0,0,0.9)] sm:px-11"
+              className="theme-dark flex flex-col items-center gap-2.5 bg-paper px-7 pb-9 pt-12 text-center text-ink shadow-[inset_0_0_70px_rgba(14,25,22,0.28),0_30px_60px_-20px_rgba(0,0,0,0.9)] sm:px-11"
               style={{ clipPath: TORN }}
             >
               <p className="m-0 font-western text-[clamp(58px,15vw,104px)] leading-none tracking-[0.02em]">WANTED</p>
@@ -138,12 +138,12 @@ const NotFound = () => {
 
           <div className="flex flex-col gap-5">
             <p className="m-0 break-all text-[14px] text-smoke">
-              <span className="text-volt">›</span> GET {path} → <span className="text-volt">404 Not Found</span>
+              <span className="text-frost">›</span> GET {path} → <span className="text-frost">404 Not Found</span>
             </p>
             <h1 className="m-0 font-display text-[clamp(56px,7vw,96px)] font-normal uppercase leading-[0.95]">
               This page
               <br />
-              rode off<span className="text-volt">.</span>
+              rode off<span className="text-frost">.</span>
             </h1>
             <p lang="ar" dir="rtl" className="m-0 text-left font-arabic text-[clamp(26px,3vw,34px)] leading-snug text-mist">
               الصفحة دي ركبت الحصان ومشيت.
@@ -154,13 +154,13 @@ const NotFound = () => {
             <div className="mt-2 flex flex-wrap gap-2.5">
               <a
                 href="/"
-                className="flex h-[52px] items-center rounded-full bg-volt px-6 text-[13px] font-extrabold uppercase tracking-[0.1em] text-ink transition-transform hover:scale-105"
+                className="flex h-[52px] items-center rounded-full bg-frost px-6 text-[13px] font-extrabold uppercase tracking-[0.1em] text-ink transition-transform hover:scale-105"
               >
                 ← Back to town
               </a>
               <a
                 href={`mailto:${config.html.email}?subject=${encodeURIComponent(`Broken link on magdy.digital: ${path}`)}`}
-                className="flex h-[52px] items-center rounded-full border border-paper/25 px-[22px] text-[13px] font-bold uppercase tracking-[0.1em] transition-colors hover:border-volt hover:text-volt"
+                className="flex h-[52px] items-center rounded-full border border-paper/25 px-[22px] text-[13px] font-bold uppercase tracking-[0.1em] transition-colors hover:border-frost hover:text-frost"
               >
                 Report the bug ↗
               </a>

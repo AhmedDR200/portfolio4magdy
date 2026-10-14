@@ -83,7 +83,7 @@ const KonamiEasterEgg = () => {
                 repeat: Infinity,
                 ease: "linear",
               }}
-              className="absolute top-0 font-display text-volt"
+              className="absolute top-0 font-display text-frost"
               style={{ left: `${d.left}%`, fontSize: `${d.size}px` }}
             >
               {d.symbol}
@@ -96,18 +96,18 @@ const KonamiEasterEgg = () => {
             exit={{ scale: 0.7, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 18 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative z-10 mx-4 max-w-md rounded-[24px] border-2 border-volt bg-graphite px-8 py-7 text-center"
+            className="relative z-10 mx-4 max-w-md rounded-[24px] border-2 border-frost bg-graphite px-8 py-7 text-center"
           >
-            <p className="m-0 font-display text-[56px] leading-none text-volt">200 OK</p>
+            <p className="m-0 font-display text-[56px] leading-none text-frost">200 OK</p>
             <h3 className="m-0 mt-3 font-display text-[28px] font-normal uppercase">Cheat code unlocked!</h3>
             <p className="m-0 mt-2 text-[14px] leading-[22px] text-smoke">
-              <span className="text-volt">--ship-it</span> mode engaged. All tests green, zero downtime,
+              <span className="text-frost">--ship-it</span> mode engaged. All tests green, zero downtime,
               infinite uptime. You found the secret — now go build something great.
             </p>
             <button
               type="button"
               onClick={() => setActive(false)}
-              className="mt-5 h-11 rounded-full bg-volt px-6 text-[13px] font-semibold uppercase tracking-[0.08em] text-ink"
+              className="mt-5 h-11 rounded-full bg-frost px-6 text-[13px] font-semibold uppercase tracking-[0.08em] text-ink"
             >
               Deploy to prod
             </button>

@@ -8,7 +8,7 @@ import RevealText from "../atoms/RevealText";
 import { Eyebrow } from "../atoms/SectionHeader";
 
 const pill =
-  "flex h-14 items-center gap-3 rounded-full border border-paper/30 px-6 transition-colors hover:border-volt hover:text-volt";
+  "flex h-14 items-center gap-3 rounded-full border border-paper/30 px-6 transition-colors hover:border-frost hover:text-frost";
 
 const Contact = () => (
   <section id="contact" className="pb-20 pt-24 sm:pb-28 sm:pt-40">
@@ -18,13 +18,13 @@ const Contact = () => (
         <img
           src={mePhoto}
           alt=""
-          className="h-20 w-20 rounded-full border-[3px] border-volt object-cover grayscale sm:h-[104px] sm:w-[104px]"
+          className="h-20 w-20 rounded-full border-[3px] border-frost object-cover grayscale sm:h-[104px] sm:w-[104px]"
           style={{ objectPosition: "51% 28%" }}
         />
         <RevealText
           as="h2"
           text="Let's build something that scales"
-          suffix={<span className="text-volt">.</span>}
+          suffix={<span className="text-frost">.</span>}
           className="m-0 max-w-[12ch] font-display text-[clamp(64px,10.4vw,168px)] font-normal uppercase leading-[0.9]"
         />
       </div>
@@ -37,7 +37,7 @@ const Contact = () => (
           <Magnetic>
             <a
               href={`mailto:${config.html.email}`}
-              className="flex h-[150px] w-[150px] items-center justify-center rounded-full bg-volt text-center font-display text-[24px] uppercase leading-none text-ink sm:h-[188px] sm:w-[188px] sm:text-[28px]"
+              className="flex h-[150px] w-[150px] items-center justify-center rounded-full bg-frost text-center font-display text-[24px] uppercase leading-none text-ink sm:h-[188px] sm:w-[188px] sm:text-[28px]"
             >
               Get in
               <br />

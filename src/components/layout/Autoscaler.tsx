@@ -112,7 +112,7 @@ const Autoscaler = () => {
         >
           <div className="mt-2.5 flex items-center gap-4 border-t border-paper/10 pt-2.5">
             <span className="hidden whitespace-nowrap text-smoke sm:inline">
-              <span className="text-volt">›</span> HPA
+              <span className="text-frost">›</span> HPA
             </span>
             <span className="flex w-[110px] shrink-0 flex-wrap gap-[3px] sm:w-[190px]">
               <AnimatePresence initial={false}>
@@ -123,14 +123,14 @@ const Autoscaler = () => {
                     animate={{ scale: 1 }}
                     exit={{ scale: 0, opacity: 0 }}
                     transition={{ duration: 0.2 }}
-                    className={`h-2.5 w-2.5 rounded-[2px] border border-volt ${pod.ready ? "bg-volt" : "animate-pulse bg-transparent"}`}
+                    className={`h-2.5 w-2.5 rounded-[2px] border border-frost ${pod.ready ? "bg-frost" : "animate-pulse bg-transparent"}`}
                   />
                 ))}
               </AnimatePresence>
             </span>
             <span className="w-[120px] shrink-0 whitespace-nowrap tabular-nums">
               {pods.length} pods <span className="text-smoke">{rps}rps</span>
-              <span className="text-volt"> {trend === "up" ? "↑" : trend === "down" ? "↓" : ""}</span>
+              <span className="text-frost"> {trend === "up" ? "↑" : trend === "down" ? "↓" : ""}</span>
             </span>
           </div>
         </motion.div>

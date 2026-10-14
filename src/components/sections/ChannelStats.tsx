@@ -149,7 +149,7 @@ const LiveNumber = ({ value }: { value: number }) => {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: -6 }}
             exit={{ opacity: 0, y: -18 }}
-            className="absolute -top-2 left-full ml-1.5 rounded-full bg-volt px-1.5 py-0.5 font-mono text-[11px] leading-none text-ink"
+            className="absolute -top-2 left-full ml-1.5 rounded-full bg-frost px-1.5 py-0.5 font-mono text-[11px] leading-none text-ink"
           >
             +{compact.format(gain.n)}
           </motion.span>
@@ -194,14 +194,14 @@ const ChannelStats = () => {
               className="relative flex min-w-0 flex-1 flex-col-reverse gap-2.5 border-l border-paper/15 px-5 py-6 first:border-l-0 sm:px-8 sm:py-7"
             >
               <dt className={label}>{item.label}</dt>
-              <dd className="m-0 font-display text-[52px] leading-[0.9] text-volt sm:text-[80px] lg:text-[96px]">
+              <dd className="m-0 font-display text-[52px] leading-[0.9] text-frost sm:text-[80px] lg:text-[96px]">
                 <LiveNumber value={item.value} />
               </dd>
             </div>
           ))}
           <div className="flex basis-full flex-col justify-center gap-2 border-t border-paper/15 px-5 py-5 sm:px-8 lg:basis-0 lg:flex-[1.15] lg:border-l lg:border-t-0">
-            <p className="m-0 flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-volt">
-              <span aria-hidden="true" className="animate-pulse-volt h-2 w-2 rounded-full bg-volt" />
+            <p className="m-0 flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-frost">
+              <span aria-hidden="true" className="animate-pulse-frost h-2 w-2 rounded-full bg-frost" />
               Live from YouTube
             </p>
             <p className={label}>
@@ -212,10 +212,10 @@ const ChannelStats = () => {
                 href={`${config.youtube.url}?sub_confirmation=1`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex w-fit flex-wrap items-baseline gap-x-2.5 text-[12px] uppercase tracking-[0.1em] hover:text-volt"
+                className="flex w-fit flex-wrap items-baseline gap-x-2.5 text-[12px] uppercase tracking-[0.1em] hover:text-frost"
               >
                 Be subscriber #{next.toLocaleString("en")} ↗
-                <span lang="ar" dir="rtl" className="font-arabic text-[17px] normal-case tracking-normal text-volt">
+                <span lang="ar" dir="rtl" className="font-arabic text-[17px] normal-case tracking-normal text-frost">
                   خليك رقم {next.toLocaleString("ar-EG")}
                 </span>
               </a>

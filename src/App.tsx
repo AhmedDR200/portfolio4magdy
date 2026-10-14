@@ -14,6 +14,9 @@ import {
   Hero,
   HonorMeter,
   HorseWhistle,
+  ChapterTravel,
+  DeadEye,
+  Satchel,
   Impact,
   Intro,
   Journal,
@@ -133,7 +136,14 @@ const App = () => {
       />
       <RequestTrace />
       <main className="overflow-x-hidden">
-        <Hero startHidden={playIntro} revealed={heroRevealed} onMenu={openMenu} />
+        <Hero
+          startHidden={playIntro}
+          revealed={heroRevealed}
+          onMenu={openMenu}
+          onMap={openMap}
+          onWheel={openWheel}
+          onJournal={openJournal}
+        />
         <About />
         <Ticker />
         <Impact />
@@ -156,6 +166,9 @@ const App = () => {
       <HonorMeter />
       <RideAlong />
       <HorseWhistle />
+      <ChapterTravel />
+      <DeadEye />
+      <Satchel />
       <Toasts />
     </MotionConfig>
   );

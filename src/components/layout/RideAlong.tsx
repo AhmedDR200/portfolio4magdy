@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
+import { useBond } from "../../utils/bond";
 import Horse from "../atoms/Horse";
 
 // Reading progress as a rail across the top of the page, with a real horse
@@ -15,6 +16,7 @@ const PX_PER_FRAME = 36;
 
 const RideAlong = () => {
   const reduce = useReducedMotion();
+  const { name } = useBond();
   const [state, setState] = useState({ visible: false, progress: 0, frame: 0, speed: 0 });
   const travelled = useRef(0);
 
@@ -77,7 +79,7 @@ const RideAlong = () => {
           <div className="absolute left-4 right-[104px] top-0 h-[50px] sm:left-6 sm:right-[204px]">
             {/* The rail, and how far along it you are. */}
             <span className="absolute inset-x-0 top-[44px] border-t border-dashed border-paper/20" />
-            <span className="absolute left-0 top-[43px] h-[3px] rounded-full bg-volt" style={{ width: pct }} />
+            <span className="absolute left-0 top-[43px] h-[3px] rounded-full bg-frost" style={{ width: pct }} />
 
             {!reduce && (
               <span className="absolute top-[7px] -translate-x-full" style={{ left: pct }}>
@@ -85,7 +87,7 @@ const RideAlong = () => {
                   {Array.from({ length: dust }, (_, i) => (
                     <span
                       key={i}
-                      className="absolute rounded-full bg-volt"
+                      className="absolute rounded-full bg-frost"
                       style={{
                         right: `calc(100% - 6px + ${i * 11}px)`,
                         top: `${30 - (i % 2) * 5}px`,
@@ -95,7 +97,13 @@ const RideAlong = () => {
                       }}
                     />
                   ))}
-                  <Horse frame={arrived ? 0 : state.frame} className="h-[38px] w-[61px] text-volt" />
+                  {/* Once named (bond level 4), the horse carries its name. */}
+                  {name && (
+                    <span lang="ar" dir="auto" className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap font-arabic text-[13px] leading-none text-frost">
+                      {name}
+                    </span>
+                  )}
+                  <Horse frame={arrived ? 0 : state.frame} className="h-[38px] w-[61px] text-frost" />
                 </span>
               </span>
             )}
@@ -104,7 +112,7 @@ const RideAlong = () => {
             <span className="absolute -right-[84px] top-[6px] hidden flex-col items-center sm:flex">
               <span
                 className={`rounded border-2 px-2 py-0.5 font-western text-[12px] leading-tight transition-colors ${
-                  arrived ? "border-volt bg-volt text-ink" : "border-paper/35 bg-ink/80 text-mist"
+                  arrived ? "border-frost bg-frost text-ink" : "border-paper/35 bg-ink/80 text-mist"
                 }`}
               >
                 200 OK

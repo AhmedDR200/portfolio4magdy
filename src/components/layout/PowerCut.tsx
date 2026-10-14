@@ -78,7 +78,7 @@ const PowerCut = ({ on, onChange }: Props) => {
               {
                 "--x": `${pointer.current.x}px`,
                 "--y": `${pointer.current.y}px`,
-                background: `radial-gradient(circle at var(--x) var(--y), rgba(244,244,239,0.07) 0, rgba(5,5,5,0) ${LIT}px, rgba(5,5,5,0.97) ${DARK}px)`,
+                background: `radial-gradient(circle at var(--x) var(--y), rgba(238,242,238,0.07) 0, rgba(5,5,5,0) ${LIT}px, rgba(5,5,5,0.97) ${DARK}px)`,
               } as React.CSSProperties
             }
           />
@@ -93,7 +93,7 @@ const PowerCut = ({ on, onChange }: Props) => {
               transition={{ delay: reduce ? 0 : 0.7, duration: 0.4, ease: EASE_OUT_EXPO }}
               className="pointer-events-auto flex flex-col items-center gap-1 rounded-[20px] border border-paper/15 bg-ink/90 px-6 py-4 text-center font-bee3a backdrop-blur-md"
             >
-              <p className="m-0 flex items-center gap-2.5 font-arabic text-[28px] leading-[1.2] text-volt">
+              <p className="m-0 flex items-center gap-2.5 font-arabic text-[28px] leading-[1.2] text-frost">
                 <Icon name="bulb-off" size={26} />
                 الكهربا قطعت
               </p>
@@ -102,7 +102,7 @@ const PowerCut = ({ on, onChange }: Props) => {
               <button
                 type="button"
                 onClick={() => onChange(false)}
-                className="mt-2 rounded-full bg-volt px-4 py-1.5 text-[13px] font-semibold text-ink transition-transform hover:scale-105"
+                className="mt-2 rounded-full bg-frost px-4 py-1.5 text-[13px] font-semibold text-ink transition-transform hover:scale-105"
               >
                 رجّع النور
               </button>

@@ -14,6 +14,7 @@ import { TProject } from "../../types";
 import { noteCaseStudy } from "../../utils/achievements";
 import { changeHonor } from "../../utils/honor";
 import { EASE_OUT_EXPO } from "../../utils/motion";
+import KeyCap from "../atoms/KeyCap";
 import SectionHeader from "../atoms/SectionHeader";
 import { Bee3aCard } from "./FeaturedProducts";
 
@@ -70,7 +71,7 @@ const CaseStudyModal = ({
               type="button"
               onClick={onClose}
               aria-label="Close case study"
-              className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full bg-volt text-[20px] text-ink"
+              className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full bg-frost text-[20px] text-ink"
             >
               ×
             </button>
@@ -95,24 +96,24 @@ const CaseStudyModal = ({
             <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-3">
               {project.caseStudy.impact.map((m) => (
                 <div key={m.label} className="rounded-2xl bg-ink px-4 py-4">
-                  <div className="font-display text-[34px] leading-none text-volt">{m.value}</div>
+                  <div className="font-display text-[34px] leading-none text-frost">{m.value}</div>
                   <div className="mt-1.5 text-[12px] leading-tight text-smoke">{m.label}</div>
                 </div>
               ))}
             </div>
 
-            <h4 className="m-0 mt-8 text-[12px] font-semibold uppercase tracking-[0.14em] text-volt">
+            <h4 className="m-0 mt-8 text-[12px] font-semibold uppercase tracking-[0.14em] text-frost">
               The problem
             </h4>
             <p className="m-0 mt-2 text-[15px] leading-[1.75] text-mist">{project.caseStudy.problem}</p>
 
-            <h4 className="m-0 mt-7 text-[12px] font-semibold uppercase tracking-[0.14em] text-volt">
+            <h4 className="m-0 mt-7 text-[12px] font-semibold uppercase tracking-[0.14em] text-frost">
               What I did
             </h4>
             <ul className="m-0 mt-3 flex list-none flex-col gap-2 p-0">
               {project.caseStudy.approach.map((point) => (
                 <li key={point} className="flex gap-3 text-[15px] leading-[1.65] text-mist">
-                  <span aria-hidden="true" className="text-volt">
+                  <span aria-hidden="true" className="text-frost">
                     →
                   </span>
                   {point}
@@ -120,7 +121,7 @@ const CaseStudyModal = ({
               ))}
             </ul>
 
-            <h4 className="m-0 mt-7 text-[12px] font-semibold uppercase tracking-[0.14em] text-volt">
+            <h4 className="m-0 mt-7 text-[12px] font-semibold uppercase tracking-[0.14em] text-frost">
               Stack
             </h4>
             <ul className="m-0 mt-3 flex list-none flex-wrap gap-2 p-0 text-[12px]">
@@ -135,7 +136,7 @@ const CaseStudyModal = ({
               href={project.sourceCodeLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-9 flex h-[52px] w-fit items-center rounded-full bg-volt px-6 text-[13px] font-semibold uppercase tracking-[0.1em] text-ink"
+              className="mt-9 flex h-[52px] w-fit items-center rounded-full bg-frost px-6 text-[13px] font-semibold uppercase tracking-[0.1em] text-ink"
             >
               {linkLabel(project.sourceCodeLink)} ↗
             </a>
@@ -147,7 +148,7 @@ const CaseStudyModal = ({
   );
 };
 
-// Big rows; on desktop a volt card with the project's logo follows the
+// Big rows; on desktop a frost card with the project's logo follows the
 // pointer over the list.
 const ProjectList = ({ onOpenCase }: { onOpenCase: (p: TProject) => void }) => {
   const reduce = useReducedMotion();
@@ -173,27 +174,33 @@ const ProjectList = ({ onOpenCase }: { onOpenCase: (p: TProject) => void }) => {
       ref={listRef}
       data-xray="projects"
       onPointerMove={onMove}
-      className="relative m-0 mt-16 list-none border-b border-paper/15 p-0"
+      className="relative m-0 mt-16 list-none border-b border-dashed border-paper/20 p-0"
     >
       {projects.map((project, i) => {
         const dimmed = hovered !== null && hovered !== i;
-        const rowClass = `group flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-paper/15 py-6 text-left transition-colors sm:py-[30px] ${
+        const rowClass = `group flex w-full flex-wrap items-center gap-x-5 gap-y-2 border-t border-dashed border-paper/20 py-5 text-left transition-colors sm:py-6 ${
           dimmed ? "text-dim" : "text-paper"
         }`;
+        // A page of the catalogue: number, name, a dotted leader, the kind, a key.
         const content = (
           <>
+            <span className="w-[62px] shrink-0 font-fellsc text-[15px] tracking-[0.1em] text-smoke">
+              No. {String(i + 1).padStart(2, "0")}
+            </span>
             <motion.span
-              animate={{ x: hovered === i && !reduce ? 18 : 0 }}
+              animate={{ x: hovered === i && !reduce ? 14 : 0 }}
               transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
-              className="font-display text-[clamp(36px,6vw,92px)] uppercase leading-none"
+              className="font-fell text-[clamp(30px,4.2vw,58px)] leading-[1.1]"
             >
               {project.name}
             </motion.span>
-            <span
-              className={`text-[12px] uppercase tracking-[0.12em] ${hovered === i ? "text-volt" : ""}`}
-            >
-              {project.category}
-              {project.caseStudy ? " · Case study" : " ↗"}
+            <span aria-hidden="true" className="hidden min-w-[40px] flex-1 -translate-y-1 self-end border-b-2 border-dotted border-paper/30 md:block" />
+            <span className="flex items-center gap-4 pl-[82px] md:pl-0">
+              <span className={`text-[12px] uppercase tracking-[0.12em] ${hovered === i ? "text-frost" : "text-smoke"}`}>
+                {project.category}
+              </span>
+              <KeyCap>{project.caseStudy ? "↵" : "↗"}</KeyCap>
+              <span className="sr-only">{project.caseStudy ? "Open the case study" : "Opens in a new tab"}</span>
             </span>
           </>
         );
@@ -236,7 +243,7 @@ const ProjectList = ({ onOpenCase }: { onOpenCase: (p: TProject) => void }) => {
             initial={false}
             animate={{ scale: hovered !== null ? 1 : 0, rotate: hovered !== null ? 3 : -4 }}
             transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
-            className="flex h-[250px] w-[340px] flex-col gap-3.5 rounded-2xl bg-volt p-6 shadow-[0_30px_80px_-24px_rgba(212,255,58,0.45)]"
+            className="flex h-[250px] w-[340px] flex-col gap-3.5 rounded-2xl bg-frost p-6 shadow-[0_30px_80px_-24px_rgb(var(--frost)/0.45)]"
           >
             <div className="flex flex-1 items-center justify-center overflow-hidden rounded-[10px] bg-white p-7">
               <img src={preview.image} alt="" className="max-h-full max-w-full object-contain" />
@@ -266,10 +273,7 @@ const Works = () => {
   return (
     <section id="work" className="py-20 sm:py-28">
       <div className={styles.container}>
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <SectionHeader index="04" label="Selected work" labelAr="أعمالي" title="Selected work" />
-          <p className="m-0 text-[12px] uppercase tracking-[0.14em] text-smoke">Client · Focus</p>
-        </div>
+        <SectionHeader index="04" label="Selected work" labelAr="أعمالي" title="Selected Work" />
 
         <Bee3aCard />
         <ProjectList onOpenCase={openCaseStudy} />

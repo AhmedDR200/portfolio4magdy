@@ -99,31 +99,31 @@ const RequestTrace = () => {
         >
           <div className="flex items-center gap-4">
             <span className="hidden whitespace-nowrap text-smoke sm:inline">
-              <span className="text-volt">›</span> GET /ahmed
+              <span className="text-frost">›</span> GET /ahmed
             </span>
 
             <span className="relative h-3 w-[110px] shrink-0 sm:w-[190px]">
               <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-paper/20" />
-              <span className="absolute left-0 top-1/2 h-px -translate-y-1/2 bg-volt" style={{ width: progress }} />
+              <span className="absolute left-0 top-1/2 h-px -translate-y-1/2 bg-frost" style={{ width: progress }} />
               {HOPS.map((h, i) => (
                 <span
                   key={h.section}
                   className={`absolute top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full ${
-                    i <= position + 0.001 ? "bg-volt" : "bg-paper/30"
+                    i <= position + 0.001 ? "bg-frost" : "bg-paper/30"
                   }`}
                   style={{ left: `${(i / LAST) * 100}%` }}
                 />
               ))}
               <span
-                className={`absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-volt ${
-                  done ? "animate-pulse-volt" : "shadow-[0_0_14px_rgba(212,255,58,0.85)]"
+                className={`absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-frost ${
+                  done ? "animate-pulse-frost" : "shadow-[0_0_14px_rgb(var(--frost)/0.85)]"
                 }`}
                 style={{ left: progress }}
               />
             </span>
 
             <span className="w-[120px] shrink-0 whitespace-nowrap tabular-nums">
-              <span className={done ? "text-volt" : ""}>{hop.name}</span>{" "}
+              <span className={done ? "text-frost" : ""}>{hop.name}</span>{" "}
               <span className="text-smoke">{latencyAt(position)}ms</span>
             </span>
           </div>

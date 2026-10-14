@@ -20,9 +20,9 @@ const label = "m-0 text-[11px] uppercase tracking-[0.14em] text-smoke";
 const Channel = () => (
   <section id="channel" aria-label="YouTube channel" className="py-20 sm:py-28">
     <div className={styles.container}>
-      <SectionHeader index="07" label="On YouTube" labelAr="على يوتيوب" title="The channel" />
+      <SectionHeader index="07" label="On YouTube" labelAr="على يوتيوب" title="The Channel" />
 
-      <article className="relative mt-12 overflow-hidden rounded-[28px] border border-paper/15 bg-[#121212]">
+      <article className="theme-dark relative mt-12 overflow-hidden rounded-[28px] border border-paper/15 bg-[#121212]">
         {/* The channel banner's two worlds, drawn: the code at night, a green
             seam, and the street on paper. The banner's own words are below. */}
         <div aria-hidden="true" className="relative grid h-[130px] grid-cols-2 sm:h-[210px]">
@@ -53,7 +53,7 @@ const Channel = () => (
               href={`${config.youtube.url}?sub_confirmation=1`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-[50px] items-center gap-2.5 rounded-full bg-volt px-6 text-[13px] font-extrabold uppercase tracking-[0.1em] text-ink transition-transform hover:scale-105"
+              className="flex h-[50px] items-center gap-2.5 rounded-full bg-frost px-6 text-[13px] font-extrabold uppercase tracking-[0.1em] text-ink transition-transform hover:scale-105"
             >
               Subscribe
               <span lang="ar" className="font-arabic text-[18px] font-normal normal-case tracking-normal">
@@ -64,7 +64,7 @@ const Channel = () => (
               href={config.youtube.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-[50px] items-center rounded-full border border-paper/25 px-[22px] text-[13px] font-bold uppercase tracking-[0.1em] transition-colors hover:border-volt hover:text-volt"
+              className="flex h-[50px] items-center rounded-full border border-paper/25 px-[22px] text-[13px] font-bold uppercase tracking-[0.1em] transition-colors hover:border-frost hover:text-frost"
             >
               Watch on YouTube ↗
             </a>

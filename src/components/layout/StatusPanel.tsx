@@ -118,10 +118,10 @@ const StatusPanel = () => {
     <div ref={ref} data-xray="status" className="rounded-[28px] border border-paper/15 bg-graphite/50 px-5 pb-2 pt-6 sm:px-8 sm:pt-7">
       <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-paper/15 pb-5">
         <p className="m-0 flex items-center gap-3 font-display text-[26px] uppercase leading-none sm:text-[32px]">
-          <span aria-hidden="true" className="animate-pulse-volt h-3 w-3 shrink-0 rounded-full bg-volt" />
+          <span aria-hidden="true" className="animate-pulse-frost h-3 w-3 shrink-0 rounded-full bg-frost" />
           All systems operational
         </p>
-        <p lang="ar" dir="rtl" className="m-0 font-arabic text-[24px] leading-none text-volt">
+        <p lang="ar" dir="rtl" className="m-0 font-arabic text-[24px] leading-none text-frost">
           كله تمام
         </p>
       </div>
@@ -134,22 +134,22 @@ const StatusPanel = () => {
           </dt>
           <dd className={`${value} truncate`}>
             {commit ? (
-              <a href={commit.url} target="_blank" rel="noopener noreferrer" className="hover:text-volt">
+              <a href={commit.url} target="_blank" rel="noopener noreferrer" className="hover:text-frost">
                 {commit.message}
                 <span className="text-smoke"> · {commit.repo}</span>
               </a>
             ) : commit === null ? (
-              <a href={config.socials.github} target="_blank" rel="noopener noreferrer" className="hover:text-volt">
+              <a href={config.socials.github} target="_blank" rel="noopener noreferrer" className="hover:text-frost">
                 See it on GitHub ↗
               </a>
             ) : (
               <span className="text-smoke">
-                <span className="text-volt">›</span> fetching
-                <span aria-hidden="true" className="animate-blink ml-1 inline-block h-[3px] w-2.5 bg-volt" />
+                <span className="text-frost">›</span> fetching
+                <span aria-hidden="true" className="animate-blink ml-1 inline-block h-[3px] w-2.5 bg-frost" />
               </span>
             )}
           </dd>
-          <dd className={`${status} text-volt`}>{commit ? timeAgo(commit.date) : "—"}</dd>
+          <dd className={`${status} text-frost`}>{commit ? timeAgo(commit.date) : "—"}</dd>
         </div>
 
         <div className={row}>
@@ -158,8 +158,8 @@ const StatusPanel = () => {
             Now
           </dt>
           <dd className={value}>{config.status.now}</dd>
-          <dd className={`${status} flex items-center justify-end gap-2 text-volt`}>
-            <span aria-hidden="true" className="h-2 w-2 rounded-full bg-volt" />
+          <dd className={`${status} flex items-center justify-end gap-2 text-frost`}>
+            <span aria-hidden="true" className="h-2 w-2 rounded-full bg-frost" />
             Shipping
           </dd>
         </div>

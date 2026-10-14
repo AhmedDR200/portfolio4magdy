@@ -2,10 +2,16 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { navLinks } from "../../constants";
+import Brush from "../atoms/Brush";
+import { travelOnClick } from "../../utils/travel";
 import { config } from "../../constants/config";
 import { ACHIEVEMENTS, useUnlocked } from "../../utils/achievements";
+import { levelOf, useBond } from "../../utils/bond";
+import { toggleTheme, useTheme } from "../../utils/theme";
 import { EASE_OUT_EXPO } from "../../utils/motion";
 import { whistle } from "./HorseWhistle";
+import { deadEye } from "./DeadEye";
+import { openSatchel } from "./Satchel";
 import Icon from "../atoms/Icon";
 
 type Props = {
@@ -21,13 +27,15 @@ type Props = {
 };
 
 const modeButton =
-  "flex h-10 items-center gap-2.5 rounded-full border border-paper/25 px-4 text-[12px] font-semibold uppercase tracking-[0.08em] transition-colors hover:border-volt hover:text-volt aria-pressed:border-volt aria-pressed:text-volt";
+  "flex h-10 items-center gap-2.5 rounded-full border border-paper/25 px-4 text-[12px] font-semibold uppercase tracking-[0.08em] transition-colors hover:border-frost hover:text-frost aria-pressed:border-frost aria-pressed:text-frost";
 const kbd = "rounded border border-current px-1.5 font-mono text-[11px] leading-[1.4]";
 
-// A round volt button that appears once the hero scrolls away, plus the
+// A round frost button that appears once the hero scrolls away, plus the
 // full-screen menu it opens (also opened by the hero's Menu button on phones).
 const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, onMap, onWheel, onJournal }: Props) => {
   const unlocked = useUnlocked();
+  const bond = useBond();
+  const theme = useTheme();
   const [scrolledPastHero, setScrolledPastHero] = useState(false);
 
   useEffect(() => {
@@ -68,7 +76,7 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
             aria-expanded={open}
             aria-controls="site-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="fixed right-5 top-5 z-[80] flex h-[68px] w-[68px] flex-col items-center justify-center gap-[7px] rounded-full bg-volt text-ink shadow-[0_10px_40px_-10px_rgba(212,255,58,0.6)] sm:right-8 sm:top-8 sm:h-20 sm:w-20"
+            className="fixed right-5 top-5 z-[80] flex h-[68px] w-[68px] flex-col items-center justify-center gap-[7px] rounded-full bg-frost text-ink shadow-[0_10px_40px_-10px_rgb(var(--frost)/0.6)] sm:right-8 sm:top-8 sm:h-20 sm:w-20"
           >
             <span
               className={`block h-[2px] w-6 bg-ink transition-transform duration-300 ${open ? "translate-y-[4.5px] rotate-45" : ""}`}
@@ -107,22 +115,23 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
               className="absolute inset-y-0 right-0 flex w-full flex-col justify-between overflow-y-auto bg-graphite px-8 pb-10 pt-32 sm:w-[520px] sm:px-14"
             >
               <div className="flex flex-col gap-6">
-                <p className="m-0 border-b border-paper/15 pb-4 text-[12px] uppercase tracking-[0.14em] text-smoke">
-                  Navigation
+                <p className="m-0 border-b border-paper/15 pb-4 font-fellsc text-[15px] tracking-[0.2em] text-smoke">
+                  Chapters
                 </p>
                 <ul className="m-0 flex list-none flex-col gap-1 p-0">
-                  {navLinks.map((link) => (
-                    <li key={link.id}>
+                  {/* RDR2's pause menu: the hovered item gets the brush stroke. */}
+                  {navLinks.map((link, i) => (
+                    <li key={link.id} className="flex">
                       <a
                         href={`#${link.id}`}
-                        onClick={close}
-                        className="group flex items-center gap-4 py-1 font-display text-[clamp(48px,7vw,72px)] uppercase leading-[1.05] transition-colors hover:text-volt"
+                        onClick={travelOnClick(link.id, close)}
+                        className="group relative px-4 py-1.5 font-fellsc text-[clamp(38px,5.4vw,52px)] leading-[1.15] tracking-[0.08em] transition-colors duration-200 hover:text-ink focus-visible:text-ink focus-visible:outline-none"
                       >
-                        <span
-                          aria-hidden="true"
-                          className="h-3 w-3 scale-0 rounded-full bg-volt transition-transform group-hover:scale-100"
+                        <Brush
+                          variant={i}
+                          className="absolute -inset-x-3 inset-y-0 h-full w-[calc(100%+24px)] text-paper transition-[clip-path] duration-300 ease-out [clip-path:inset(0_100%_0_0)] group-hover:[clip-path:inset(0_0_0_0)] group-focus-visible:[clip-path:inset(0_0_0_0)]"
                         />
-                        {link.title}
+                        <span className="relative">{link.title}</span>
                       </a>
                     </li>
                   ))}
@@ -134,21 +143,21 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
                   href={config.cvUrl}
                   download
                   data-cv
-                  className="flex h-14 w-fit items-center rounded-full bg-volt px-7 text-[13px] font-semibold uppercase tracking-[0.1em] text-ink"
+                  className="torn flex h-14 w-fit items-center bg-frost px-8 font-fellsc text-[18px] tracking-[0.12em] text-ink"
                 >
                   Resume ↓
                 </a>
                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-[13px] uppercase tracking-[0.1em]">
-                  <a href={config.socials.github} target="_blank" rel="noopener noreferrer" className="py-2 hover:text-volt">
+                  <a href={config.socials.github} target="_blank" rel="noopener noreferrer" className="py-2 hover:text-frost">
                     GitHub
                   </a>
-                  <a href={config.socials.linkedin} target="_blank" rel="noopener noreferrer" className="py-2 hover:text-volt">
+                  <a href={config.socials.linkedin} target="_blank" rel="noopener noreferrer" className="py-2 hover:text-frost">
                     LinkedIn
                   </a>
-                  <a href={config.youtube.url} target="_blank" rel="noopener noreferrer" className="py-2 hover:text-volt">
+                  <a href={config.youtube.url} target="_blank" rel="noopener noreferrer" className="py-2 hover:text-frost">
                     YouTube
                   </a>
-                  <a href={`mailto:${config.html.email}`} className="py-2 hover:text-volt">
+                  <a href={`mailto:${config.html.email}`} className="py-2 hover:text-frost">
                     Email
                   </a>
                 </div>
@@ -158,6 +167,10 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
                     <button type="button" aria-pressed={xray} onClick={toggleMode(onXray)} className={modeButton}>
                       <Icon name="eye" size={16} />
                       X-ray <kbd className={kbd}>X</kbd>
+                    </button>
+                    <button type="button" onClick={toggleMode(toggleTheme)} className={modeButton}>
+                      <Icon name={theme === "dark" ? "sun" : "moon"} size={16} />
+                      {theme === "dark" ? "Light" : "Dark"} mode <kbd className={kbd}>L</kbd>
                     </button>
                     <button type="button" aria-pressed={powerCut} onClick={toggleMode(onPowerCut)} className={modeButton}>
                       <Icon name="bulb-off" size={16} />
@@ -177,11 +190,19 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
                     </button>
                     <button type="button" onClick={toggleMode(whistle)} className={modeButton}>
                       <Icon name="whistle" size={16} />
-                      Whistle <kbd className={kbd}>H</kbd>
+                      Whistle · bond {levelOf(bond.whistles).level}/4 <kbd className={kbd}>H</kbd>
+                    </button>
+                    <button type="button" onClick={toggleMode(openSatchel)} className={modeButton}>
+                      <Icon name="briefcase" size={16} />
+                      Satchel <kbd className={kbd}>I</kbd>
+                    </button>
+                    <button type="button" onClick={toggleMode(deadEye)} className={modeButton}>
+                      <Icon name="stopwatch" size={16} />
+                      Dead Eye <kbd className={kbd}>E</kbd>
                     </button>
                   </div>
                 </div>
-                <p lang="ar" dir="rtl" className="m-0 text-left font-arabic text-[28px] text-volt">
+                <p lang="ar" dir="rtl" className="m-0 text-left font-arabic text-[28px] text-frost">
                   {config.motto.ar}
                 </p>
               </div>

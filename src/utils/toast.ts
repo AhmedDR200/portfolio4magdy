@@ -9,8 +9,8 @@ export type Toast = {
   kicker: string;
   title: string;
   ar: string;
-  /** volt: good news; paper: secrets and warnings; ink-on-volt: the big one. */
-  tone?: "volt" | "paper" | "legend";
+  /** frost: good news; paper: secrets and warnings; ink-on-frost: the big one. */
+  tone?: "frost" | "paper" | "legend";
   /** Shown on the right, like "5 / 12". */
   meta?: string;
 };

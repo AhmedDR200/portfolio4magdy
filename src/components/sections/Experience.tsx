@@ -3,73 +3,70 @@ import { motion } from "framer-motion";
 import { experiences } from "../../constants";
 import { styles } from "../../constants/styles";
 import { fadeUp } from "../../utils/motion";
-import RevealText from "../atoms/RevealText";
-import { Eyebrow } from "../atoms/SectionHeader";
+import SectionHeader from "../atoms/SectionHeader";
 
-// A volt spine down the middle with a glowing dot on the current role.
+// Experience as the camp ledger: a torn page with ruled lines and a red double
+// margin. Each job is an entry: the dates, who and what, and what it paid in.
+const pad = "pl-[76px] pr-5 sm:pl-[96px] sm:pr-7";
+const since = experiences[experiences.length - 1].date.split(" – ")[0];
+
 const Experience = () => (
-  <section id="experience" className="relative overflow-hidden py-24 sm:py-32">
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute left-1/2 top-[22%] h-[600px] w-[900px] -translate-x-1/2 bg-[radial-gradient(closest-side,rgba(212,255,58,0.09),rgba(212,255,58,0))]"
-    />
-    <div className={`${styles.container} relative max-w-[1200px]`}>
-      <Eyebrow index="05" label="Experience" labelAr="مشواري" center />
-      <h2
-        aria-label="My career & experience"
-        className="m-0 mt-4 text-center font-display text-[clamp(60px,8.4vw,124px)] font-normal uppercase leading-[0.95]"
-      >
-        <RevealText as="span" text="My career" className="block" />
-        <RevealText as="span" text="& experience" className="block text-volt" />
-      </h2>
+  <section id="experience" className="py-24 sm:py-32">
+    <div className={`${styles.container} max-w-[1200px]`}>
+      <SectionHeader index="05" label="Experience" labelAr="مشواري" title="Experience" />
 
-      <ol className="relative m-0 mt-20 flex list-none flex-col gap-16 p-0 sm:mt-24 sm:gap-[72px]">
-        <span
-          aria-hidden="true"
-          className="absolute bottom-0 left-[7px] top-[-40px] w-[3px] bg-[linear-gradient(to_top,rgba(212,255,58,0)_0%,rgba(212,255,58,0.6)_35%,#D4FF3A_80%,rgba(212,255,58,0.3)_100%)] md:left-1/2 md:-translate-x-1/2"
-        />
-        <span
-          aria-hidden="true"
-          className="absolute left-[3px] top-[18px] h-3 w-3 rounded-full bg-volt shadow-[0_0_5px_2px_#E9FF9A,0_0_18px_8px_rgba(212,255,58,0.6),0_0_90px_22px_rgba(212,255,58,0.35)] md:left-1/2 md:-translate-x-1/2"
-        />
-        {experiences.map((job, i) => (
-          <motion.li
-            key={job.companyName}
-            variants={fadeUp(0.05)}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.4 }}
-            className="flex flex-col gap-5 pl-10 md:flex-row md:justify-between md:gap-6 md:pl-0"
-          >
-            <div className="flex justify-between gap-6 md:w-[42%]">
-              <div>
-                <h3 className="m-0 font-display text-[30px] font-normal uppercase leading-none sm:text-[38px]">
-                  {job.title}
-                </h3>
-                {job.companyUrl ? (
-                  <a
-                    href={job.companyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2.5 inline-block text-[15px] uppercase tracking-[0.06em] text-volt hover:underline"
-                  >
-                    {job.companyName} ↗
-                  </a>
-                ) : (
-                  <p className="m-0 mt-2.5 text-[15px] uppercase tracking-[0.06em] text-volt">{job.companyName}</p>
-                )}
-                <p className="m-0 mt-1 text-[12px] uppercase tracking-[0.1em] text-smoke">{job.date}</p>
+      <motion.div
+        variants={fadeUp(0.05)}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.2 }}
+        className="torn-3 relative mt-14 bg-graphite"
+      >
+        <span aria-hidden="true" className="absolute inset-y-0 left-[54px] border-l-[1.5px] border-bandana/75 sm:left-[70px]" />
+        <span aria-hidden="true" className="absolute inset-y-0 left-[59px] border-l-[1.5px] border-bandana/75 sm:left-[75px]" />
+
+        <div className={`flex flex-wrap items-baseline justify-between gap-3 border-b-2 border-frost/30 py-6 ${pad}`}>
+          <h3 className="m-0 flex flex-wrap items-baseline gap-x-3.5 font-normal">
+            <span className="font-fellsc text-[20px] tracking-[0.24em] sm:text-[22px]">Camp Ledger</span>
+            <span lang="ar" className="font-ruqaa text-[24px] text-smoke">
+              دفتر المعسكر
+            </span>
+          </h3>
+          <span className="hidden font-fellsc text-[13px] tracking-[0.12em] text-smoke sm:block">Date · Entry · Paid in</span>
+        </div>
+
+        <ol className="m-0 list-none p-0">
+          {experiences.map((job) => (
+            <li
+              key={job.companyName}
+              className={`grid gap-x-6 gap-y-1.5 border-b border-frost/15 py-5 md:grid-cols-[170px_1fr_160px] md:items-baseline ${pad}`}
+            >
+              <span className="text-[12.5px] text-smoke">{job.date}</span>
+              <div className="flex flex-col gap-1">
+                <p className="m-0 flex flex-wrap items-baseline gap-x-3 font-fell text-[24px] leading-tight">
+                  {job.companyUrl ? (
+                    <a href={job.companyUrl} target="_blank" rel="noopener noreferrer" className="hover:text-frost">
+                      {job.companyName} ↗
+                    </a>
+                  ) : (
+                    job.companyName
+                  )}
+                  <span className="font-fellsc text-[14px] tracking-[0.1em] text-smoke">{job.title}</span>
+                </p>
+                <p className="m-0 font-fell text-[16px] italic leading-[1.55] text-paper/75">{job.summary}</p>
               </div>
-              <p
-                className={`m-0 font-display text-[48px] uppercase leading-[0.9] sm:text-[64px] ${i === 0 ? "text-volt" : ""}`}
-              >
-                {job.marker}
-              </p>
-            </div>
-            <p className="m-0 text-[15px] leading-[1.75] text-smoke md:w-[42%]">{job.summary}</p>
-          </motion.li>
-        ))}
-      </ol>
+              <span className="font-fell text-[20px] italic text-frost md:text-right">{job.paidIn}</span>
+            </li>
+          ))}
+        </ol>
+
+        <div className={`flex flex-wrap items-baseline justify-between gap-3 py-5 ${pad}`}>
+          <span className="font-fellsc text-[15px] tracking-[0.12em] text-smoke">On the trail since {since}</span>
+          <span lang="ar" dir="rtl" className="font-ruqaa text-[26px]">
+            والرحلة لسه مكملة
+          </span>
+        </div>
+      </motion.div>
     </div>
   </section>
 );

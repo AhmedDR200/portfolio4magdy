@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { unlock } from "../../utils/achievements";
@@ -360,7 +360,15 @@ const TABS: { id: Tab | "more"; label: string }[] = [
   { id: "more", label: "المزيد" },
 ];
 
-const Bee3aDemo = () => {
+type Props = {
+  /** The guided tour ("Try the demo" on the card) is playing. */
+  playing: boolean;
+  onPlayingChange: (playing: boolean) => void;
+  className?: string;
+};
+
+// The phone and the line under it. The card places it and owns the tour button.
+const Bee3aDemo = ({ playing, onPlayingChange, className = "" }: Props) => {
   const [state, dispatch] = useReducer(reducer, INITIAL);
 
   useEffect(() => {
@@ -368,7 +376,6 @@ const Bee3aDemo = () => {
     unlock("first-sale");
     changeHonor(1, "bee3a-sale");
   }, [state.sale]);
-  const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     if (!playing) return;
@@ -376,7 +383,7 @@ const Bee3aDemo = () => {
     let id = 0;
     const next = () => {
       const item = TOUR[step++];
-      if (item === undefined) return setPlaying(false);
+      if (item === undefined) return onPlayingChange(false);
       if (typeof item === "number") {
         id = window.setTimeout(next, item);
         return;
@@ -386,7 +393,7 @@ const Bee3aDemo = () => {
     };
     next();
     return () => window.clearTimeout(id);
-  }, [playing]);
+  }, [playing, onPlayingChange]);
 
   useEffect(() => {
     if (!state.toast) return;
@@ -395,35 +402,7 @@ const Bee3aDemo = () => {
   }, [state.toast]);
 
   return (
-    <>
-      <div className="absolute inset-x-6 top-[90px] flex items-center gap-3 sm:inset-x-auto sm:left-6 sm:top-[92px] sm:flex-col sm:items-start sm:gap-1.5">
-        <button
-          type="button"
-          onClick={() => setPlaying((p) => !p)}
-          aria-pressed={playing}
-          className="flex items-center gap-2 whitespace-nowrap rounded-full bg-volt px-3 py-1.5 text-[12px] font-bold uppercase tracking-[0.1em] text-ink transition-transform hover:scale-105"
-        >
-          {playing ? "■ Stop" : "▶ Try it"}
-          <span aria-hidden="true" className="animate-blink h-[3px] w-2.5 bg-ink" />
-        </button>
-        <span className="whitespace-nowrap text-[11px] text-smoke">
-          <span className="sm:hidden">or tap the phone</span>
-          <span className="hidden sm:inline">or tap the phone · nothing is saved</span>
-        </span>
-        {state.touched && (
-          <button
-            type="button"
-            onClick={() => {
-              setPlaying(false);
-              dispatch({ type: "reset" });
-            }}
-            className="ml-auto whitespace-nowrap text-[11px] uppercase tracking-[0.1em] text-volt hover:underline sm:ml-0"
-          >
-            Reset ↺
-          </button>
-        )}
-      </div>
-
+    <div className={`flex flex-col items-center gap-3 ${className}`}>
       <div
         role="group"
         aria-label="Bee3a demo (in Arabic)"
@@ -431,8 +410,8 @@ const Bee3aDemo = () => {
         lang="ar"
         data-xray="bee3a-demo"
         // Touching the phone hands control back to the visitor.
-        onPointerDown={() => setPlaying(false)}
-        className="absolute left-1/2 top-[136px] flex h-[468px] w-[252px] -translate-x-1/2 flex-col overflow-hidden rounded-[34px] border-[6px] border-[#2A241E] bg-[#FAF6F0] font-bee3a text-[#17130F] sm:left-auto sm:right-11 sm:top-10 sm:translate-x-0"
+        onPointerDown={() => onPlayingChange(false)}
+        className="relative flex h-[468px] w-[252px] flex-col overflow-hidden rounded-[34px] border-[6px] border-[#2A241E] bg-[#FAF6F0] font-bee3a text-[#17130F] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.9)]"
       >
         <div className="relative min-h-0 flex-1 px-3.5 pb-2 pt-5">
           <AnimatePresence mode="wait" initial={false}>
@@ -488,7 +467,26 @@ const Bee3aDemo = () => {
           )}
         </nav>
       </div>
-    </>
+
+      <p className="m-0 flex items-center gap-2 whitespace-nowrap text-[11px] text-smoke">
+        Tap the phone · nothing is saved
+        {state.touched && (
+          <>
+            <span aria-hidden="true">·</span>
+            <button
+              type="button"
+              onClick={() => {
+                onPlayingChange(false);
+                dispatch({ type: "reset" });
+              }}
+              className="uppercase tracking-[0.1em] text-frost hover:underline"
+            >
+              Reset ↺
+            </button>
+          </>
+        )}
+      </p>
+    </div>
   );
 };
 

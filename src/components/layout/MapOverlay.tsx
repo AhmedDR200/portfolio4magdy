@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type 
 import { AnimatePresence, motion } from "framer-motion";
 
 import { unlock } from "../../utils/achievements";
-import { pauseScroll, scrollToSection } from "../../utils/lenis";
+import { pauseScroll } from "../../utils/lenis";
+import { travelTo } from "../../utils/travel";
 import { EASE_OUT_EXPO } from "../../utils/motion";
 
 // Press M: the page as a western map. Each section is a town on a railway
@@ -111,7 +112,7 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
       onOpenChange(false);
       unlock("fast-traveler");
       // Let the map fade first, then glide there.
-      window.setTimeout(() => scrollToSection(TOWNS[index].id), 260);
+      window.setTimeout(() => travelTo(TOWNS[index].id), 260);
     },
     [onOpenChange]
   );
@@ -160,7 +161,7 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-[88] flex flex-col bg-[radial-gradient(circle_at_50%_50%,#121212_0,#0A0A0A_75%)] text-paper"
+          className="fixed inset-0 z-[88] flex flex-col bg-[radial-gradient(circle_at_50%_50%,rgb(var(--graphite))_0,rgb(var(--ink))_75%)] text-paper"
         >
           <div className="flex items-start justify-between gap-4 px-5 pt-5 sm:px-12 sm:pt-10">
             <p className="m-0 flex items-baseline gap-4">
@@ -177,7 +178,7 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
               <button
                 type="button"
                 onClick={() => onOpenChange(false)}
-                className="rounded-full border border-paper/25 px-3.5 py-2 hover:border-volt hover:text-volt"
+                className="rounded-full border border-paper/25 px-3.5 py-2 hover:border-frost hover:text-frost"
               >
                 Close · M
               </button>
@@ -191,18 +192,17 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
               className="absolute inset-0 h-full w-full"
             >
               {art.contours.map((d, i) => (
-                <path key={i} d={d} fill="none" stroke="rgba(244,244,239,0.06)" strokeWidth="1.2" />
+                <path key={i} d={d} fill="none" className="stroke-paper/[0.08]" strokeWidth="1.2" />
               ))}
-              <path d={layout.river} fill="none" stroke="rgba(212,255,58,0.2)" strokeWidth="10" strokeLinecap="round" />
-              <path d={art.rail} fill="none" stroke="rgba(244,244,239,0.3)" strokeWidth="2" strokeDasharray="2 10" strokeLinecap="round" />
+              <path d={layout.river} fill="none" className="stroke-frost/20" strokeWidth="10" strokeLinecap="round" />
+              <path d={art.rail} fill="none" className="stroke-paper/30" strokeWidth="2" strokeDasharray="2 10" strokeLinecap="round" />
               {selected !== here && (
                 <path
                   d={`M${hx},${hy} Q${(hx + sx) / 2},${Math.min(hy, sy) - 90} ${sx},${sy}`}
                   fill="none"
-                  stroke="#D4FF3A"
                   strokeWidth="3"
                   strokeDasharray="10 10"
-                  className="animate-map-route"
+                  className="animate-map-route stroke-frost"
                 />
               )}
 
@@ -226,12 +226,12 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
                     data-cursor-target
                   >
                     <circle cx={x} cy={y} r="34" fill="transparent" />
-                    {on && <circle cx={x} cy={y} r="20" fill="rgba(212,255,58,0.18)" />}
-                    <circle cx={x} cy={y} r="9" fill={on ? "#D4FF3A" : "#0A0A0A"} stroke="#D4FF3A" strokeWidth="3" />
-                    <text x={x + 18} y={y - 2} fontFamily="Rye, serif" fontSize={on ? 26 : 20} fill={on ? "#D4FF3A" : "#F4F4EF"}>
+                    {on && <circle cx={x} cy={y} r="20" className="fill-frost/[0.18]" />}
+                    <circle cx={x} cy={y} r="9" className={on ? "fill-frost stroke-frost" : "fill-ink stroke-frost"} strokeWidth="3" />
+                    <text x={x + 18} y={y - 2} fontFamily="Rye, serif" fontSize={on ? 26 : 20} className={on ? "fill-frost" : "fill-paper"}>
                       {t.name}
                     </text>
-                    <text x={x + 18} y={y + 18} fontFamily="JetBrains Mono, monospace" fontSize="12" fill="#8C8C86">
+                    <text x={x + 18} y={y + 18} fontFamily="JetBrains Mono, monospace" fontSize="12" className="fill-smoke">
                       {t.section}
                     </text>
                   </g>
@@ -241,9 +241,9 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
               {/* The bob animates an inner group, so it doesn't replace the position. */}
               <g transform={`translate(${hx} ${hy - 30})`} pointerEvents="none">
                 <g className="animate-map-you">
-                  <path d="M0 18 L-12 -6 L0 0 L12 -6 Z" fill="#F4F4EF" stroke="#0A0A0A" strokeWidth="2" />
-                  <rect x="-46" y="-34" width="92" height="20" rx="10" fill="#F4F4EF" />
-                  <text x="0" y="-20" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="10" fontWeight="800" letterSpacing="1.2" fill="#0A0A0A">
+                  <path d="M0 18 L-12 -6 L0 0 L12 -6 Z" className="fill-paper stroke-ink" strokeWidth="2" />
+                  <rect x="-46" y="-34" width="92" height="20" rx="10" className="fill-paper" />
+                  <text x="0" y="-20" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="10" fontWeight="800" letterSpacing="1.2" className="fill-ink">
                     YOU ARE HERE
                   </text>
                 </g>
@@ -256,10 +256,10 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-            className="m-4 flex flex-col gap-2.5 rounded-[22px] border border-volt/45 bg-ink/95 p-5 md:absolute md:right-12 md:top-[calc(50%-150px)] md:m-0 md:w-[330px] md:p-6"
+            className="m-4 flex flex-col gap-2.5 rounded-[22px] border border-frost/45 bg-ink/95 p-5 md:absolute md:right-12 md:top-[calc(50%-150px)] md:m-0 md:w-[330px] md:p-6"
           >
             <span className="text-[10px] uppercase tracking-[0.16em] text-smoke">{selected === here ? "You are here" : "Selected town"}</span>
-            <span className="font-western text-[30px] leading-none text-volt sm:text-[36px]">{town.name}</span>
+            <span className="font-western text-[30px] leading-none text-frost sm:text-[36px]">{town.name}</span>
             <span className="text-[13px]">
               {town.section} ·{" "}
               <span lang="ar" className="font-arabic text-[16px] text-mist">
@@ -270,7 +270,7 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
             <button
               type="button"
               onClick={() => travel(selected)}
-              className="mt-1 flex h-[50px] items-center justify-between rounded-full bg-volt px-6 text-[13px] font-extrabold uppercase tracking-[0.1em] text-ink transition-transform hover:scale-[1.02]"
+              className="mt-1 flex h-[50px] items-center justify-between rounded-full bg-frost px-6 text-[13px] font-extrabold uppercase tracking-[0.1em] text-ink transition-transform hover:scale-[1.02]"
             >
               Fast travel <span aria-hidden="true">→</span>
             </button>
