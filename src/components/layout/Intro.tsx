@@ -55,7 +55,9 @@ const Intro = ({ onReveal, onDone }: Props) => {
       if (ctx) {
         try {
           await ctx.resume();
-          const track = await local.current;
+          // Don't keep a quick visitor waiting on the download: after 0.7 s the
+          // synthesized sounds play instead.
+          const track = await Promise.race([local.current, new Promise<null>((r) => window.setTimeout(() => r(null), 700))]);
           if (track) {
             const delay = 0.05;
             playLocalTrack(ctx, track, delay);
