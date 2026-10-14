@@ -4,6 +4,7 @@ import { AnimatePresence, animate, motion, useInView, useReducedMotion } from "f
 import { config } from "../../constants/config";
 import { logApiCall, loggedFetch } from "../../utils/apiLog";
 import { readCache, writeCache } from "../../utils/sessionCache";
+import Arrow from "../atoms/Arrow";
 
 type Stats = { subscribers: number | null; videos: number; views: number; at: number };
 
@@ -33,9 +34,7 @@ async function get<T>(path: string, params: Record<string, string>, signal: Abor
 }
 
 const fetchStats = async (signal: AbortSignal): Promise<Stats | null> => {
-  const channel = (
-    await get<ChannelRes>("channels", { part: "statistics,contentDetails", forHandle: config.youtube.handle }, signal)
-  )?.items?.[0];
+  const channel = (await get<ChannelRes>("channels", { part: "statistics,contentDetails", forHandle: config.youtube.handle }, signal))?.items?.[0];
   if (!channel) return null;
   const s = channel.statistics;
   const videos = Number(s.videoCount);
@@ -46,7 +45,7 @@ const fetchStats = async (signal: AbortSignal): Promise<Stats | null> => {
     const list = await get<PlaylistRes>(
       "playlistItems",
       { part: "contentDetails", maxResults: "50", playlistId: channel.contentDetails.relatedPlaylists.uploads },
-      signal
+      signal,
     );
     ids = list?.items?.map((item) => item.contentDetails.videoId) ?? [];
     writeCache(IDS_KEY, ids);
@@ -214,7 +213,7 @@ const ChannelStats = () => {
                 rel="noopener noreferrer"
                 className="flex w-fit flex-wrap items-baseline gap-x-2.5 text-[12px] uppercase tracking-[0.1em] hover:text-frost"
               >
-                Be subscriber #{next.toLocaleString("en")} ↗
+                Be subscriber #{next.toLocaleString("en")} <Arrow dir="up-right" />
                 <span lang="ar" dir="rtl" className="font-arabic text-[17px] normal-case tracking-normal text-frost">
                   خليك رقم {next.toLocaleString("ar-EG")}
                 </span>

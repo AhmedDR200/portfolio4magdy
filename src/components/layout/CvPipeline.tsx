@@ -5,6 +5,7 @@ import { config } from "../../constants/config";
 import { unlock } from "../../utils/achievements";
 import { changeHonor } from "../../utils/honor";
 import { EASE_OUT_EXPO } from "../../utils/motion";
+import Arrow from "../atoms/Arrow";
 
 // Clicking a Resume link (any <a data-cv>) runs a small CI pipeline before the
 // download starts: build → test → deploy → "CV delivered". It mirrors the
@@ -101,20 +102,12 @@ const CvPipeline = () => {
               <span className="text-smoke">
                 <span className="text-frost">›</span> gh run watch <span className="text-paper">sync-cv.yml</span>
               </span>
-              <button
-                type="button"
-                aria-label="Close"
-                onClick={() => setStep(-1)}
-                className="text-[16px] leading-none text-smoke hover:text-frost"
-              >
+              <button type="button" aria-label="Close" onClick={() => setStep(-1)} className="text-[16px] leading-none text-smoke hover:text-frost">
                 ×
               </button>
             </div>
             <div className="h-[2px] bg-paper/10">
-              <div
-                className="h-full bg-frost transition-[width] duration-500 ease-out"
-                style={{ width: `${(Math.max(step, 0) / STEPS.length) * 100}%` }}
-              />
+              <div className="h-full bg-frost transition-[width] duration-500 ease-out" style={{ width: `${(Math.max(step, 0) / STEPS.length) * 100}%` }} />
             </div>
 
             <ol className="m-0 flex list-none flex-col gap-2 px-5 py-4">
@@ -125,13 +118,9 @@ const CvPipeline = () => {
                     <span className={`w-3 shrink-0 ${state === "queued" ? "text-dim" : "text-frost"}`}>
                       {state === "done" ? "✓" : state === "running" ? SPINNER[frame] : "○"}
                     </span>
-                    <span className={`w-[52px] shrink-0 uppercase tracking-[0.1em] ${state === "queued" ? "text-dim" : "text-paper"}`}>
-                      {s.job}
-                    </span>
+                    <span className={`w-[52px] shrink-0 uppercase tracking-[0.1em] ${state === "queued" ? "text-dim" : "text-paper"}`}>{s.job}</span>
                     <span className={`min-w-0 flex-1 truncate ${state === "queued" ? "text-dim" : "text-mist"}`}>{s.label}</span>
-                    <span className="shrink-0 tabular-nums text-smoke">
-                      {state === "done" ? `${(s.ms / 1000).toFixed(1)}s` : ""}
-                    </span>
+                    <span className="shrink-0 tabular-nums text-smoke">{state === "done" ? `${(s.ms / 1000).toFixed(1)}s` : ""}</span>
                   </li>
                 );
               })}
@@ -146,7 +135,7 @@ const CvPipeline = () => {
                 <>
                   <b className="text-[13px]">✓ CV delivered · Ahmed_Magdy_CV.pdf</b>
                   <a href={config.cvUrl} download className="underline">
-                    Didn't start? Download ↓
+                    Didn't start? Download <Arrow dir="down" />
                   </a>
                 </>
               ) : (

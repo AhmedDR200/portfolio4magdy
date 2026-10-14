@@ -7,6 +7,7 @@ import Brush from "../atoms/Brush";
 import KeyCap from "../atoms/KeyCap";
 import { KIT_ART } from "../atoms/KitArt";
 import Ornament from "../atoms/Ornament";
+import Arrow from "../atoms/Arrow";
 
 // Inside the satchel: two pouches like RDR2's, Kit (the hardware, drawn) and
 // Tools (the apps). Q and E switch pouch, the arrows move through the slots,
@@ -99,7 +100,9 @@ const SatchelPanel = ({ onClose }: { onClose: () => void }) => {
                 role="tab"
                 aria-selected={on}
                 onClick={() => switchTo(i)}
-                className={`relative px-4 py-2 font-fellsc text-[19px] tracking-[0.12em] transition-colors ${on ? "text-ink" : "text-paper/75 hover:text-paper"}`}
+                className={`relative px-4 py-2 font-fellsc text-[19px] tracking-[0.12em] transition-colors ${
+                  on ? "text-ink" : "text-paper/75 hover:text-paper"
+                }`}
               >
                 {on && <Brush variant={i + 1} className="absolute -inset-x-2 inset-y-0 h-full w-[calc(100%+16px)] text-paper" />}
                 <span className="relative flex items-baseline gap-2.5">
@@ -131,7 +134,11 @@ const SatchelPanel = ({ onClose }: { onClose: () => void }) => {
                   }`}
                 >
                   <Leather className={pouch === 0 ? "h-[150px] sm:h-[168px]" : "h-[132px] sm:h-[150px]"}>
-                    <span className={`absolute flex items-center justify-center ${pouch === 0 ? "inset-[18px]" : "inset-x-9 bottom-9 top-7"} ${on ? "text-frost" : "text-paper"}`}>
+                    <span
+                      className={`absolute flex items-center justify-center ${pouch === 0 ? "inset-[18px]" : "inset-x-9 bottom-9 top-7"} ${
+                        on ? "text-frost" : "text-paper"
+                      }`}
+                    >
                       <Art pouch={pouch} id={it.id} className="h-full max-h-full w-full" />
                     </span>
                     {pouch === 1 && <span className="absolute bottom-2.5 left-3 font-fellsc text-[11px] tracking-[0.1em] text-paper/70">{it.name}</span>}
@@ -179,7 +186,10 @@ const SatchelPanel = ({ onClose }: { onClose: () => void }) => {
         </span>
         <span className="flex items-center gap-7 font-fellsc text-[15px] tracking-[0.12em]">
           <span className="flex items-center gap-2.5">
-            <KeyCap>←→</KeyCap> Browse
+            <KeyCap>
+              <Arrow dir="left-right" />
+            </KeyCap>{" "}
+            Browse
           </span>
           <span className="flex items-center gap-2.5">
             <KeyCap>Q</KeyCap>

@@ -4,6 +4,7 @@ import { experiences } from "../../constants";
 import { styles } from "../../constants/styles";
 import { fadeUp } from "../../utils/motion";
 import SectionHeader from "../atoms/SectionHeader";
+import Arrow from "../atoms/Arrow";
 
 // Experience as the camp ledger: a torn page with ruled lines and a red double
 // margin. Each job is an entry: the dates, who and what, and what it paid in.
@@ -46,7 +47,7 @@ const Experience = () => (
                 <p className="m-0 flex flex-wrap items-baseline gap-x-3 font-fell text-[24px] leading-tight">
                   {job.companyUrl ? (
                     <a href={job.companyUrl} target="_blank" rel="noopener noreferrer" className="hover:text-frost">
-                      {job.companyName} ↗
+                      {job.companyName} <Arrow dir="up-right" className="text-[0.8em]" />
                     </a>
                   ) : (
                     job.companyName

@@ -13,6 +13,7 @@ import { whistle } from "./HorseWhistle";
 import { deadEye } from "./DeadEye";
 import { openSatchel } from "./Satchel";
 import Icon from "../atoms/Icon";
+import Arrow from "../atoms/Arrow";
 
 type Props = {
   open: boolean;
@@ -78,25 +79,15 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
             aria-label={open ? "Close menu" : "Open menu"}
             className="fixed right-5 top-5 z-[80] flex h-[68px] w-[68px] flex-col items-center justify-center gap-[7px] rounded-full bg-frost text-ink shadow-[0_10px_40px_-10px_rgb(var(--frost)/0.6)] sm:right-8 sm:top-8 sm:h-20 sm:w-20"
           >
-            <span
-              className={`block h-[2px] w-6 bg-ink transition-transform duration-300 ${open ? "translate-y-[4.5px] rotate-45" : ""}`}
-            />
-            <span
-              className={`block h-[2px] w-6 bg-ink transition-transform duration-300 ${open ? "-translate-y-[4.5px] -rotate-45" : ""}`}
-            />
+            <span className={`block h-[2px] w-6 bg-ink transition-transform duration-300 ${open ? "translate-y-[4.5px] rotate-45" : ""}`} />
+            <span className={`block h-[2px] w-6 bg-ink transition-transform duration-300 ${open ? "-translate-y-[4.5px] -rotate-45" : ""}`} />
           </motion.button>
         )}
       </AnimatePresence>
 
       <AnimatePresence>
         {open && (
-          <motion.div
-            key="menu"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[70]"
-          >
+          <motion.div key="menu" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[70]">
             <button
               type="button"
               aria-label="Close menu"
@@ -115,9 +106,7 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
               className="absolute inset-y-0 right-0 flex w-full flex-col justify-between overflow-y-auto bg-graphite px-8 pb-10 pt-32 sm:w-[520px] sm:px-14"
             >
               <div className="flex flex-col gap-6">
-                <p className="m-0 border-b border-paper/15 pb-4 font-fellsc text-[15px] tracking-[0.2em] text-smoke">
-                  Chapters
-                </p>
+                <p className="m-0 border-b border-paper/15 pb-4 font-fellsc text-[15px] tracking-[0.2em] text-smoke">Chapters</p>
                 <ul className="m-0 flex list-none flex-col gap-1 p-0">
                   {/* RDR2's pause menu: the hovered item gets the brush stroke. */}
                   {navLinks.map((link, i) => (
@@ -145,7 +134,7 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
                   data-cv
                   className="torn flex h-14 w-fit items-center bg-frost px-8 font-fellsc text-[18px] tracking-[0.12em] text-ink"
                 >
-                  Resume ↓
+                  Resume <Arrow dir="down" className="ml-2" />
                 </a>
                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-[13px] uppercase tracking-[0.1em]">
                   <a href={config.socials.github} target="_blank" rel="noopener noreferrer" className="py-2 hover:text-frost">

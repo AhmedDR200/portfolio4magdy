@@ -5,6 +5,7 @@ import { services } from "../../constants";
 import { styles } from "../../constants/styles";
 import { EASE_OUT_EXPO } from "../../utils/motion";
 import SectionHeader from "../atoms/SectionHeader";
+import Arrow from "../atoms/Arrow";
 
 // "What I do" as the bounty board outside the sheriff's office: each service
 // is a WANTED poster nailed to the planks, "for hire", with the best proof
@@ -124,8 +125,8 @@ const Services = () => {
               <ul className="m-0 flex list-none flex-col gap-2 p-0 font-fell text-[18px] leading-[1.5] text-paper">
                 {picked.details.map((detail) => (
                   <li key={detail} className="flex gap-3">
-                    <span aria-hidden="true" className="text-frost">
-                      →
+                    <span className="pt-[0.25em] text-frost">
+                      <Arrow dir="right" />
                     </span>
                     {detail}
                   </li>

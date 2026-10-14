@@ -8,6 +8,7 @@ import Wordmark from "../atoms/Wordmark";
 import Cursor from "../layout/Cursor";
 import HonorMeter from "../layout/HonorMeter";
 import Toasts from "../layout/Toasts";
+import Arrow from "../atoms/Arrow";
 
 // The torn top and bottom edges of the poster.
 const TORN =
@@ -130,9 +131,7 @@ const NotFound = () => {
               <span aria-hidden="true" className="my-1.5 h-0.5 w-full bg-ink" />
               <p className="m-0 font-western text-[clamp(18px,4.4vw,26px)] tracking-[0.14em]">REWARD</p>
               <p className="m-0 font-western text-[clamp(44px,12vw,62px)] leading-none">$5,000</p>
-              <p className="m-0 mt-1 text-[11px] uppercase tracking-[0.1em] text-[#3C3C38]">
-                Report to the sheriff · magdy.digital
-              </p>
+              <p className="m-0 mt-1 text-[11px] uppercase tracking-[0.1em] text-[#3C3C38]">Report to the sheriff · magdy.digital</p>
             </div>
           </motion.div>
 
@@ -156,13 +155,13 @@ const NotFound = () => {
                 href="/"
                 className="flex h-[52px] items-center rounded-full bg-frost px-6 text-[13px] font-extrabold uppercase tracking-[0.1em] text-ink transition-transform hover:scale-105"
               >
-                ← Back to town
+                <Arrow dir="left" className="mr-2" /> Back to town
               </a>
               <a
                 href={`mailto:${config.html.email}?subject=${encodeURIComponent(`Broken link on magdy.digital: ${path}`)}`}
                 className="flex h-[52px] items-center rounded-full border border-paper/25 px-[22px] text-[13px] font-bold uppercase tracking-[0.1em] transition-colors hover:border-frost hover:text-frost"
               >
-                Report the bug ↗
+                Report the bug <Arrow dir="up-right" className="ml-1.5" />
               </a>
             </div>
           </div>

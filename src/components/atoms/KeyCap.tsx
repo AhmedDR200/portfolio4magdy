@@ -1,6 +1,8 @@
 // A keyboard key in RDR2's prompt style: a small outlined box. With `ring`,
 // a circle around it fills on hover, like the game's hold-to-confirm prompts.
-type Props = { children: string; ring?: boolean; className?: string };
+import type { ReactNode } from "react";
+
+type Props = { children: ReactNode; ring?: boolean; className?: string };
 
 const KeyCap = ({ children, ring = false, className = "" }: Props) => {
   const key = (

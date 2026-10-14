@@ -4,6 +4,7 @@ import { styles } from "../../constants/styles";
 import Chip from "../atoms/Chip";
 import SectionHeader from "../atoms/SectionHeader";
 import ChannelStats from "./ChannelStats";
+import Arrow from "../atoms/Arrow";
 
 // The channel's own level colors, from its banner.
 const levels = [
@@ -66,7 +67,7 @@ const Channel = () => (
               rel="noopener noreferrer"
               className="flex h-[50px] items-center rounded-full border border-paper/25 px-[22px] text-[13px] font-bold uppercase tracking-[0.1em] transition-colors hover:border-frost hover:text-frost"
             >
-              Watch on YouTube ↗
+              Watch on YouTube <Arrow dir="up-right" className="ml-1" />
             </a>
           </div>
         </div>
@@ -81,8 +82,7 @@ const Channel = () => (
               من الجونيور للسينيور، بأمثلة من الحياة اللي حواليك
             </p>
             <p className="m-0 mt-1 max-w-[620px] text-[13px] leading-[1.75] text-smoke">
-              Backend engineering explained in Egyptian Arabic. Everyday street scenes turn into the systems behind
-              them, animated in code with Remotion.
+              Backend engineering explained in Egyptian Arabic. Everyday street scenes turn into the systems behind them, animated in code with Remotion.
             </p>
           </div>
 

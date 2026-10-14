@@ -4,6 +4,7 @@ import { animate, useInView, useMotionValue, useMotionValueEvent, useReducedMoti
 import { bee3aLockup, bee3aLockupLight } from "../../assets";
 import Bee3aDemo from "./Bee3aDemo";
 import Bee3aNotebook from "./Bee3aNotebook";
+import Arrow from "../atoms/Arrow";
 
 // The Bee3a card tells Bee3a's own line, «ودّع الكشكول!» ("goodbye, notebook"),
 // as a before and after: the paper notebook a shop runs on, and the same day in
@@ -72,7 +73,7 @@ const SplitHandle = ({ split, stage }: { split: MotionValue<number>; stage: { cu
         onKeyDown={onKey}
         className="absolute left-1/2 top-1/2 flex h-[54px] w-[54px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-frost text-[20px] font-extrabold text-ink shadow-[0_10px_30px_-8px_rgba(0,0,0,0.7)] outline-none focus-visible:ring-4 focus-visible:ring-frost/40"
       >
-        ⟷
+        <Arrow dir="left-right" className="text-[24px]" />
       </span>
     </div>
   );
@@ -141,7 +142,7 @@ export const Bee3aCard = () => {
               rel="noopener noreferrer"
               className="flex h-[46px] items-center whitespace-nowrap torn bg-frost px-5 text-[13px] font-bold uppercase tracking-[0.1em] text-ink transition-transform hover:scale-105"
             >
-              Visit bee3a.site ↗
+              Visit bee3a.site <Arrow dir="up-right" className="ml-1.5" />
             </a>
           </div>
         </div>

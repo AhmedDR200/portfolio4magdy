@@ -1,12 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import {
-  AnimatePresence,
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-} from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 
 import { projects } from "../../constants";
 import { styles } from "../../constants/styles";
@@ -17,6 +11,7 @@ import { EASE_OUT_EXPO } from "../../utils/motion";
 import KeyCap from "../atoms/KeyCap";
 import SectionHeader from "../atoms/SectionHeader";
 import { Bee3aCard } from "./FeaturedProducts";
+import Arrow from "../atoms/Arrow";
 
 const linkLabel = (url: string) => {
   if (url.includes("apps.apple.com")) return "Open in App Store";
@@ -24,13 +19,7 @@ const linkLabel = (url: string) => {
   return "Visit website";
 };
 
-const CaseStudyModal = ({
-  project,
-  onClose,
-}: {
-  project: TProject | null;
-  onClose: () => void;
-}) => {
+const CaseStudyModal = ({ project, onClose }: { project: TProject | null; onClose: () => void }) => {
   useEffect(() => {
     if (!project) return;
     const onKey = (e: KeyboardEvent) => {
@@ -81,10 +70,7 @@ const CaseStudyModal = ({
                 <img src={project.image} alt="" className="max-h-full max-w-full object-contain" />
               </div>
               <div>
-                <h3
-                  id="case-study-title"
-                  className="m-0 font-display text-[clamp(30px,4vw,44px)] font-normal uppercase leading-none"
-                >
+                <h3 id="case-study-title" className="m-0 font-display text-[clamp(30px,4vw,44px)] font-normal uppercase leading-none">
                   {project.name}
                 </h3>
                 <p className="m-0 mt-1.5 text-[13px] uppercase tracking-[0.08em] text-smoke">
@@ -102,28 +88,22 @@ const CaseStudyModal = ({
               ))}
             </div>
 
-            <h4 className="m-0 mt-8 text-[12px] font-semibold uppercase tracking-[0.14em] text-frost">
-              The problem
-            </h4>
+            <h4 className="m-0 mt-8 text-[12px] font-semibold uppercase tracking-[0.14em] text-frost">The problem</h4>
             <p className="m-0 mt-2 text-[15px] leading-[1.75] text-mist">{project.caseStudy.problem}</p>
 
-            <h4 className="m-0 mt-7 text-[12px] font-semibold uppercase tracking-[0.14em] text-frost">
-              What I did
-            </h4>
+            <h4 className="m-0 mt-7 text-[12px] font-semibold uppercase tracking-[0.14em] text-frost">What I did</h4>
             <ul className="m-0 mt-3 flex list-none flex-col gap-2 p-0">
               {project.caseStudy.approach.map((point) => (
                 <li key={point} className="flex gap-3 text-[15px] leading-[1.65] text-mist">
-                  <span aria-hidden="true" className="text-frost">
-                    →
+                  <span className="pt-[0.2em] text-frost">
+                    <Arrow dir="right" />
                   </span>
                   {point}
                 </li>
               ))}
             </ul>
 
-            <h4 className="m-0 mt-7 text-[12px] font-semibold uppercase tracking-[0.14em] text-frost">
-              Stack
-            </h4>
+            <h4 className="m-0 mt-7 text-[12px] font-semibold uppercase tracking-[0.14em] text-frost">Stack</h4>
             <ul className="m-0 mt-3 flex list-none flex-wrap gap-2 p-0 text-[12px]">
               {project.caseStudy.stack.map((s) => (
                 <li key={s} className="rounded-full border border-paper/20 px-3 py-1.5">
@@ -138,13 +118,13 @@ const CaseStudyModal = ({
               rel="noopener noreferrer"
               className="mt-9 flex h-[52px] w-fit items-center rounded-full bg-frost px-6 text-[13px] font-semibold uppercase tracking-[0.1em] text-ink"
             >
-              {linkLabel(project.sourceCodeLink)} ↗
+              {linkLabel(project.sourceCodeLink)} <Arrow dir="up-right" className="ml-1.5" />
             </a>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>,
-    document.body
+    document.body,
   );
 };
 
@@ -170,12 +150,7 @@ const ProjectList = ({ onOpenCase }: { onOpenCase: (p: TProject) => void }) => {
   const preview = projects[shown];
 
   return (
-    <ul
-      ref={listRef}
-      data-xray="projects"
-      onPointerMove={onMove}
-      className="relative m-0 mt-16 list-none border-b border-dashed border-paper/20 p-0"
-    >
+    <ul ref={listRef} data-xray="projects" onPointerMove={onMove} className="relative m-0 mt-16 list-none border-b border-dashed border-paper/20 p-0">
       {projects.map((project, i) => {
         const dimmed = hovered !== null && hovered !== i;
         const rowClass = `group flex w-full flex-wrap items-center gap-x-5 gap-y-2 border-t border-dashed border-paper/20 py-5 text-left transition-colors sm:py-6 ${
@@ -184,9 +159,7 @@ const ProjectList = ({ onOpenCase }: { onOpenCase: (p: TProject) => void }) => {
         // A page of the catalogue: number, name, a dotted leader, the kind, a key.
         const content = (
           <>
-            <span className="w-[62px] shrink-0 font-fellsc text-[15px] tracking-[0.1em] text-smoke">
-              No. {String(i + 1).padStart(2, "0")}
-            </span>
+            <span className="w-[62px] shrink-0 font-fellsc text-[15px] tracking-[0.1em] text-smoke">No. {String(i + 1).padStart(2, "0")}</span>
             <motion.span
               animate={{ x: hovered === i && !reduce ? 14 : 0 }}
               transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
@@ -196,10 +169,8 @@ const ProjectList = ({ onOpenCase }: { onOpenCase: (p: TProject) => void }) => {
             </motion.span>
             <span aria-hidden="true" className="hidden min-w-[40px] flex-1 -translate-y-1 self-end border-b-2 border-dotted border-paper/30 md:block" />
             <span className="flex items-center gap-4 pl-[82px] md:pl-0">
-              <span className={`text-[12px] uppercase tracking-[0.12em] ${hovered === i ? "text-frost" : "text-smoke"}`}>
-                {project.category}
-              </span>
-              <KeyCap>{project.caseStudy ? "↵" : "↗"}</KeyCap>
+              <span className={`text-[12px] uppercase tracking-[0.12em] ${hovered === i ? "text-frost" : "text-smoke"}`}>{project.category}</span>
+              <KeyCap>{project.caseStudy ? <Arrow dir="enter" /> : <Arrow dir="up-right" />}</KeyCap>
               <span className="sr-only">{project.caseStudy ? "Open the case study" : "Opens in a new tab"}</span>
             </span>
           </>
@@ -219,13 +190,7 @@ const ProjectList = ({ onOpenCase }: { onOpenCase: (p: TProject) => void }) => {
                 {content}
               </button>
             ) : (
-              <a
-                href={project.sourceCodeLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={rowClass}
-                {...handlers}
-              >
+              <a href={project.sourceCodeLink} target="_blank" rel="noopener noreferrer" className={rowClass} {...handlers}>
                 {content}
               </a>
             )}
@@ -234,11 +199,7 @@ const ProjectList = ({ onOpenCase }: { onOpenCase: (p: TProject) => void }) => {
       })}
 
       {!reduce && (
-        <motion.li
-          aria-hidden="true"
-          style={{ x: springX, y: springY }}
-          className="pointer-events-none absolute left-0 top-0 z-10 hidden md:block"
-        >
+        <motion.li aria-hidden="true" style={{ x: springX, y: springY }} className="pointer-events-none absolute left-0 top-0 z-10 hidden md:block">
           <motion.div
             initial={false}
             animate={{ scale: hovered !== null ? 1 : 0, rotate: hovered !== null ? 3 : -4 }}

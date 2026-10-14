@@ -5,6 +5,7 @@ import { unlock } from "../../utils/achievements";
 import { pauseScroll } from "../../utils/lenis";
 import { travelTo } from "../../utils/travel";
 import { EASE_OUT_EXPO } from "../../utils/motion";
+import Arrow from "../atoms/Arrow";
 
 // Press M: the page as a western map. Each section is a town on a railway
 // that runs in page order; pick one and fast-travel there. The town names
@@ -28,15 +29,43 @@ const LAYOUTS = {
   wide: {
     w: 1440,
     h: 900,
-    pts: [[230, 200], [170, 470], [380, 690], [640, 520], [560, 230], [860, 170], [960, 420], [820, 740]],
-    hills: [[330, 300, 1.4, 0.3], [1000, 260, 1.2, 1.1], [560, 640, 1.6, 2], [1180, 700, 1.1, 0.7]],
+    pts: [
+      [230, 200],
+      [170, 470],
+      [380, 690],
+      [640, 520],
+      [560, 230],
+      [860, 170],
+      [960, 420],
+      [820, 740],
+    ],
+    hills: [
+      [330, 300, 1.4, 0.3],
+      [1000, 260, 1.2, 1.1],
+      [560, 640, 1.6, 2],
+      [1180, 700, 1.1, 0.7],
+    ],
     river: "M-20,560 C140,520 260,600 420,560 S700,420 820,470 S1060,620 1200,560 S1380,470 1460,500",
   },
   tall: {
     w: 720,
     h: 1100,
-    pts: [[170, 150], [480, 260], [220, 390], [500, 520], [200, 640], [470, 760], [190, 880], [470, 990]],
-    hills: [[180, 260, 1.1, 0.4], [560, 470, 1, 1.3], [200, 760, 1.2, 2.1], [560, 960, 1, 0.8]],
+    pts: [
+      [170, 150],
+      [480, 260],
+      [220, 390],
+      [500, 520],
+      [200, 640],
+      [470, 760],
+      [190, 880],
+      [470, 990],
+    ],
+    hills: [
+      [180, 260, 1.1, 0.4],
+      [560, 470, 1, 1.3],
+      [200, 760, 1.2, 2.1],
+      [560, 960, 1, 0.8],
+    ],
     river: "M-20,330 C160,300 300,380 420,330 S640,260 740,300",
   },
 };
@@ -96,12 +125,10 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
 
   const art = useMemo(
     () => ({
-      contours: layout.hills.flatMap(([cx, cy, sx, ph]) =>
-        Array.from({ length: 7 }, (_, j) => ring(cx, cy, 30 + j * 26, ph + j * 0.3, sx))
-      ),
+      contours: layout.hills.flatMap(([cx, cy, sx, ph]) => Array.from({ length: 7 }, (_, j) => ring(cx, cy, 30 + j * 26, ph + j * 0.3, sx))),
       rail: through(layout.pts),
     }),
-    [layout]
+    [layout],
   );
 
   const selectedRef = useRef(selected);
@@ -114,7 +141,7 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
       // Let the map fade first, then glide there.
       window.setTimeout(() => travelTo(TOWNS[index].id), 260);
     },
-    [onOpenChange]
+    [onOpenChange],
   );
 
   // M toggles from anywhere; inside the map, arrows pick and Enter travels.
@@ -172,7 +199,10 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
             </p>
             <div className="flex items-center gap-4 text-[12px] uppercase tracking-[0.1em] text-mist">
               <span className="hidden items-center gap-2 md:flex">
-                <kbd className="rounded border border-paper/40 border-b-[3px] px-2 py-0.5 font-mono">← →</kbd> Pick
+                <kbd className="flex items-center rounded border border-paper/40 border-b-[3px] px-2 py-1 font-mono">
+                  <Arrow dir="left-right" />
+                </kbd>{" "}
+                Pick
                 <kbd className="ml-2 rounded border border-paper/40 border-b-[3px] px-2 py-0.5 font-mono">Enter</kbd> Travel
               </span>
               <button
@@ -186,11 +216,7 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
           </div>
 
           <div className="relative min-h-0 flex-1">
-            <svg
-              viewBox={`0 0 ${layout.w} ${layout.h}`}
-              preserveAspectRatio="xMidYMid meet"
-              className="absolute inset-0 h-full w-full"
-            >
+            <svg viewBox={`0 0 ${layout.w} ${layout.h}`} preserveAspectRatio="xMidYMid meet" className="absolute inset-0 h-full w-full">
               {art.contours.map((d, i) => (
                 <path key={i} d={d} fill="none" className="stroke-paper/[0.08]" strokeWidth="1.2" />
               ))}
@@ -243,7 +269,16 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
                 <g className="animate-map-you">
                   <path d="M0 18 L-12 -6 L0 0 L12 -6 Z" className="fill-paper stroke-ink" strokeWidth="2" />
                   <rect x="-46" y="-34" width="92" height="20" rx="10" className="fill-paper" />
-                  <text x="0" y="-20" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="10" fontWeight="800" letterSpacing="1.2" className="fill-ink">
+                  <text
+                    x="0"
+                    y="-20"
+                    textAnchor="middle"
+                    fontFamily="JetBrains Mono, monospace"
+                    fontSize="10"
+                    fontWeight="800"
+                    letterSpacing="1.2"
+                    className="fill-ink"
+                  >
                     YOU ARE HERE
                   </text>
                 </g>
@@ -272,7 +307,7 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
               onClick={() => travel(selected)}
               className="mt-1 flex h-[50px] items-center justify-between rounded-full bg-frost px-6 text-[13px] font-extrabold uppercase tracking-[0.1em] text-ink transition-transform hover:scale-[1.02]"
             >
-              Fast travel <span aria-hidden="true">→</span>
+              Fast travel <Arrow dir="right" className="text-[18px]" />
             </button>
             <span lang="ar" className="font-arabic text-[16px] text-mist">
               ودّيني هناك

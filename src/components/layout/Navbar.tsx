@@ -5,6 +5,7 @@ import { travelOnClick } from "../../utils/travel";
 import Icon from "../atoms/Icon";
 import Brush from "../atoms/Brush";
 import Wordmark from "../atoms/Wordmark";
+import Arrow from "../atoms/Arrow";
 
 // Sits at the top of the hero. The links read like RDR2's menu: hovering one
 // sweeps a white brush stroke behind it. On small screens they collapse into
@@ -56,7 +57,7 @@ const Navbar = ({ onMenu, ready }: { onMenu: () => void; ready: boolean }) => (
         data-cv
         className="torn ml-3 flex h-12 items-center whitespace-nowrap bg-frost px-5 text-ink transition-transform hover:scale-105 lg:px-6"
       >
-        Resume ↓
+        Resume <Arrow dir="down" className="ml-1.5" />
       </a>
     </nav>
 

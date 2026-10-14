@@ -6,6 +6,7 @@ import { styles } from "../../constants/styles";
 import { fadeUp } from "../../utils/motion";
 import { travelOnClick } from "../../utils/travel";
 import { CupSketch, RackSketch, TelegraphSketch, Underline } from "../atoms/Sketches";
+import Arrow from "../atoms/Arrow";
 
 // About as two pages of a journal, like the one Arthur keeps in RDR2: the date
 // in Cairo, the statement and bio written in, the Arabic in Ruqaa, a note in
@@ -73,7 +74,7 @@ const About = () => (
                 onClick={travelOnClick("experience")}
                 className="border-b-[1.5px] border-current pb-0.5 font-fell text-[22px] italic transition-colors hover:text-[#3B4A6B]"
               >
-                Turn the page → Chapter V
+                Turn the page <Arrow dir="right" className="mx-0.5" /> Chapter V
               </a>
               <span aria-hidden="true" className="font-fell text-[16px] text-[#6A746F]">
                 1
@@ -85,7 +86,9 @@ const About = () => (
           <span aria-hidden="true" className="hidden bg-[linear-gradient(#A9B3AC,#C2CAC3,#A9B3AC)] lg:absolute lg:inset-y-0 lg:left-1/2 lg:block lg:w-0.5" />
 
           {/* Right page: the photo taped in, and sketches. */}
-          <div className={`${PAGE} gap-6 border-t border-[#C2CAC3] bg-[linear-gradient(270deg,#E7ECE6_82%,#D3DAD3)] px-6 pb-8 pt-10 sm:px-12 sm:pb-10 lg:border-t-0`}>
+          <div
+            className={`${PAGE} gap-6 border-t border-[#C2CAC3] bg-[linear-gradient(270deg,#E7ECE6_82%,#D3DAD3)] px-6 pb-8 pt-10 sm:px-12 sm:pb-10 lg:border-t-0`}
+          >
             <span aria-hidden="true" className="paper-grain absolute inset-0" />
             <div className="relative flex flex-wrap items-start gap-8">
               <figure className="relative m-0 h-[212px] w-[176px] shrink-0 -rotate-3 bg-[#F4F7F3] p-1.5 shadow-[0_14px_22px_-12px_rgba(0,0,0,0.5)]">

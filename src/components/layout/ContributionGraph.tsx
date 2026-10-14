@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { config } from "../../constants/config";
 import { logApiCall, loggedFetch } from "../../utils/apiLog";
 import { readCache, writeCache } from "../../utils/sessionCache";
+import Arrow from "../atoms/Arrow";
 
 type Day = { date: string; count: number; level: number };
 type Calendar = { total: number; days: Day[] };
@@ -72,8 +73,7 @@ const EMPTY_WEEKS: null[][] = Array.from({ length: 53 }, () => Array(7).fill(nul
 // Phones show the last 20 weeks, tablets 34, laptops the whole year.
 const weekVisibility = (age: number) => (age >= 34 ? "hidden lg:flex" : age >= 20 ? "hidden sm:flex" : "flex");
 
-const dateLabel = (iso: string) =>
-  new Date(`${iso}T00:00:00Z`).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+const dateLabel = (iso: string) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 
 // The GitHub contribution graph, in frost. Hidden if it can't be loaded.
 const ContributionGraph = ({ enabled }: { enabled: boolean }) => {
@@ -93,15 +93,11 @@ const ContributionGraph = ({ enabled }: { enabled: boolean }) => {
           rel="noopener noreferrer"
           className="text-[12px] uppercase tracking-[0.12em] text-frost hover:underline"
         >
-          {total ? `${total} in the last year ↗` : "GitHub ↗"}
+          {total ? `${total} in the last year` : "GitHub"} <Arrow dir="up-right" />
         </a>
       </div>
 
-      <div
-        role="img"
-        aria-label={total ? `${total} GitHub contributions in the last year` : "GitHub contributions"}
-        className="flex gap-[3px] lg:gap-1"
-      >
+      <div role="img" aria-label={total ? `${total} GitHub contributions in the last year` : "GitHub contributions"} className="flex gap-[3px] lg:gap-1">
         {weeks.map((week, i) => (
           <div key={i} className={`${weekVisibility(weeks.length - 1 - i)} flex-1 flex-col gap-[3px] lg:gap-1`}>
             {week.map((day, j) => (
@@ -115,10 +111,7 @@ const ContributionGraph = ({ enabled }: { enabled: boolean }) => {
         ))}
       </div>
 
-      <div
-        aria-hidden="true"
-        className="mt-3 flex items-center justify-end gap-1.5 text-[11px] uppercase tracking-[0.12em] text-smoke"
-      >
+      <div aria-hidden="true" className="mt-3 flex items-center justify-end gap-1.5 text-[11px] uppercase tracking-[0.12em] text-smoke">
         Less
         {LEVELS.map((level) => (
           <span key={level} className={`h-2.5 w-2.5 rounded-[2px] ${level}`} />

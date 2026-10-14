@@ -5,6 +5,7 @@ import Wordmark from "../atoms/Wordmark";
 import Icon from "../atoms/Icon";
 import { HORSE_CREDIT } from "../atoms/Horse";
 import StatusPanel from "./StatusPanel";
+import Arrow from "../atoms/Arrow";
 
 const label = "mb-2 text-[12px] uppercase tracking-[0.14em] text-smoke";
 
@@ -46,15 +47,10 @@ const Footer = ({ xray, onXray, powerCut, onPowerCut }: Props) => (
         </a>
       </nav>
       <div className="flex flex-col items-start gap-3">
-        <span className="text-[12px] uppercase tracking-[0.14em] text-smoke">
-          © {new Date().getFullYear()} Ahmed Magdy
-        </span>
+        <span className="text-[12px] uppercase tracking-[0.14em] text-smoke">© {new Date().getFullYear()} Ahmed Magdy</span>
         <span className="-mt-2 max-w-[240px] text-[11px] leading-snug text-dim">Horse: {HORSE_CREDIT}</span>
-        <a
-          href="#top"
-          className="flex h-11 items-center torn bg-frost px-[18px] text-[13px] font-semibold uppercase tracking-[0.08em] text-ink"
-        >
-          Back to top ↑
+        <a href="#top" className="flex h-11 items-center torn bg-frost px-[18px] text-[13px] font-semibold uppercase tracking-[0.08em] text-ink">
+          Back to top <Arrow dir="up" className="ml-1.5" />
         </a>
         <button
           type="button"

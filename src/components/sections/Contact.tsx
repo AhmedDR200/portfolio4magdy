@@ -6,9 +6,9 @@ import Magnetic from "../atoms/Magnetic";
 import HatTip from "./HatTip";
 import RevealText from "../atoms/RevealText";
 import { Eyebrow } from "../atoms/SectionHeader";
+import Arrow from "../atoms/Arrow";
 
-const pill =
-  "flex h-14 items-center gap-3 rounded-full border border-paper/30 px-6 transition-colors hover:border-frost hover:text-frost";
+const pill = "flex h-14 items-center gap-3 rounded-full border border-paper/30 px-6 transition-colors hover:border-frost hover:text-frost";
 
 const Contact = () => (
   <section id="contact" className="pb-20 pt-24 sm:pb-28 sm:pt-40">
@@ -52,32 +52,17 @@ const Contact = () => (
           <Icon name="letter" />
           {config.html.email}
         </a>
-        <a
-          href={config.socials.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`${pill} uppercase tracking-[0.08em]`}
-        >
+        <a href={config.socials.linkedin} target="_blank" rel="noopener noreferrer" className={`${pill} uppercase tracking-[0.08em]`}>
           <Icon name="briefcase" />
-          LinkedIn ↗
+          LinkedIn <Arrow dir="up-right" />
         </a>
-        <a
-          href={config.socials.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`${pill} uppercase tracking-[0.08em]`}
-        >
+        <a href={config.socials.github} target="_blank" rel="noopener noreferrer" className={`${pill} uppercase tracking-[0.08em]`}>
           <Icon name="branch" />
-          GitHub ↗
+          GitHub <Arrow dir="up-right" />
         </a>
-        <a
-          href={config.youtube.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`${pill} uppercase tracking-[0.08em]`}
-        >
+        <a href={config.youtube.url} target="_blank" rel="noopener noreferrer" className={`${pill} uppercase tracking-[0.08em]`}>
           <Icon name="reel" />
-          YouTube ↗
+          YouTube <Arrow dir="up-right" />
         </a>
       </div>
       <HatTip />

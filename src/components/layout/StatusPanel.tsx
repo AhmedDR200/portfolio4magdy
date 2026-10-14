@@ -6,6 +6,7 @@ import Icon from "../atoms/Icon";
 import { logApiCall, loggedFetch } from "../../utils/apiLog";
 import { readCache, writeCache } from "../../utils/sessionCache";
 import ContributionGraph from "./ContributionGraph";
+import Arrow from "../atoms/Arrow";
 
 type Commit = { message: string; repo: string; url: string; date: string };
 type PushEvent = { type: string; created_at: string; repo: { name: string }; payload: { head?: string } };
@@ -101,11 +102,9 @@ const sinceLabel = new Date(config.status.upSince).toLocaleDateString("en", { mo
 
 const label = "text-[12px] uppercase tracking-[0.14em] text-smoke";
 // Phones: label and status share the first line, the value goes below.
-const row =
-  "grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1.5 py-4 sm:grid-cols-[170px_minmax(0,1fr)_auto] sm:items-center";
+const row = "grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1.5 py-4 sm:grid-cols-[170px_minmax(0,1fr)_auto] sm:items-center";
 const value = "col-span-2 row-start-2 m-0 min-w-0 text-[15px] sm:col-span-1 sm:row-start-auto";
-const status =
-  "col-start-2 row-start-1 m-0 text-right text-[12px] uppercase tracking-[0.12em] sm:col-start-auto sm:row-start-auto";
+const status = "col-start-2 row-start-1 m-0 text-right text-[12px] uppercase tracking-[0.12em] sm:col-start-auto sm:row-start-auto";
 
 // A status page for the person: last commit (live from GitHub), what's on
 // the desk now, an uptime counter since joining GitHub, and the contribution graph.
@@ -140,7 +139,7 @@ const StatusPanel = () => {
               </a>
             ) : commit === null ? (
               <a href={config.socials.github} target="_blank" rel="noopener noreferrer" className="hover:text-frost">
-                See it on GitHub ↗
+                See it on GitHub <Arrow dir="up-right" />
               </a>
             ) : (
               <span className="text-smoke">

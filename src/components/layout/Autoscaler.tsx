@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { unlock } from "../../utils/achievements";
+import Arrow from "../atoms/Arrow";
 
 // Scrolling speed as traffic, Kubernetes-style: faster scrolling means more
 // requests per second, and pods are added to keep each one under its target
@@ -37,7 +38,7 @@ const useAutoscaler = () => {
     const tick = (t: number) => {
       const dt = lastT ? Math.max(1, t - lastT) : 16;
       const y = window.scrollY;
-      velocity = velocity * 0.85 + ((Math.abs(y - lastY) / dt) * 1000) * 0.15;
+      velocity = velocity * 0.85 + (Math.abs(y - lastY) / dt) * 1000 * 0.15;
       lastY = y;
       lastT = t;
 
@@ -48,9 +49,7 @@ const useAutoscaler = () => {
       if (desired > count) {
         const added = Array.from({ length: desired - count }, () => ({ id: nextId++, ready: false }));
         setPods((prev) => [...prev, ...added]);
-        added.forEach((pod) =>
-          boots.push(window.setTimeout(() => setPods((prev) => prev.map((p) => (p.id === pod.id ? { ...p, ready: true } : p))), BOOT_MS))
-        );
+        added.forEach((pod) => boots.push(window.setTimeout(() => setPods((prev) => prev.map((p) => (p.id === pod.id ? { ...p, ready: true } : p))), BOOT_MS)));
         count = desired;
         calmSince = 0;
         setTrend("up");
@@ -130,7 +129,11 @@ const Autoscaler = () => {
             </span>
             <span className="w-[120px] shrink-0 whitespace-nowrap tabular-nums">
               {pods.length} pods <span className="text-smoke">{rps}rps</span>
-              <span className="text-frost"> {trend === "up" ? "↑" : trend === "down" ? "↓" : ""}</span>
+              {trend && (
+                <span className="ml-1 text-frost">
+                  <Arrow dir={trend === "up" ? "up" : "down"} />
+                </span>
+              )}
             </span>
           </div>
         </motion.div>
