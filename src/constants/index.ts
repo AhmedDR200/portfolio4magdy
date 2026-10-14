@@ -1,23 +1,14 @@
 import type {
-  TNavLink,
-  TService,
-  TTechnology,
   TExperience,
-  TTestimonial,
+  TImpactStat,
+  TNavLink,
+  TPrinciple,
   TProject,
+  TService,
+  TSkillGroup,
 } from "../types";
 
 import {
-  mobile,
-  backend,
-  creator,
-  web,
-  javascript,
-  typescript,
-  nodejs,
-  mongodb,
-  git,
-  docker,
   madkhol,
   basicsengage,
   appgain,
@@ -30,152 +21,225 @@ import {
 } from "../assets";
 
 export const navLinks: TNavLink[] = [
+  { id: "work", title: "Work" },
+  { id: "about", title: "About" },
+  { id: "experience", title: "Experience" },
+  { id: "contact", title: "Contact" },
+];
+
+// Intro loader words, shown one after another; the last one is held.
+export const greetings: { text: string; lang: string }[] = [
+  { text: "Hello", lang: "en" },
+  { text: "مرحبا", lang: "ar" },
+  { text: "Bonjour", lang: "fr" },
+  { text: "Hola", lang: "es" },
+  { text: "Ciao", lang: "it" },
+  { text: "こんにちは", lang: "ja" },
+  { text: "Hallo", lang: "de" },
+  { text: "Merhaba", lang: "tr" },
+  { text: "أهلاً", lang: "ar" },
+];
+
+export const heroRoles = ["Systems Designer", "API Architect", "Real-time Engineer"];
+
+export const stackTicker = [
+  "Node.js",
+  "NestJS",
+  "Python",
+  "FastAPI",
+  "Redis",
+  "RabbitMQ",
+  "Docker",
+  "Kubernetes",
+  "AWS",
+  "WebSockets",
+];
+
+export const impactStats: TImpactStat[] = [
   {
-    id: "about",
-    title: "About",
+    icon: "crowd",
+    value: "15K+",
+    label: "Users served by AI-powered features I built",
+    labelAr: "١٥ ألف مستخدم",
   },
   {
-    id: "work",
-    title: "Work",
+    icon: "bell",
+    value: "50%",
+    label: "Faster responses from a push notification server",
+    labelAr: "إشعارات أسرع",
   },
   {
-    id: "contact",
-    title: "Contact",
+    icon: "stopwatch",
+    value: "30%",
+    label: "Faster APIs through caching and query optimization",
+    labelAr: "واجهات برمجة أسرع",
+  },
+  {
+    icon: "loop",
+    value: "150+",
+    label: "Automation workflows running every month",
+    labelAr: "أتمتة كل شهر",
   },
 ];
 
-const services: TService[] = [
+export const services: TService[] = [
+  {
+    icon: "gear",
+    title: "Backend APIs & services",
+    description:
+      "REST and internal APIs in Node.js, NestJS, Express and FastAPI — designed for clear contracts, caching and safe change.",
+    details: [
+      "Improved API performance by 30% through query optimization and caching.",
+      "Fixed 30+ critical bugs, reducing transaction errors by 40%.",
+      "Maintained internal APIs and service-to-service communication.",
+    ],
+    stack: ["Node.js", "NestJS", "Express", "FastAPI", "MySQL", "MongoDB", "Redis"],
+  },
+  {
+    icon: "divider",
+    title: "System design & microservices",
+    description:
+      "Service boundaries, queues and contracts across microservice platforms — RabbitMQ, Redis, Docker and Kubernetes.",
+    details: [
+      "Split an investment platform into services for portfolios, strategies and analytics.",
+      "Moved slow work onto queues so the API never waits on it.",
+      "Containerized services and ran them on Kubernetes with RabbitMQ.",
+    ],
+    stack: ["RabbitMQ", "Redis", "Docker", "Kubernetes", "GitHub Actions"],
+  },
+  {
+    icon: "bolt",
+    title: "Real-time systems",
+    description:
+      "WebSockets, pub/sub and push notifications that arrive fast and reliably — like the Appgain Notify Server.",
+    details: [
+      "Made the Appgain Notify Server 50% faster.",
+      "Built real-time auth, payments and virtual gifts for the Toki social app.",
+      "Shipped an AWS S3 uploader SDK with retries and progress tracking.",
+    ],
+    stack: ["WebSockets", "Socket.io", "Redis pub/sub", "AWS S3", "Prometheus"],
+  },
+];
+
+// The Skills section, grouped the way a request travels. "daily" is what's
+// used every day; everything else has shipped to production at least once.
+export const skillGroups: TSkillGroup[] = [
+  {
+    title: "Languages",
+    titleAr: "لغات",
+    items: ["TypeScript", "JavaScript", "Python", "C#"],
+    daily: ["TypeScript", "JavaScript"],
+  },
+  {
+    title: "Backend",
+    titleAr: "باك إند",
+    items: ["Node.js", "NestJS", "Express", "FastAPI", "Bun", "Flask", "Django"],
+    daily: ["Node.js", "NestJS", "Express"],
+  },
+  {
+    title: "Data",
+    titleAr: "داتا",
+    items: ["MongoDB", "MySQL", "Redis", "PostgreSQL", "Prisma", "TypeORM", "Mongoose", "Sequelize"],
+    daily: ["MongoDB", "MySQL", "Redis"],
+  },
+  {
+    title: "Real-time",
+    titleAr: "ريل تايم",
+    items: ["WebSockets", "Socket.io", "RabbitMQ", "Redis pub/sub", "Pusher"],
+    daily: ["WebSockets", "Socket.io"],
+  },
+  {
+    title: "Cloud & DevOps",
+    titleAr: "سحابة",
+    items: ["Docker", "Kubernetes", "AWS", "Cloudflare Workers", "GitHub Actions", "Linux", "Prometheus"],
+    daily: ["Docker"],
+  },
+  {
+    title: "AI & automation",
+    titleAr: "ذكاء اصطناعي",
+    items: ["GPT", "Gemini", "Workers AI", "Zapier"],
+    daily: [],
+  },
+  {
+    title: "Tools",
+    titleAr: "أدوات",
+    items: ["Git", "Postman", "Swagger", "GraphQL", "Bash"],
+    daily: ["Git"],
+  },
+  {
+    title: "Beyond backend",
+    titleAr: "برّه الباك إند",
+    items: ["React", "PWA", "Remotion"],
+    daily: [],
+  },
+];
+
+export const principles: TPrinciple[] = [
+  { ar: "خلّيها تشتغل، وبعدين خلّيها أسرع.", en: "Make it work, then make it fast." },
+  {
+    ar: "اشتغل في صمت، وخلّي السيرفر يتكلّم.",
+    en: "Work quietly; let the server do the talking.",
+  },
+  { ar: "مفيش مشكلة ملهاش حل.", en: "Every problem has a fix." },
+  { ar: "عَدِّي حُدودَك.", en: "Go beyond your limits." },
+];
+
+export const experiences: TExperience[] = [
   {
     title: "Backend Engineer",
-    icon: backend,
-  },
-  {
-    title: "System Design",
-    icon: web,
-  },
-  {
-    title: "Microservices Architect",
-    icon: creator,
-  },
-  {
-    title: "Real-time Systems",
-    icon: mobile,
-  },
-];
-
-const technologies: TTechnology[] = [
-  {
-    name: "JavaScript",
-    icon: javascript,
-  },
-  {
-    name: "TypeScript",
-    icon: typescript,
-  },
-  {
-    name: "Node JS",
-    icon: nodejs,
-  },
-  {
-    name: "MongoDB",
-    icon: mongodb,
-  },
-  {
-    name: "Docker",
-    icon: docker,
-  },
-  {
-    name: "git",
-    icon: git,
-  },
-];
-
-const experiences: TExperience[] = [
-  {
-    title: "Backend Engineer",
-    companyName: "Madkhol",
+    companyName: "Madkhol Capital",
     companyUrl: "https://madkhol.com",
-    icon: madkhol,
-    iconBg: "#ffffff",
-    date: "May 2025 - Present",
+    date: "May 2025 – Present",
+    marker: "Now",
+    summary:
+      "Backend services for an investment and robo-advisory platform built on microservices: portfolio management, strategies and analytics. APIs 30% faster; transaction errors down 40%.",
     points: [
       "Built and maintained backend services for an investment & robo-advisory platform using a microservices architecture.",
       "Implemented portfolio management, investment strategies, and financial analytics features.",
       "Improved API performance by 30% through query optimization and caching.",
       "Fixed 30+ critical bugs, reducing transaction errors by 40%.",
       "Maintained internal APIs and service-to-service communication across the platform.",
-      "Stack: Node.js, NestJS, Express, Python, FastAPI, MySQL, MongoDB, Redis, Docker, Kubernetes, RabbitMQ, GitHub Actions.",
     ],
   },
   {
     title: "Backend Engineer",
     companyName: "BasicsEngage",
     companyUrl: "https://www.basicsengage.com",
-    icon: basicsengage,
-    iconBg: "#ffffff",
-    date: "Oct 2024 - May 2025",
+    date: "Oct 2024 – May 2025",
+    marker: "2024",
+    summary:
+      "GPT-3.5 Turbo email generation for 15k+ users, Zapier integrations powering 150+ automations a month, and the APIs behind those AI and automation features.",
     points: [
       "Integrated GPT-3.5 Turbo for AI-powered email generation, serving 15k+ users.",
       "Built Zapier integrations supporting 150+ monthly automation workflows.",
       "Designed backend APIs powering AI-driven and automation features.",
-      "Stack: Node.js, Express.js, MongoDB, Redis, Docker, AWS S3, AWS SES, WebSocket, OpenAI API, Zapier.",
     ],
   },
   {
     title: "Backend Engineer",
     companyName: "Appgain.io",
     companyUrl: "https://appgain.io",
-    icon: appgain,
-    iconBg: "#ffffff",
-    date: "Jul 2023 - Oct 2024",
+    date: "Jul 2023 – Oct 2024",
+    marker: "2023",
+    summary:
+      "Made the Notify Server 50% faster; built auth, payments and real-time features for the Toki social app, an AWS S3 uploader SDK, and the Peak and Marraksh SaaS backends.",
     points: [
       "Optimized the Appgain Notify Server, achieving 50% faster response times.",
       "Developed backend features for the Toki social app: auth, payments, virtual gifts, and real-time communication via WebSockets.",
       "Built an AWS Uploader WebSDK for secure S3 uploads with retries and progress tracking.",
       "Implemented backend systems for Peak (pharma e-commerce SaaS): auth, orders, invoices, and analytics.",
       "Designed secure authentication for the Marraksh e-commerce SaaS.",
-      "Stack: JavaScript, Node.js, Express.js, Python, Flask, MongoDB, Redis, Prometheus, Docker, AWS.",
     ],
   },
 ];
 
-const testimonials: TTestimonial[] = [
-  {
-    testimonial:
-      "Ahmed shipped backend systems that made our APIs noticeably faster — the kind of engineer who fixes the root cause, not the symptom.",
-    name: "Sara Lee",
-    designation: "CTO",
-    company: "Acme Co",
-    image: "https://randomuser.me/api/portraits/women/4.jpg",
-  },
-  {
-    testimonial:
-      "Reliable, fast, and great at owning hard problems end-to-end. Our real-time features wouldn't ship without him.",
-    name: "Chris Brown",
-    designation: "Engineering Lead",
-    company: "DEF Corp",
-    image: "https://randomuser.me/api/portraits/men/5.jpg",
-  },
-  {
-    testimonial:
-      "Ahmed cut our notification server latency in half and kept production stable through a major migration.",
-    name: "Lisa Wang",
-    designation: "VP Engineering",
-    company: "456 Enterprises",
-    image: "https://randomuser.me/api/portraits/women/6.jpg",
-  },
-];
-
-const projects: TProject[] = [
+export const projects: TProject[] = [
   {
     name: "Madkhol — Investment App",
+    category: "Fintech · iOS",
     description:
       "iOS investment & robo-advisory app. Built backend microservices for portfolio management, investment strategies, and financial analytics. Improved API performance by 30% and reduced transaction errors by 40%.",
-    tags: [
-      { name: "nestjs", color: "blue-text-gradient" },
-      { name: "microservices", color: "green-text-gradient" },
-      { name: "ios", color: "pink-text-gradient" },
-    ],
+    tags: ["nestjs", "microservices", "ios"],
     image: madkhol,
     sourceCodeLink:
       "https://apps.apple.com/eg/app/madkhol-%D9%85%D8%AF%D8%AE%D9%88%D9%84/id6476918304",
@@ -212,13 +276,10 @@ const projects: TProject[] = [
   },
   {
     name: "BasicsEngage Platform",
+    category: "AI · Automation",
     description:
       "AI-powered email automation platform integrating GPT-3.5 Turbo for 15k+ users and Zapier workflows supporting 150+ monthly automations across customer tools.",
-    tags: [
-      { name: "openai", color: "blue-text-gradient" },
-      { name: "zapier", color: "green-text-gradient" },
-      { name: "nodejs", color: "pink-text-gradient" },
-    ],
+    tags: ["openai", "zapier", "nodejs"],
     image: basicsengage,
     sourceCodeLink: "https://www.basicsengage.com",
     metric: { value: "15k+", label: "users on AI email gen" },
@@ -252,13 +313,10 @@ const projects: TProject[] = [
   },
   {
     name: "Appgain Notify Server",
+    category: "Real-time · Messaging",
     description:
       "Push notification & messaging server powering customer engagement across Appgain apps. Optimized for 50% faster response times and reliable real-time delivery.",
-    tags: [
-      { name: "nodejs", color: "blue-text-gradient" },
-      { name: "websockets", color: "green-text-gradient" },
-      { name: "redis", color: "pink-text-gradient" },
-    ],
+    tags: ["nodejs", "websockets", "redis"],
     image: appgain,
     sourceCodeLink: "https://appgain.io",
     metric: { value: "50%", label: "faster notifications" },
@@ -292,56 +350,41 @@ const projects: TProject[] = [
     },
   },
   {
-    name: "ConnectGain",
-    description:
-      "Customer engagement Android app on Google Play. Backend services for authentication, user data, and notification flows powered by the Appgain stack.",
-    tags: [
-      { name: "express", color: "blue-text-gradient" },
-      { name: "mongodb", color: "green-text-gradient" },
-      { name: "android", color: "pink-text-gradient" },
-    ],
-    image: connectgain,
-    sourceCodeLink:
-      "https://play.google.com/store/apps/details?id=com.appgain.connectgain",
-    metric: { value: "Real-time", label: "notification flows" },
-  },
-  {
     name: "Peak Pharma",
+    category: "B2B SaaS · Android",
     description:
       "Pharma e-commerce SaaS for B2B ordering. Built backend systems for auth, orders, invoices, and analytics — production-ready Android app.",
-    tags: [
-      { name: "express", color: "blue-text-gradient" },
-      { name: "mongodb", color: "green-text-gradient" },
-      { name: "saas", color: "pink-text-gradient" },
-    ],
+    tags: ["express", "mongodb", "saas"],
     image: peakpharma,
-    sourceCodeLink:
-      "https://play.google.com/store/apps/details?id=com.appgain.peakPharma",
+    sourceCodeLink: "https://play.google.com/store/apps/details?id=com.appgain.peakPharma",
     metric: { value: "B2B", label: "orders, invoices & analytics" },
   },
   {
+    name: "ConnectGain",
+    category: "Engagement · Android",
+    description:
+      "Customer engagement Android app on Google Play. Backend services for authentication, user data, and notification flows powered by the Appgain stack.",
+    tags: ["express", "mongodb", "android"],
+    image: connectgain,
+    sourceCodeLink: "https://play.google.com/store/apps/details?id=com.appgain.connectgain",
+    metric: { value: "Real-time", label: "notification flows" },
+  },
+  {
     name: "iKhair (Quantatil)",
+    category: "Messaging · Android",
     description:
       "Mobile app powered by Appgain backend infrastructure. Authentication, real-time messaging, and notification delivery for end users.",
-    tags: [
-      { name: "nodejs", color: "blue-text-gradient" },
-      { name: "websockets", color: "green-text-gradient" },
-      { name: "android", color: "pink-text-gradient" },
-    ],
+    tags: ["nodejs", "websockets", "android"],
     image: ikhair,
-    sourceCodeLink:
-      "https://play.google.com/store/apps/details?id=com.quantatil.ikhar",
+    sourceCodeLink: "https://play.google.com/store/apps/details?id=com.quantatil.ikhar",
     metric: { value: "Real-time", label: "messaging & auth" },
   },
   {
     name: "Alzhafra Admin",
+    category: "Admin · Android",
     description:
       "Admin Android app for the Alzhafra platform. Backend services for admin auth, content management, and analytics dashboards.",
-    tags: [
-      { name: "express", color: "blue-text-gradient" },
-      { name: "mongodb", color: "green-text-gradient" },
-      { name: "admin", color: "pink-text-gradient" },
-    ],
+    tags: ["express", "mongodb", "admin"],
     image: alzhafraAdmin,
     sourceCodeLink:
       "https://play.google.com/store/apps/details?id=com.appgain.alzhafra_admin_app",
@@ -349,13 +392,10 @@ const projects: TProject[] = [
   },
   {
     name: "Zhafra Attendees",
+    category: "Events · Android",
     description:
       "Android app for event attendees on the Zhafra platform. Backend services for attendee auth, check-in flows, and event data.",
-    tags: [
-      { name: "express", color: "blue-text-gradient" },
-      { name: "mongodb", color: "green-text-gradient" },
-      { name: "events", color: "pink-text-gradient" },
-    ],
+    tags: ["express", "mongodb", "events"],
     image: zhafraAttendees,
     sourceCodeLink:
       "https://play.google.com/store/apps/details?id=com.appgain.zhafra_attendees_app",
@@ -363,123 +403,13 @@ const projects: TProject[] = [
   },
   {
     name: "Marrakesh Consumer",
+    category: "E-commerce · Android",
     description:
       "Consumer-facing Marraksh e-commerce SaaS app. Designed secure authentication and customer flows on the Appgain backend.",
-    tags: [
-      { name: "express", color: "blue-text-gradient" },
-      { name: "auth", color: "green-text-gradient" },
-      { name: "ecommerce", color: "pink-text-gradient" },
-    ],
+    tags: ["express", "auth", "ecommerce"],
     image: marrakesh,
     sourceCodeLink:
       "https://play.google.com/store/apps/details?id=com.appgain.marrakeshconsumer",
     metric: { value: "Secure", label: "auth & checkout flows" },
   },
 ];
-
-type TSkillCategory = {
-  title: string;
-  items: string[];
-};
-
-const devicon = (path: string) =>
-  `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${path}`;
-const simpleIcon = (slug: string, color = "white") =>
-  `https://cdn.simpleicons.org/${slug}/${color}`;
-
-export const skillIcons: Record<string, string> = {
-  JavaScript: devicon("javascript/javascript-original.svg"),
-  TypeScript: devicon("typescript/typescript-original.svg"),
-  Python: devicon("python/python-original.svg"),
-  "C#": devicon("csharp/csharp-original.svg"),
-  "Node.js": devicon("nodejs/nodejs-original.svg"),
-  "Bun.js": devicon("bun/bun-original.svg"),
-  "Express.js": simpleIcon("express"),
-  NestJS: devicon("nestjs/nestjs-original.svg"),
-  FastAPI: devicon("fastapi/fastapi-original.svg"),
-  Flask: simpleIcon("flask"),
-  Django: devicon("django/django-plain.svg"),
-  MongoDB: devicon("mongodb/mongodb-original.svg"),
-  PostgreSQL: devicon("postgresql/postgresql-original.svg"),
-  MySQL: devicon("mysql/mysql-original.svg"),
-  Mongoose: devicon("mongoose/mongoose-original.svg"),
-  TypeORM: simpleIcon("typeorm"),
-  Prisma: simpleIcon("prisma"),
-  Sequelize: devicon("sequelize/sequelize-original.svg"),
-  Git: devicon("git/git-original.svg"),
-  GitHub: simpleIcon("github"),
-  GitLab: devicon("gitlab/gitlab-original.svg"),
-  Bitbucket: devicon("bitbucket/bitbucket-original.svg"),
-  Docker: devicon("docker/docker-original.svg"),
-  Linux: devicon("linux/linux-original.svg"),
-  Redis: devicon("redis/redis-original.svg"),
-  AWS: devicon("amazonwebservices/amazonwebservices-original-wordmark.svg"),
-  Bash: devicon("bash/bash-original.svg"),
-  "Socket.io": simpleIcon("socketdotio"),
-  Pusher: simpleIcon("pusher"),
-  Postman: devicon("postman/postman-original.svg"),
-  Swagger: devicon("swagger/swagger-original.svg"),
-  GraphQL: devicon("graphql/graphql-plain.svg"),
-};
-
-const skillCategories: TSkillCategory[] = [
-  {
-    title: "Languages",
-    items: ["JavaScript", "TypeScript", "Python", "C#"],
-  },
-  {
-    title: "Frameworks",
-    items: [
-      "Node.js",
-      "Bun.js",
-      "Express.js",
-      "NestJS",
-      "FastAPI",
-      "Flask",
-      "Django",
-    ],
-  },
-  {
-    title: "Databases & ORMs",
-    items: [
-      "MongoDB",
-      "PostgreSQL",
-      "MySQL",
-      "Mongoose",
-      "TypeORM",
-      "Prisma",
-      "Sequelize",
-    ],
-  },
-  {
-    title: "DevOps",
-    items: [
-      "Git",
-      "GitHub",
-      "GitLab",
-      "Bitbucket",
-      "Docker",
-      "Linux",
-      "Redis",
-      "AWS",
-      "Bash",
-    ],
-  },
-  {
-    title: "Real-time",
-    items: ["Socket.io", "Pusher"],
-  },
-  {
-    title: "Tools",
-    items: ["Postman", "Swagger", "GraphQL"],
-  },
-];
-
-export {
-  services,
-  technologies,
-  experiences,
-  testimonials,
-  projects,
-  skillCategories,
-};

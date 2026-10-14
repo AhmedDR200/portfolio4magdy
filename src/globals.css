@@ -1,104 +1,30 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "AA Majara";
-  src: url("/fonts/aa-majara.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-.font-majara {
-  font-family: "AA Majara", "Comic Sans MS", cursive;
-}
-
-:root,
-[data-theme="dark"] {
-  --color-primary: 10 14 10;
-  --color-secondary: 74 128 85;
-  --color-tertiary: 15 24 16;
-  --color-black-100: 5 8 5;
-  --color-black-200: 0 0 0;
-  --color-white-100: 200 255 208;
-  --color-fg: 255 255 255;
-  --color-grid-bg: 10 14 10;
-  color-scheme: dark;
-}
-
-[data-theme="light"] {
-  --color-primary: 238 242 238;
-  --color-secondary: 47 92 58;
-  --color-tertiary: 255 255 255;
-  --color-black-100: 226 232 226;
-  --color-black-200: 245 247 245;
-  --color-white-100: 20 48 27;
-  --color-fg: 10 14 10;
-  --color-grid-bg: 238 242 238;
-  color-scheme: light;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-  scroll-behavior: smooth;
+html {
+  background-color: #0a0a0a;
 }
 
 body {
-  background-color: rgb(var(--color-primary));
+  background-color: #0a0a0a;
+  color: #f4f4ef;
+  font-family: theme("fontFamily.mono");
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-/* In light mode, literal white text/borders would disappear on light
-   surfaces, so remap them to the theme foreground. Higher specificity
-   than Tailwind's single-class utilities, so these win without !important. */
-[data-theme="light"] .text-white {
-  color: rgb(var(--color-fg));
-}
-[data-theme="light"] .border-white\/10 {
-  border-color: rgb(var(--color-fg) / 0.12);
-}
-[data-theme="light"] .border-white\/5 {
-  border-color: rgb(var(--color-fg) / 0.08);
-}
-[data-theme="light"] .text-white\/90,
-[data-theme="light"] .text-white\/80,
-[data-theme="light"] .text-white\/60 {
-  color: rgb(var(--color-fg) / 0.75);
+::selection {
+  background: #d4ff3a;
+  color: #0a0a0a;
 }
 
-/* The hero overlays text on an always-dark grayscale photo, so its text must
-   stay light in BOTH themes. These selectors carry an extra .hero-on-photo
-   ancestor, so they out-specify the generic light-theme remaps above. */
-[data-theme="light"] .hero-on-photo .text-white {
-  color: #fff;
-}
-[data-theme="light"] .hero-on-photo .text-white\/90 {
-  color: rgba(255, 255, 255, 0.9);
-}
-[data-theme="light"] .hero-on-photo .text-white\/80 {
-  color: rgba(255, 255, 255, 0.8);
-}
-[data-theme="light"] .hero-on-photo .text-white\/60 {
-  color: rgba(255, 255, 255, 0.6);
-}
-[data-theme="light"] .hero-on-photo .text-secondary {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-/* Reduce-motion: kill CSS animations/transitions and pin scroll behavior.
-   Framer Motion components additionally read the settings context. */
-[data-reduce-motion="true"] *,
-[data-reduce-motion="true"] *::before,
-[data-reduce-motion="true"] *::after {
-  animation-duration: 0.001ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.001ms !important;
-  scroll-behavior: auto !important;
+:focus-visible {
+  outline: 2px solid #d4ff3a;
+  outline-offset: 3px;
 }
 
 .hash-span {
@@ -107,333 +33,104 @@ body {
   display: block;
 }
 
-/* RGB-split glitch (green/cyan) for the hero name. Pseudo-element copies
-   sit behind the white text and jitter on hover. Transforms/opacity only. */
-.glitch {
-  position: relative;
-  display: inline-block;
+/* Infinite strips: the content is rendered twice, so -50% loops seamlessly. */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
 }
 
-.glitch::before,
-.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  pointer-events: none;
-  will-change: transform, opacity;
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.glitch::before {
-  color: #00ffaa;
-  z-index: -1;
-}
-
-.glitch::after {
-  color: #00ff88;
-  z-index: -2;
-}
-
-.glitch:hover::before {
-  opacity: 0.85;
-  animation: glitch-cyan 0.45s steps(2, end) infinite;
-}
-
-.glitch:hover::after {
-  opacity: 0.85;
-  animation: glitch-green 0.45s steps(2, end) infinite;
-}
-
-@keyframes glitch-cyan {
+/* Pulsing status dots: ink on volt surfaces, volt on dark ones. */
+@keyframes pulse-ink {
   0%,
   100% {
-    transform: translate(0);
+    box-shadow: 0 0 0 0 rgba(10, 10, 10, 0.55);
   }
-  20% {
-    transform: translate(-2px, 1px);
-  }
-  40% {
-    transform: translate(-2px, -1px);
-  }
-  60% {
-    transform: translate(2px, 1px);
-  }
-  80% {
-    transform: translate(1px, -1px);
+  50% {
+    box-shadow: 0 0 0 7px rgba(10, 10, 10, 0);
   }
 }
 
-@keyframes glitch-green {
+@keyframes pulse-volt {
   0%,
   100% {
-    transform: translate(0);
+    box-shadow: 0 0 0 0 rgba(212, 255, 58, 0.6);
   }
-  20% {
-    transform: translate(2px, -1px);
-  }
-  40% {
-    transform: translate(2px, 1px);
-  }
-  60% {
-    transform: translate(-2px, -1px);
-  }
-  80% {
-    transform: translate(-1px, 1px);
+  50% {
+    box-shadow: 0 0 0 7px rgba(212, 255, 58, 0);
   }
 }
 
-/* Reduce-motion: drop the glitch copies entirely so only plain text shows. */
-[data-reduce-motion="true"] .glitch::before,
-[data-reduce-motion="true"] .glitch::after {
-  content: none;
-  animation: none;
+.animate-marquee {
+  animation: marquee var(--marquee-duration, 30s) linear infinite;
 }
 
-/* Diagonal green light sweep across a button on hover. Clipped by the
-   element's own overflow:hidden; animates a single translate. */
-.shine {
-  position: relative;
-  overflow: hidden;
+.animate-spin-slow {
+  animation: spin-slow 14s linear infinite;
 }
 
-.shine::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -150%;
-  width: 75%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent 0%,
-    rgba(0, 255, 136, 0.35) 50%,
-    transparent 100%
-  );
-  transform: skewX(-20deg);
-  pointer-events: none;
-  will-change: left;
+.animate-pulse-ink {
+  animation: pulse-ink 2s ease-in-out infinite;
 }
 
-.shine:hover::before {
-  animation: shine-sweep 0.8s ease;
+.animate-pulse-volt {
+  animation: pulse-volt 2s ease-in-out infinite;
 }
 
-@keyframes shine-sweep {
-  0% {
-    left: -150%;
-  }
-  100% {
-    left: 150%;
-  }
-}
-
-/* Reduce-motion: no sweep (bg/border hover styles still apply). */
-[data-reduce-motion="true"] .shine::before {
-  animation: none;
-}
-
-/* Blinking block cursor for the navbar terminal-prompt tagline. */
-.nav-cursor {
-  animation: nav-cursor-blink 1s steps(1, start) infinite;
-}
-
-@keyframes nav-cursor-blink {
+/* The logo's terminal cursor; 1.06 s is a real terminal's blink rate. */
+@keyframes blink {
   50% {
     opacity: 0;
   }
 }
 
-/* Reduce-motion: solid cursor, no blink. */
-[data-reduce-motion="true"] .nav-cursor {
-  animation: none;
-  opacity: 1;
+.animate-blink {
+  animation: blink 1.06s steps(1) infinite;
 }
 
-.line-clamp-2,
-.line-clamp-3,
-.line-clamp-4 {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.hero-grid {
-  background-color: rgb(var(--color-grid-bg));
-  background-image: linear-gradient(
-      rgba(0, 255, 136, 0.06) 1px,
-      transparent 1px
-    ),
-    linear-gradient(90deg, rgba(0, 255, 136, 0.06) 1px, transparent 1px);
-  background-size: 40px 40px;
-  background-position: center center;
-}
-
-.vertical-timeline::before {
-  background: rgba(0, 255, 136, 0.25) !important;
-}
-.vertical-timeline-element-date {
-  color: rgb(var(--color-fg) / 0.7) !important;
-}
-.line-clamp-2 {
-  -webkit-line-clamp: 2;
-}
-.line-clamp-3 {
-  -webkit-line-clamp: 3;
-}
-.line-clamp-4 {
-  -webkit-line-clamp: 4;
-}
-
-.black-gradient {
-  background: #000000; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #434343,
-    #000000
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #434343,
-    #000000
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-}
-
-.violet-gradient {
-  background: #00FF88;
-  background: linear-gradient(-90deg, #00FF88 0%, rgba(60, 51, 80, 0) 100%);
-  background: -webkit-linear-gradient(
-    -90deg,
-    #00FF88 0%,
-    rgba(60, 51, 80, 0) 100%
-  );
-}
-
-.green-pink-gradient {
-  background: #00FF88;
-  background: linear-gradient(90.13deg, #00FF88 1.9%, #FFB700 97.5%);
-  background: -webkit-linear-gradient(-90.13deg, #00FF88 1.9%, #FFB700 97.5%);
-}
-
-.orange-text-gradient {
-  background: #FFB700;
-  background: -webkit-linear-gradient(to top, #C28800, #FFB700);
-  background: linear-gradient(to top, #C28800, #FFB700);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.green-text-gradient {
-  background: #00FF88;
-  background: -webkit-linear-gradient(to top, #00AA55, #00FF88);
-  background: linear-gradient(to top, #00AA55, #00FF88);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.blue-text-gradient {
-  background: #00FFAA;
-  background: -webkit-linear-gradient(to top, #00CC77, #00FFAA);
-  background: linear-gradient(to top, #00CC77, #00FFAA);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.pink-text-gradient {
-  background: #FF0044;
-  background: -webkit-linear-gradient(to top, #CC0033, #FF6680);
-  background: linear-gradient(to top, #CC0033, #FF6680);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* canvas- styles */
-.canvas-loader {
-  font-size: 10px;
-  width: 1em;
-  height: 1em;
-  border-radius: 50%;
-  position: relative;
-  text-indent: -9999em;
-  animation: mulShdSpin 1.1s infinite ease;
-  transform: translateZ(0);
-}
-
-@keyframes mulShdSpin {
-  0%,
-  100% {
-    box-shadow: 0em -2.6em 0em 0em #ffffff,
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
-      2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.2),
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.5),
-      -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.7);
+/* The map: the dashed route crawls, the "you are here" marker bobs. */
+@keyframes map-route {
+  to {
+    stroke-dashoffset: -40;
   }
-  12.5% {
-    box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.7),
-      1.8em -1.8em 0 0em #ffffff, 2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.2),
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.5);
-  }
-  25% {
-    box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.5),
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.7), 2.5em 0em 0 0em #ffffff,
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.2),
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
-  }
-  37.5% {
-    box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.5),
-      2.5em 0em 0 0em rgba(255, 255, 255, 0.7), 1.75em 1.75em 0 0em #ffffff,
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.2),
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
-  }
+}
+
+@keyframes map-you {
   50% {
-    box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
-      2.5em 0em 0 0em rgba(255, 255, 255, 0.5),
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.7), 0em 2.5em 0 0em #ffffff,
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.2),
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
   }
-  62.5% {
-    box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
-      2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.5),
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.7), -1.8em 1.8em 0 0em #ffffff,
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
-  }
-  75% {
-    box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
-      2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.5),
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.7), -2.6em 0em 0 0em #ffffff,
-      -1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2);
-  }
-  87.5% {
-    box-shadow: 0em -2.6em 0em 0em rgba(255, 255, 255, 0.2),
-      1.8em -1.8em 0 0em rgba(255, 255, 255, 0.2),
-      2.5em 0em 0 0em rgba(255, 255, 255, 0.2),
-      1.75em 1.75em 0 0em rgba(255, 255, 255, 0.2),
-      0em 2.5em 0 0em rgba(255, 255, 255, 0.2),
-      -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.5),
-      -2.6em 0em 0 0em rgba(255, 255, 255, 0.7), -1.8em -1.8em 0 0em #ffffff;
+}
+
+.animate-map-route {
+  animation: map-route 1s linear infinite;
+}
+
+.animate-map-you {
+  animation: map-you 1.6s ease-in-out infinite;
+}
+
+/* The heading fade used by the footer wordmark. */
+.text-fade-volt {
+  background: linear-gradient(180deg, #d4ff3a 0%, rgba(212, 255, 58, 0.06) 92%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { unlock } from "../../utils/achievements";
+
 const SEQUENCE = [
   "ArrowUp",
   "ArrowUp",
@@ -14,7 +16,7 @@ const SEQUENCE = [
   "a",
 ];
 
-const EMOJIS = ["🚀", "🐛", "⚡", "🛰️", "💾", "📦", "✅"];
+const SYMBOLS = ["✦", "200", "{ }", "</>", "✓", "API", "تمام"];
 
 const KonamiEasterEgg = () => {
   const [active, setActive] = useState(false);
@@ -29,6 +31,7 @@ const KonamiEasterEgg = () => {
         if (progress === SEQUENCE.length) {
           progress = 0;
           setActive(true);
+          unlock("old-school");
         }
       } else {
         progress = key === SEQUENCE[0] ? 1 : 0;
@@ -53,7 +56,7 @@ const KonamiEasterEgg = () => {
         delay: Math.random() * 2.5,
         duration: 2.8 + Math.random() * 2.5,
         size: 20 + Math.random() * 26,
-        emoji: EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
+        symbol: SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
       })),
     []
   );
@@ -66,11 +69,12 @@ const KonamiEasterEgg = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={() => setActive(false)}
-          className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden bg-black/40 backdrop-blur-[2px]"
+          className="fixed inset-0 z-[200] flex items-center justify-center overflow-hidden bg-ink/60 backdrop-blur-[2px]"
         >
           {drops.map((d) => (
             <motion.span
               key={d.id}
+              aria-hidden="true"
               initial={{ y: "-12vh", rotate: 0, opacity: 0 }}
               animate={{ y: "112vh", rotate: 360, opacity: 1 }}
               transition={{
@@ -79,14 +83,10 @@ const KonamiEasterEgg = () => {
                 repeat: Infinity,
                 ease: "linear",
               }}
-              style={{
-                left: `${d.left}%`,
-                fontSize: `${d.size}px`,
-                position: "absolute",
-                top: 0,
-              }}
+              className="absolute top-0 font-display text-volt"
+              style={{ left: `${d.left}%`, fontSize: `${d.size}px` }}
             >
-              {d.emoji}
+              {d.symbol}
             </motion.span>
           ))}
 
@@ -96,21 +96,18 @@ const KonamiEasterEgg = () => {
             exit={{ scale: 0.7, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 18 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-tertiary relative z-10 mx-4 max-w-md rounded-2xl border border-[#00FF88]/40 px-8 py-7 text-center shadow-2xl"
+            className="relative z-10 mx-4 max-w-md rounded-[24px] border-2 border-volt bg-graphite px-8 py-7 text-center"
           >
-            <div className="text-[40px]">🚀</div>
-            <h3 className="mt-2 text-[22px] font-black text-white">
-              Cheat code unlocked!
-            </h3>
-            <p className="text-secondary mt-2 text-[14px] leading-[22px]">
-              <span className="font-mono text-[#00FF88]">--ship-it</span> mode
-              engaged. All tests green, zero downtime, infinite uptime. You found
-              the secret — now go build something great.
+            <p className="m-0 font-display text-[56px] leading-none text-volt">200 OK</p>
+            <h3 className="m-0 mt-3 font-display text-[28px] font-normal uppercase">Cheat code unlocked!</h3>
+            <p className="m-0 mt-2 text-[14px] leading-[22px] text-smoke">
+              <span className="text-volt">--ship-it</span> mode engaged. All tests green, zero downtime,
+              infinite uptime. You found the secret — now go build something great.
             </p>
             <button
               type="button"
               onClick={() => setActive(false)}
-              className="mt-5 rounded-full border border-[#00FF88]/40 bg-[#00FF88]/10 px-5 py-2 text-[14px] font-semibold text-white transition-all hover:scale-105 hover:border-[#00FF88]"
+              className="mt-5 h-11 rounded-full bg-volt px-6 text-[13px] font-semibold uppercase tracking-[0.08em] text-ink"
             >
               Deploy to prod
             </button>

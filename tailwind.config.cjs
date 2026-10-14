@@ -4,28 +4,30 @@ module.exports = {
   mode: "jit",
   theme: {
     extend: {
+      // Volt palette. Text on volt is always ink.
       colors: {
-        primary: "rgb(var(--color-primary) / <alpha-value>)",
-        secondary: "rgb(var(--color-secondary) / <alpha-value>)",
-        tertiary: "rgb(var(--color-tertiary) / <alpha-value>)",
-        "black-100": "rgb(var(--color-black-100) / <alpha-value>)",
-        "black-200": "rgb(var(--color-black-200) / <alpha-value>)",
-        "white-100": "rgb(var(--color-white-100) / <alpha-value>)",
-        accent: "#00FF88",
-        "accent-blue": "#00CC66",
-        "accent-cyan": "#00FFAA",
-        "accent-green": "#00FF88",
-        "accent-orange": "#FFB700",
-        "accent-red": "#FF0044",
+        ink: "#0A0A0A",
+        graphite: "#1C1C1C",
+        paper: "#F4F4EF",
+        mist: "#C9C9C2",
+        smoke: "#8C8C86",
+        dim: "#6A6A64",
+        volt: "#D4FF3A",
       },
-      boxShadow: {
-        card: "0px 35px 120px -15px #211e35",
+      fontFamily: {
+        // Anton is display-only: headings, always uppercase.
+        display: ["Anton", "Impact", '"Arial Narrow"', "sans-serif"],
+        arabic: ["Rakkas", "serif"],
+        // Bee3a's own UI font, only inside the Bee3a demo.
+        bee3a: ["Alexandria", "sans-serif"],
+        // ٢٠٠ تمام's own display font, only in the channel section.
+        kufi: ['"Reem Kufi"', "sans-serif"],
+        // Woodtype for the western touches (WANTED poster, map, achievements).
+        western: ["Rye", "serif"],
+        mono: ['"JetBrains Mono"', "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       screens: {
         xs: "450px",
-      },
-      backgroundImage: {
-        "hero-pattern": "url('/src/assets/herobg.png')",
       },
     },
   },

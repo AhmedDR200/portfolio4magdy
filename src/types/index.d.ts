@@ -1,27 +1,24 @@
-export type TCommonProps = {
-  title?: string;
-  name?: string;
-  icon?: string;
+import type { IconName } from "../components/atoms/Icon";
+
+export type TNavLink = {
+  id: string;
+  title: string;
 };
-
-export type TExperience = {
-  companyName: string;
-  companyUrl?: string;
-  iconBg: string;
-  date: string;
-  points: string[];
-} & Required<Omit<TCommonProps, "name">>;
-
-export type TTestimonial = {
-  testimonial: string;
-  designation: string;
-  company: string;
-  image: string;
-} & Required<Pick<TCommonProps, "name">>;
 
 export type TMetric = {
   value: string;
   label: string;
+};
+
+export type TExperience = {
+  title: string;
+  companyName: string;
+  companyUrl?: string;
+  date: string;
+  /** Big label on the timeline: "Now" for the current role, else the start year. */
+  marker: string;
+  summary: string;
+  points: string[];
 };
 
 export type TCaseStudy = {
@@ -34,28 +31,41 @@ export type TCaseStudy = {
 };
 
 export type TProject = {
+  name: string;
+  /** Short "Client · Focus" label shown on the work list. */
+  category: string;
   description: string;
-  tags: {
-    name: string;
-    color: string;
-  }[];
+  tags: string[];
   image: string;
   sourceCodeLink: string;
   metric?: TMetric;
   caseStudy?: TCaseStudy;
-} & Required<Pick<TCommonProps, "name">>;
+};
 
-export type TTechnology = Required<Omit<TCommonProps, "title">>;
+export type TImpactStat = {
+  icon: IconName;
+  value: string;
+  label: string;
+  labelAr: string;
+};
 
-export type TNavLink = {
-  id: string;
-} & Required<Pick<TCommonProps, "title">>;
+export type TService = {
+  icon: IconName;
+  title: string;
+  description: string;
+  details: string[];
+  stack: string[];
+};
 
-export type TService = Required<Omit<TCommonProps, "name">>;
+export type TSkillGroup = {
+  title: string;
+  titleAr: string;
+  items: string[];
+  /** The ones used every day; shown in volt. */
+  daily: string[];
+};
 
-export type TMotion = {
-  direction: "up" | "down" | "left" | "right" | "";
-  type: "tween" | "spring" | "just" | "";
-  delay: number;
-  duration: number;
+export type TPrinciple = {
+  ar: string;
+  en: string;
 };

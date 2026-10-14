@@ -1,67 +1,46 @@
-import React from "react";
-import Tilt from "react-parallax-tilt";
-import { motion } from "framer-motion";
-
-import { services } from "../../constants";
-import { SectionWrapper } from "../../hoc";
-import { fadeIn } from "../../utils/motion";
 import { config } from "../../constants/config";
-import { Header } from "../atoms/Header";
+import { styles } from "../../constants/styles";
+import Magnetic from "../atoms/Magnetic";
+import RevealText from "../atoms/RevealText";
+import { Eyebrow } from "../atoms/SectionHeader";
 
-interface IServiceCard {
-  index: number;
-  title: string;
-  icon: string;
-}
+const About = () => (
+  <section id="about" className="py-24 sm:py-36">
+    <div
+      className={`${styles.container} grid gap-10 lg:grid-cols-2 lg:gap-24`}
+    >
+      <div className="flex flex-col gap-5">
+        <Eyebrow index="01" label="About" labelAr="عني" />
+        <RevealText
+          as="h2"
+          text={config.about.statement}
+          highlight="unsexy infra"
+          className="m-0 font-display text-[clamp(40px,4.6vw,68px)] font-normal uppercase leading-[1.02]"
+        />
+        <p
+          lang="ar"
+          dir="rtl"
+          className="m-0 text-left font-arabic text-[28px] leading-[1.4] text-mist sm:text-[36px]"
+        >
+          {config.about.statementAr}
+        </p>
+      </div>
 
-const ServiceCard: React.FC<IServiceCard> = ({ index, title, icon }) => (
-  <Tilt
-    glareEnable
-    tiltEnable
-    tiltMaxAngleX={30}
-    tiltMaxAngleY={30}
-    glareColor="#00FF88"
-  >
-    <div className="max-w-[250px] w-full xs:w-[250px]">
-      <motion.div
-        variants={fadeIn("right", "spring", index * 0.5, 0.75)}
-        className="green-pink-gradient shadow-card w-full rounded-[20px] p-[1px]"
-      >
-        <div className="bg-tertiary flex min-h-[280px] flex-col items-center justify-evenly rounded-[20px] px-12 py-5">
-          <img
-            src={icon}
-            alt="web-development"
-            className="h-16 w-16 object-contain"
-          />
-
-          <h3 className="text-center text-[20px] font-bold text-white">
-            {title}
-          </h3>
-        </div>
-      </motion.div>
+      <div className="flex flex-col gap-10 lg:pt-10">
+        <p className="m-0 max-w-[60ch] text-[16px] leading-[1.85] text-smoke">
+          {config.about.body}
+        </p>
+        <Magnetic>
+          <a
+            href="#experience"
+            className="flex h-[150px] w-[150px] items-center justify-center rounded-full bg-volt font-display text-[22px] uppercase text-ink sm:h-[176px] sm:w-[176px] sm:text-[26px]"
+          >
+            About me
+          </a>
+        </Magnetic>
+      </div>
     </div>
-  </Tilt>
+  </section>
 );
 
-const About = () => {
-  return (
-    <>
-      <Header useMotion={true} {...config.sections.about} />
-
-      <motion.p
-        variants={fadeIn("", "", 0.1, 1)}
-        className="text-secondary mt-4 max-w-3xl text-[17px] leading-[30px]"
-      >
-        {config.sections.about.content}
-      </motion.p>
-
-      <div className="mt-20 flex flex-wrap gap-10 max-sm:justify-center">
-        {services.map((service, index) => (
-          <ServiceCard key={service.title} index={index} {...service} />
-        ))}
-      </div>
-    </>
-  );
-};
-
-export default SectionWrapper(About, "about");
+export default About;

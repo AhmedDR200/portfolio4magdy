@@ -1,0 +1,56 @@
+# Keeps the downloadable CV in step with Overleaf.
+# Fetches the compiled PDF from the Overleaf share link and publishes it as the
+# asset of the "cv" release, which the site's Resume button downloads:
+# https://github.com/AhmedDR200/portfolio4magdy/releases/download/cv/Ahmed_Magdy_CV.pdf
+# Runs every 3 hours; use "Run workflow" on the Actions tab to sync right away.
+name: Sync CV from Overleaf
+
+on:
+  schedule:
+    - cron: "17 */3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-cv
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      OVERLEAF_SHARE_URL: "https://www.overleaf.com/project/6735c11bef4c013261c94e40/share#8b5cdf413e13f86767f0b868ab89a7fd127ba78ff14ce6ea"
+      CV_FILE: Ahmed_Magdy_CV.pdf
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Installed in a scratch folder so the site's own dependencies stay out of it.
+      - name: Install Playwright
+        run: |
+          mkdir -p "$RUNNER_TEMP/cv"
+          cp scripts/sync-cv.mjs "$RUNNER_TEMP/cv/"
+          cd "$RUNNER_TEMP/cv"
+          npm init -y > /dev/null
+          npm install playwright@1.48.2
+          npx playwright install --with-deps chromium
+
+      - name: Download the compiled CV from Overleaf
+        working-directory: ${{ runner.temp }}/cv
+        run: node sync-cv.mjs "$GITHUB_WORKSPACE/$CV_FILE"
+
+      - name: Publish it on the "cv" release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view cv > /dev/null 2>&1 || gh release create cv \
+            --title "CV" \
+            --notes "Latest CV, synced from Overleaf by .github/workflows/sync-cv.yml." \
+            --latest=false
+          gh release upload cv "$CV_FILE" --clobber

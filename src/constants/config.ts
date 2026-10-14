@@ -1,99 +1,46 @@
-type TSection = {
-  p: string;
-  h2: string;
-  content?: string;
-};
-
-type TConfig = {
-  html: {
-    title: string;
-    fullName: string;
-    email: string;
-  };
-  hero: {
-    name: string;
-    p: string[];
-  };
-  contact: {
-    form: {
-      name: {
-        span: string;
-        placeholder: string;
-      };
-      email: {
-        span: string;
-        placeholder: string;
-      };
-      message: {
-        span: string;
-        placeholder: string;
-      };
-    };
-  } & TSection;
-  sections: {
-    about: Required<TSection>;
-    experience: TSection;
-    feedbacks: TSection;
-    works: Required<TSection>;
-  };
-};
-
-export const config: TConfig = {
+export const config = {
   html: {
     title: "Ahmed Magdy — Software Engineer",
     fullName: "Ahmed Magdy",
     email: "alshwwhy212@gmail.com",
   },
-  hero: {
-    name: "Ahmed Magdy",
-    p: ["I build scalable backend systems,", "APIs, and real-time services"],
+  // The CV is written on Overleaf. .github/workflows/sync-cv.yml copies the
+  // compiled PDF onto the "cv" GitHub release every 3 hours, so this link
+  // always downloads the latest version.
+  cvUrl:
+    "https://github.com/AhmedDR200/portfolio4magdy/releases/download/cv/Ahmed_Magdy_CV.pdf",
+  socials: {
+    github: "https://github.com/AhmedDR200",
+    linkedin: "https://www.linkedin.com/in/am412002/",
   },
-  contact: {
-    p: "Get in touch",
-    h2: "Contact.",
-    form: {
-      name: {
-        span: "Your Name",
-        placeholder: "What's your name?",
-      },
-      email: { span: "Your Email", placeholder: "What's your email?" },
-      message: {
-        span: "Your Message",
-        placeholder: "What do you want to say?",
-      },
-    },
+  youtube: {
+    url: "https://www.youtube.com/@200tamam",
+    handle: "@200tamam",
+    // A YouTube Data API browser key, restricted to this site's domains. It
+    // comes from .env.local (VITE_YOUTUBE_API_KEY); without it the live
+    // channel stats are simply hidden.
+    apiKey: import.meta.env.VITE_YOUTUBE_API_KEY ?? "",
   },
-  sections: {
-    about: {
-      p: "Introduction",
-      h2: "Overview.",
-      content: `Strategic and results-oriented Software Engineer with a proven
-      track record of designing, developing, and delivering scalable,
-      high-performance software solutions across diverse technologies and
-      architectures. Adept at translating complex business requirements into
-      robust technical implementations, optimizing system performance, and
-      ensuring software reliability and security. Experienced in full
-      software development lifecycle, from conceptualization and architecture
-      design to deployment and maintenance. Passionate about continuous
-      improvement, modern engineering practices, and mentoring teams to
-      achieve excellence. Driven by innovation and committed to building
-      impactful, future-ready digital solutions.`,
-    },
-    experience: {
-      p: "What I have done so far",
-      h2: "Work Experience.",
-    },
-    feedbacks: {
-      p: "What others say",
-      h2: "Testimonials.",
-    },
-    works: {
-      p: "My work",
-      h2: "Projects.",
-      content: `A selection of backend systems and integrations I've built across
-      fintech, AI, and SaaS products. Each entry highlights the problem,
-      the stack, and the impact — from cutting API latency in half to
-      shipping AI-powered features used by thousands of users.`,
-    },
+  currentRole: {
+    title: "Backend Engineer @ Madkhol",
+    titleAr: "حالياً في مدخول",
+    url: "https://madkhol.com",
+  },
+  about: {
+    statement:
+      "Crafting scalable systems and real-time services — building the unsexy infra that makes products fast.",
+    statementAr: "ببني البنية التحتية اللي بتخلّي المنتجات أسرع.",
+    body: "Software engineer with a track record of designing, building and shipping scalable, high-performance systems — from architecture design to deployment and maintenance. Right now I'm building investment and robo-advisory backends at Madkhol Capital.",
+  },
+  // The footer's status panel. The last commit is read live from GitHub.
+  status: {
+    githubUser: "AhmedDR200",
+    now: "Backend @ Madkhol · shipping Bee3a",
+    // The uptime counter starts on the day this GitHub account was created.
+    upSince: "2021-11-14T13:57:35Z",
+  },
+  motto: {
+    ar: "عَدِّي حُدودَك.",
+    en: "Go beyond your limits.",
   },
 };

@@ -1,91 +1,37 @@
-import type { TMotion } from "../types";
-import { Variants } from "framer-motion";
+import type { Variants } from "framer-motion";
 
-export const textVariant = () => {
-  return {
-    hidden: {
-      y: -50,
-      opacity: 0,
-    },
-    show: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        duration: 1.25,
-      },
-    },
-  };
+// easeOutCubic: the intro curtain and hero reveal.
+export const EASE_OUT_CUBIC = [0.33, 1, 0.68, 1];
+// Close to GSAP's power3.inOut: letter reveals.
+export const EASE_IN_OUT = [0.65, 0, 0.35, 1];
+export const EASE_OUT_EXPO = [0.16, 1, 0.3, 1];
+
+export const fadeUp = (delay = 0): Variants => ({
+  hidden: { opacity: 0, y: 32 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: EASE_OUT_EXPO, delay },
+  },
+});
+
+// Show the intro once per browser session, and never with reduced motion.
+const INTRO_KEY = "intro-seen";
+
+export const shouldPlayIntro = (): boolean => {
+  if (typeof window === "undefined") return false;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+  try {
+    return sessionStorage.getItem(INTRO_KEY) === null;
+  } catch {
+    return true;
+  }
 };
 
-export const fadeIn = (
-  direction: TMotion["direction"],
-  type: TMotion["type"],
-  delay: TMotion["delay"],
-  duration: TMotion["duration"]
-): Variants => {
-  return {
-    hidden: {
-      x: direction === "left" ? 100 : direction === "right" ? -100 : 0,
-      y: direction === "up" ? 100 : direction === "down" ? -100 : 0,
-      opacity: 0,
-    },
-    show: {
-      x: 0,
-      y: 0,
-      opacity: 1,
-      transition: {
-        type,
-        delay,
-        duration,
-        ease: "easeOut",
-      },
-    },
-  };
-};
-
-export const zoomIn = (
-  delay: TMotion["delay"],
-  duration: TMotion["duration"]
-) => {
-  return {
-    hidden: {
-      scale: 0,
-      opacity: 0,
-    },
-    show: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        type: "tween",
-        delay,
-        duration,
-        ease: "easeOut",
-      },
-    },
-  };
-};
-
-export const slideIn = (
-  direction: TMotion["direction"],
-  type: TMotion["type"],
-  delay: TMotion["delay"],
-  duration: TMotion["duration"]
-) => {
-  return {
-    hidden: {
-      x: direction === "left" ? "-100%" : direction === "right" ? "100%" : 0,
-      y: direction === "up" ? "100%" : direction === "down" ? "100%" : 0,
-    },
-    show: {
-      x: 0,
-      y: 0,
-      transition: {
-        type,
-        delay,
-        duration,
-        ease: "easeOut",
-      },
-    },
-  };
+export const markIntroSeen = () => {
+  try {
+    sessionStorage.setItem(INTRO_KEY, "1");
+  } catch {
+    /* storage blocked: the intro may replay, which is harmless */
+  }
 };
