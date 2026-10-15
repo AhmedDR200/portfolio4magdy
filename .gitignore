@@ -36,3 +36,6 @@ public/local/
 # Videos and recordings dropped in the project root (local reference only).
 /*.mp4
 /*.mov
+
+# Raw art dropped in for processing (finished assets go in src/assets).
+/art-inbox/

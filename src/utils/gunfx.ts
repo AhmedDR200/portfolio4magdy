@@ -208,3 +208,19 @@ export const playLocalTrack = (ctx: AudioContext, track: LocalTrack, delay: numb
   src.connect(ctx.destination);
   src.start(ctx.currentTime + delay);
 };
+
+/**
+ * Call inside the tap or key press itself, before any await: iOS Safari only
+ * lets audio start from a gesture, and a silent one-sample sound unlocks it.
+ */
+export const unlockAudio = (ctx: AudioContext) => {
+  try {
+    const src = ctx.createBufferSource();
+    src.buffer = ctx.createBuffer(1, 1, 22050);
+    src.connect(ctx.destination);
+    src.start(0);
+  } catch {
+    // Nothing to unlock with; resume() below may still work.
+  }
+  return ctx.resume();
+};

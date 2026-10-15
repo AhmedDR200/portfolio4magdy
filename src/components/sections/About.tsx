@@ -5,13 +5,17 @@ import { config } from "../../constants/config";
 import { styles } from "../../constants/styles";
 import { fadeUp } from "../../utils/motion";
 import { travelOnClick } from "../../utils/travel";
-import { CupSketch, RackSketch, TelegraphSketch, Underline } from "../atoms/Sketches";
+import coffeeSketch from "../../assets/journal/coffee.webp";
+import serversSketch from "../../assets/journal/servers.webp";
+import telegraphSketch from "../../assets/journal/telegraph.webp";
+import { Underline } from "../atoms/Sketches";
 import Arrow from "../atoms/Arrow";
 
 // About as two pages of a journal, like the one Arthur keeps in RDR2: the date
 // in Cairo, the statement and bio written in, the Arabic in Ruqaa, a note in
 // the margin, and on the facing page the photo taped in beside pencil
-// sketches. On phones the pages stack.
+// sketches (drawn with Gemini in the style of Arthur's journal, cut out to
+// sit on the page). On phones the pages stack.
 
 const HIGHLIGHT = "unsexy infra";
 const PAGE = "relative flex flex-col bg-[#E7ECE6] text-[#262B29]";
@@ -67,7 +71,7 @@ const About = () => (
               {config.about.statementAr}
             </p>
             <p className="relative m-0 font-fell text-[17px] leading-[1.6] sm:text-[18px]">{config.about.body}</p>
-            <span className="relative -rotate-[7deg] self-end font-fell text-[19px] italic text-[#3B4A6B] sm:mr-6">+ shipping Bee3a</span>
+            <span className="relative -rotate-[7deg] self-end font-fell text-[19px] italic text-[#3B4A6B] sm:mr-6">+ shipping Bee<span style={{ fontFamily: "'Times New Roman', Times, serif" }}>3</span>a</span>
             <div className="relative mt-auto flex items-end justify-between pt-6">
               <a
                 href="#experience"
@@ -100,12 +104,12 @@ const About = () => (
                 <span aria-hidden="true" className="torn absolute -right-7 -top-2 h-[26px] w-[86px] rotate-[22deg] bg-[rgba(214,226,220,0.62)]" />
               </figure>
               <figure className="m-0 flex flex-col items-center gap-1">
-                <RackSketch className="h-[190px] w-[136px]" />
+                <img src={serversSketch} alt="Pencil sketch of a server rack" loading="lazy" width={403} height={520} className="h-[230px] w-auto" />
                 <figcaption className="font-fell text-[15px] italic">The servers: kept warm, kept fast.</figcaption>
               </figure>
             </div>
             <figure className="relative m-0 flex flex-col gap-1">
-              <TelegraphSketch className="h-auto w-full max-w-[360px]" />
+              <img src={telegraphSketch} alt="Pencil sketch of telegraph poles along a trail, a bird on the wire" loading="lazy" width={900} height={721} className="h-auto w-full max-w-[400px]" />
               <figcaption className="font-fell text-[15px] italic">Real-time: WebSockets are only telegraph lines with better manners.</figcaption>
               <span lang="ar" dir="rtl" className="text-left font-ruqaa text-[20px]">
                 الريل تايم = تلغراف بس أسرع
@@ -113,7 +117,7 @@ const About = () => (
             </figure>
             <div className="relative mt-auto flex items-end justify-between">
               <figure className="m-0 flex items-end gap-3.5">
-                <CupSketch className="h-[100px] w-[96px]" />
+                <img src={coffeeSketch} alt="Pencil sketch of a tin coffee cup and pot" loading="lazy" width={383} height={420} className="h-[150px] w-auto" />
                 <figcaption className="mb-2.5 flex flex-col">
                   <span className="font-fell text-[16px] italic">Fuel.</span>
                   <span lang="ar" className="font-ruqaa text-[20px]">

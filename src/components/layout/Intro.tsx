@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { audioContext, INTRO_BEATS, loadLocalTrack, playGunIntro, playLocalTrack, type LocalTrack } from "../../utils/gunfx";
+import { audioContext, INTRO_BEATS, loadLocalTrack, playGunIntro, playLocalTrack, unlockAudio, type LocalTrack } from "../../utils/gunfx";
 import { EASE_OUT_CUBIC, markIntroSeen } from "../../utils/motion";
 import { Breech, ShellSide } from "../atoms/IntroArt";
 import SmokeCanvas from "../atoms/SmokeCanvas";
@@ -24,6 +24,7 @@ const FADE_S = 0.5;
 const SILENT_AFTER_MS = 7000;
 const LIFT_S = 0.9;
 const RED = "200 16 46";
+const wait = (ms: number) => new Promise<null>((resolve) => window.setTimeout(() => resolve(null), ms));
 
 type Phase = "gate" | "open" | "breech" | "logo" | "out" | "lift";
 type Props = {
@@ -38,8 +39,10 @@ const Intro = ({ onReveal, onDone }: Props) => {
   const timers = useRef<number[]>([]);
   const started = useRef(false);
   const local = useRef<Promise<LocalTrack | null> | null>(null);
+  const lifted = useRef(false);
 
   const lift = useCallback(() => {
+    lifted.current = true;
     timers.current.forEach((t) => window.clearTimeout(t));
     timers.current = [];
     setPhase("lift");
@@ -47,34 +50,49 @@ const Intro = ({ onReveal, onDone }: Props) => {
   }, [onReveal]);
 
   const start = useCallback(
-    async (withSound: boolean) => {
+    (withSound: boolean) => {
       if (started.current) return;
       started.current = true;
       const ctx = withSound ? audioContext() : null;
-      let fire = INTRO_BEATS.fire;
-      if (ctx) {
-        try {
-          await ctx.resume();
-          // Don't keep a quick visitor waiting on the download: after 0.7 s the
-          // synthesized sounds play instead.
-          const track = await Promise.race([local.current, new Promise<null>((r) => window.setTimeout(() => r(null), 700))]);
-          if (track) {
-            const delay = 0.05;
-            playLocalTrack(ctx, track, delay);
-            fire = track.fire + delay;
-          } else {
-            playGunIntro(ctx);
-          }
-        } catch {
-          // No sound: the picture still plays.
-        }
-      }
+      // In the tap or key press itself, before any await: iOS only unlocks
+      // audio from a gesture.
+      const resumed = ctx ? unlockAudio(ctx).then(() => true, () => false) : Promise.resolve(false);
+      // The picture never waits on the sound.
       setPhase("open");
-      const at = (s: number, fn: () => void) => timers.current.push(window.setTimeout(fn, s * 1000));
-      at(fire - BREECH_BEFORE_S, () => setPhase("breech"));
-      at(fire, () => setPhase("logo"));
-      at(fire + HOLD_S, () => setPhase("out"));
-      at(fire + HOLD_S + FADE_S, lift);
+      const tapped = performance.now();
+
+      void (async () => {
+        let fire = INTRO_BEATS.fire;
+        let soundAt = tapped;
+        // At most 0.7 s for the sound to be ready; after that the picture goes on without it.
+        const running = (await Promise.race([resumed, wait(500)])) === true && ctx?.state === "running";
+        if (ctx && running && !lifted.current) {
+          const left = Math.max(0, 700 - (performance.now() - tapped));
+          const track = await Promise.race([local.current ?? Promise.resolve(null), wait(left)]);
+          if (lifted.current) return;
+          try {
+            if (track) {
+              const delay = 0.05;
+              playLocalTrack(ctx, track, delay);
+              fire = track.fire;
+              soundAt = performance.now() + delay * 1000;
+            } else {
+              playGunIntro(ctx);
+              soundAt = performance.now();
+            }
+          } catch {
+            // No sound: the picture still plays.
+          }
+        }
+        if (lifted.current) return;
+        // Every beat is timed from when the sound started (or the tap, with no sound).
+        const since = (performance.now() - soundAt) / 1000;
+        const at = (s: number, fn: () => void) => timers.current.push(window.setTimeout(fn, Math.max(0, (s - since) * 1000)));
+        at(fire - BREECH_BEFORE_S, () => setPhase("breech"));
+        at(fire, () => setPhase("logo"));
+        at(fire + HOLD_S, () => setPhase("out"));
+        at(fire + HOLD_S + FADE_S, lift);
+      })();
     },
     [lift]
   );
@@ -119,7 +137,6 @@ const Intro = ({ onReveal, onDone }: Props) => {
       onAnimationComplete={() => {
         if (phase === "lift") onDone();
       }}
-      onPointerDown={() => phase === "gate" && start(true)}
     >
       {/* The bottom edge sags into a curve mid-lift, then flattens. */}
       <motion.span
