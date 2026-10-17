@@ -4,7 +4,9 @@ import RevealText from "./RevealText";
 // Sections are chapters, numbered like RDR2's.
 const ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 const ORDINAL_AR = ["", "الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس", "السابع", "الثامن", "التاسع", "العاشر"];
-const roman = (index: string) => ROMAN[Number(index)] ?? index;
+export const roman = (index: string) => ROMAN[Number(index)] ?? index;
+/** «الفصل الرابع، أعمالي» */
+export const chapterAr = (index: string, labelAr: string) => `الفصل ${ORDINAL_AR[Number(index)] ?? ""}، ${labelAr}`;
 
 // Every section's chapter, by its id: for the cards shown on fast travel.
 export const CHAPTERS: Record<string, { index: string; title: string; labelAr: string }> = {

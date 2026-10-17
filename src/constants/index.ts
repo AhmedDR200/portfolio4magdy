@@ -434,3 +434,18 @@ export const satchelTools = [
   { id: "chrome", name: "Chrome", sub: "Browser and DevTools", note: "The network tab is where APIs get debugged.", uses: ["DevTools"] },
   { id: "testflight", name: "TestFlight", sub: "iOS beta builds", note: "Shipping test builds to the iPhone before the App Store.", uses: ["iOS"] },
 ] as const;
+
+// Each chapter is a town on the map (the game's town names, as a nod for
+// fans); the map and the menu's fast-travel card both use them.
+export type TTown = { id: string; name: string; section: string; ar: string; blurb: string };
+
+export const towns: TTown[] = [
+  { id: "about", name: "Valentine", section: "(01) About", ar: "عني", blurb: "Where it starts: who I am and what I build." },
+  { id: "services", name: "Strawberry", section: "(02) What I do", ar: "بعمل إيه", blurb: "Three trades: APIs, system design and real-time." },
+  { id: "skills", name: "Rhodes", section: "(03) Skills", ar: "مهاراتي", blurb: "The stack: 43 tools, the daily ones marked." },
+  { id: "work", name: "Saint Denis", section: "(04) Selected work", ar: "أعمالي", blurb: "The big city: Bee3a and nine projects, case studies inside." },
+  { id: "experience", name: "Blackwater", section: "(05) Experience", ar: "مشواري", blurb: "The trail so far, job by job." },
+  { id: "principles", name: "Annesburg", section: "(06) How I work", ar: "بشتغل إزاي", blurb: "House rules, in Arabic." },
+  { id: "channel", name: "Van Horn", section: "(07) The channel", ar: "على يوتيوب", blurb: "٢٠٠ تمام, with live numbers from YouTube." },
+  { id: "contact", name: "Armadillo", section: "(08) Contact", ar: "كلّمني", blurb: "End of the line: say hello." },
+];
