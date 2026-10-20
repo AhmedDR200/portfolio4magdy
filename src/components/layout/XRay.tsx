@@ -28,7 +28,7 @@ const TARGETS: Target[] = [
   { selector: "#experience", name: "<Experience />", note: "the camp ledger · torn clip-path" },
   { selector: "#principles", name: "<Principles />", note: "Arabic sayings in Rakkas" },
   { selector: "#channel", name: "<Channel />", note: "youtube.com/@200tamam" },
-  { selector: '[data-xray="channel-stats"]', name: "<ChannelStats />", note: "YouTube Data API v3 · polls every 30 s while on screen" },
+  { selector: '[data-xray="channel-stats"]', name: "<ChannelStats />", note: "YouTube Data API v3 + /api/tiktok (reads the public profile) · polls every 30 s while on screen" },
   { selector: "#contact", name: "<Contact />", note: "mailto + socials · no form, no backend" },
   { selector: '[data-xray="status"]', name: "<StatusPanel />", note: "GitHub REST: events → commit · cached 10 min" },
   { selector: '[data-xray="contributions"]', name: "<ContributionGraph />", note: "contributions API · cached 60 min" },

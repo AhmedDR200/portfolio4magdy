@@ -5,6 +5,7 @@ import { config } from "../../constants/config";
 import { logApiCall, loggedFetch } from "../../utils/apiLog";
 import { readCache, writeCache } from "../../utils/sessionCache";
 import Arrow from "../atoms/Arrow";
+import { useTikTokStats } from "./TikTokStats";
 
 type Stats = { subscribers: number | null; videos: number; views: number; at: number };
 
@@ -67,7 +68,7 @@ const fetchStats = async (signal: AbortSignal): Promise<Stats | null> => {
   };
 };
 
-const useLiveStats = (active: boolean) => {
+const useYouTubeStats = (active: boolean) => {
   const [stats, setStats] = useState<Stats | null>(null);
 
   useEffect(() => {
@@ -104,11 +105,11 @@ const useLiveStats = (active: boolean) => {
   return stats;
 };
 
-const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
+export const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
 const label = "m-0 text-[11px] uppercase tracking-[0.14em] text-smoke";
 
 /** Counts up to its value, and to each new one, with a "+n" when it grows. */
-const LiveNumber = ({ value }: { value: number }) => {
+export const LiveNumber =({ value }: { value: number }) => {
   const reduce = useReducedMotion();
   const [shown, setShown] = useState(reduce ? value : 0);
   const [gain, setGain] = useState<{ n: number; key: number } | null>(null);
@@ -158,7 +159,7 @@ const LiveNumber = ({ value }: { value: number }) => {
   );
 };
 
-const Updated = ({ at }: { at: number }) => {
+export const Updated = ({ at }: { at: number }) => {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     const id = window.setInterval(() => setNow(Date.now()), 1000);
@@ -168,59 +169,88 @@ const Updated = ({ at }: { at: number }) => {
   return <>{seconds < 5 ? "just now" : `${seconds}s ago`}</>;
 };
 
+const cell = "font-display text-[44px] leading-[0.9] text-frost sm:text-[56px] lg:text-[72px]";
+const columns = "grid grid-cols-2 gap-x-4 gap-y-5 px-5 sm:grid-cols-[150px_repeat(4,minmax(0,1fr))] sm:items-center sm:gap-x-5 sm:px-8 lg:grid-cols-[200px_repeat(4,minmax(0,1fr))]";
+
+type Row = { name: string; handle: string; values: (number | null)[] };
+
+// YouTube and TikTok as one ledger: a row each, the same four columns.
 const ChannelStats = () => {
   const ref = useRef<HTMLDivElement>(null);
   // Polls only while the stats are (nearly) on screen.
   const inView = useInView(ref, { margin: "200px" });
-  const stats = useLiveStats(inView);
+  const youtube = useYouTubeStats(inView);
+  const tiktok = useTikTokStats(inView);
 
-  const items = stats
-    ? [
-        ...(stats.subscribers !== null ? [{ label: "Subscribers", value: stats.subscribers }] : []),
-        { label: stats.videos === 1 ? "Video" : "Videos", value: stats.videos },
-        { label: "Views", value: stats.views },
-      ]
-    : [];
-  const next = stats?.subscribers != null ? stats.subscribers + 1 : null;
+  const rows: Row[] = [
+    ...(youtube ? [{ name: "YouTube", handle: config.youtube.handle, values: [youtube.subscribers, null, youtube.views, youtube.videos] }] : []),
+    ...(tiktok ? [{ name: "TikTok", handle: config.tiktok.handle, values: [tiktok.followers, tiktok.likes, tiktok.views, tiktok.videos] }] : []),
+  ];
+  const columnLabels = ["Followers", "Likes", "Views", "Videos"];
+  const at = Math.max(youtube?.at ?? 0, tiktok?.at ?? 0);
+  const next = youtube?.subscribers != null ? youtube.subscribers + 1 : null;
 
   return (
     <div ref={ref} data-xray="channel-stats">
-      {stats && (
-        <dl className="m-0 flex flex-wrap border-t border-paper/15">
-          {items.map((item) => (
-            <div
-              key={item.label}
-              className="relative flex min-w-0 flex-1 flex-col-reverse gap-2.5 border-l border-paper/15 px-5 py-6 first:border-l-0 sm:px-8 sm:py-7"
-            >
-              <dt className={label}>{item.label}</dt>
-              <dd className="m-0 font-display text-[52px] leading-[0.9] text-frost sm:text-[80px] lg:text-[96px]">
-                <LiveNumber value={item.value} />
-              </dd>
+      {rows.length > 0 && (
+        <div className="border-t border-paper/15">
+          <div className={`${columns} hidden py-4 ${label} sm:grid`}>
+            <p className="m-0 flex items-center gap-2 text-frost">
+              <span aria-hidden="true" className="animate-pulse-frost h-2 w-2 rounded-full bg-frost" />
+              Live · 30 s
+            </p>
+            {columnLabels.map((name) => (
+              <p key={name} className="m-0">
+                {name}
+              </p>
+            ))}
+          </div>
+          {rows.map((row) => (
+            <div key={row.name} className={`${columns} border-t border-paper/15 py-6 sm:py-7`}>
+              <div className="col-span-2 flex items-baseline gap-3 sm:col-span-1 sm:flex-col sm:gap-2">
+                <h4 className="m-0 text-[14px] font-bold uppercase tracking-[0.16em]">{row.name}</h4>
+                <p className="m-0 text-[12px] text-smoke">{row.handle}</p>
+              </div>
+              {row.values.map((value, i) => (
+                <div key={columnLabels[i]} className="flex flex-col-reverse gap-2">
+                  <p className={`${label} sm:hidden`}>{columnLabels[i]}</p>
+                  {value === null ? (
+                    <span aria-label="Not available" className={`${cell} text-dim`}>
+                      —
+                    </span>
+                  ) : (
+                    <span className={cell}>
+                      <LiveNumber value={value} />
+                    </span>
+                  )}
+                </div>
+              ))}
             </div>
           ))}
-          <div className="flex basis-full flex-col justify-center gap-2 border-t border-paper/15 px-5 py-5 sm:px-8 lg:basis-0 lg:flex-[1.15] lg:border-l lg:border-t-0">
-            <p className="m-0 flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-frost">
-              <span aria-hidden="true" className="animate-pulse-frost h-2 w-2 rounded-full bg-frost" />
-              Live from YouTube
-            </p>
+          <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-paper/15 px-5 py-4 text-[12px] uppercase tracking-[0.1em] sm:px-8">
             <p className={label}>
-              Updated <Updated at={stats.at} /> · every 30 s
+              <span className="sm:hidden">Live · every 30 s · </span>Updated <Updated at={at} />
             </p>
-            {next !== null && (
+            <div className="flex flex-wrap items-baseline gap-x-7 gap-y-2">
               <a
                 href={`${config.youtube.url}?sub_confirmation=1`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex w-fit flex-wrap items-baseline gap-x-2.5 text-[12px] uppercase tracking-[0.1em] hover:text-frost"
+                className="flex flex-wrap items-baseline gap-x-2.5 hover:text-frost"
               >
-                Be subscriber #{next.toLocaleString("en")} <Arrow dir="up-right" />
-                <span lang="ar" dir="rtl" className="font-arabic text-[17px] normal-case tracking-normal text-frost">
-                  خليك رقم {next.toLocaleString("ar-EG")}
-                </span>
+                {next !== null ? `Be subscriber #${next.toLocaleString("en")}` : "Subscribe on YouTube"} <Arrow dir="up-right" />
+                {next !== null && (
+                  <span lang="ar" dir="rtl" className="font-arabic text-[17px] normal-case tracking-normal text-frost">
+                    خليك رقم {next.toLocaleString("ar-EG")}
+                  </span>
+                )}
               </a>
-            )}
+              <a href={config.tiktok.url} target="_blank" rel="noopener noreferrer" className="flex items-baseline gap-2.5 hover:text-frost">
+                Follow on TikTok <Arrow dir="up-right" />
+              </a>
+            </div>
           </div>
-        </dl>
+        </div>
       )}
     </div>
   );

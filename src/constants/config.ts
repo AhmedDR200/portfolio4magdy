@@ -21,6 +21,10 @@ export const config = {
     // channel stats are simply hidden.
     apiKey: import.meta.env.VITE_YOUTUBE_API_KEY ?? "",
   },
+  tiktok: {
+    url: "https://www.tiktok.com/@200tamam",
+    handle: "@200tamam",
+  },
   currentRole: {
     title: "Backend Engineer @ Madkhol",
     titleAr: "حالياً في مدخول",
