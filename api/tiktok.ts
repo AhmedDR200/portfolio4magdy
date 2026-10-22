@@ -57,15 +57,17 @@ const fromPreview = (html: string): Stats | null => {
   return { followers: count(followers[1], followers[2]), likes: likes ? count(likes[1], likes[2]) : 0, videos: null, views: null };
 };
 
-// The embed page lists the account's videos with their play counts. It only
-// counts if it lists them all, otherwise the sum would understate.
+// The embed page lists the account's videos with their play counts, but only
+// the latest 10 (it listed 10 of 11 once). So the sum counts when it lists
+// them all or when it's full at 10; any shorter list means a failed read.
+const EMBED_PAGE = 10;
 const viewsFrom = (html: string, videos: number | null): number | null => {
   const match = html.match(/<script id="__FRONTITY_CONNECT_STATE__"[^>]*>([\s\S]*?)<\/script>/);
   if (!match) return null;
   try {
     const state = JSON.parse(match[1]) as { source?: { data?: Record<string, { videoList?: { playCount?: number }[] }> } };
     const list = Object.values(state.source?.data ?? {}).find((entry) => Array.isArray(entry?.videoList))?.videoList;
-    if (!list?.length || (videos !== null && list.length < videos)) return null;
+    if (!list?.length || (videos !== null && list.length < Math.min(videos, EMBED_PAGE))) return null;
     return list.reduce((total, video) => total + (video.playCount ?? 0), 0);
   } catch {
     return null;
