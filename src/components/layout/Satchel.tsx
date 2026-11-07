@@ -1,17 +1,22 @@
-import { lazy, Suspense, useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { lazy, Suspense, useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 
-import { pauseScroll } from "../../utils/lenis";
-import { EASE_OUT_EXPO } from "../../utils/motion";
+import { pauseScroll } from '../../utils/lenis';
+import { EASE_OUT_EXPO } from '../../utils/motion';
+import { currentSkin, useSkin } from '../../utils/theme';
 
 // The satchel, RDR2's inventory, as the page about what I use: press I (or
 // Satchel in the menu, or the link in The Stack). The drawings and logos load
 // only when it first opens. It follows the theme like the rest of the site.
+// It belongs to the frontier skin: the lab has no satchel, so in it I does
+// nothing and openSatchel is a no-op.
 
-const EVENT = "satchel:open";
-export const openSatchel = () => window.dispatchEvent(new Event(EVENT));
+const EVENT = 'satchel:open';
+export const openSatchel = () => {
+  if (currentSkin() !== 'bb') window.dispatchEvent(new Event(EVENT));
+};
 
-const SatchelPanel = lazy(() => import("./SatchelPanel"));
+const SatchelPanel = lazy(() => import('./SatchelPanel'));
 
 const isTyping = (target: EventTarget | null) =>
   !!(target as HTMLElement | null)?.closest?.("input, textarea, select, [contenteditable='true']");
@@ -21,15 +26,23 @@ const Satchel = () => {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.metaKey || e.ctrlKey || e.altKey || e.repeat || isTyping(e.target)) return;
-      if (e.key === "i" || e.key === "I") setOpen((v) => !v);
-      else if (e.key === "Escape") setOpen(false);
+      if (
+        e.metaKey ||
+        e.ctrlKey ||
+        e.altKey ||
+        e.repeat ||
+        isTyping(e.target) ||
+        currentSkin() === 'bb'
+      )
+        return;
+      if (e.key === 'i' || e.key === 'I') setOpen(v => !v);
+      else if (e.key === 'Escape') setOpen(false);
     };
     const onOpen = () => setOpen(true);
-    window.addEventListener("keydown", onKey);
+    window.addEventListener('keydown', onKey);
     window.addEventListener(EVENT, onOpen);
     return () => {
-      window.removeEventListener("keydown", onKey);
+      window.removeEventListener('keydown', onKey);
       window.removeEventListener(EVENT, onOpen);
     };
   }, []);
@@ -40,9 +53,15 @@ const Satchel = () => {
     return () => pauseScroll(false);
   }, [open]);
 
+  // Switching to the lab with the satchel open closes it.
+  const lab = useSkin() === 'bb';
+  useEffect(() => {
+    if (lab) setOpen(false);
+  }, [lab]);
+
   return (
     <AnimatePresence>
-      {open && (
+      {open && !lab && (
         <motion.div
           key="satchel"
           role="dialog"
@@ -52,11 +71,21 @@ const Satchel = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={(e) => e.target === e.currentTarget && setOpen(false)}
+          onClick={e => e.target === e.currentTarget && setOpen(false)}
           className="fixed inset-0 z-[88] overflow-y-auto bg-[radial-gradient(ellipse_at_40%_30%,rgb(var(--graphite)),rgb(var(--ink))_75%)] px-4 py-6 text-paper sm:px-10 sm:py-10"
         >
-          <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}>
-            <Suspense fallback={<p className="m-0 font-fellsc text-[16px] tracking-[0.14em] text-smoke">Opening the satchel…</p>}>
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
+          >
+            <Suspense
+              fallback={
+                <p className="m-0 font-fellsc text-[16px] tracking-[0.14em] text-smoke">
+                  Opening the satchel…
+                </p>
+              }
+            >
               <SatchelPanel onClose={() => setOpen(false)} />
             </Suspense>
           </motion.div>

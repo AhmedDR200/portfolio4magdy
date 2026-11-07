@@ -4,10 +4,12 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { services } from "../../constants";
 import { styles } from "../../constants/styles";
 import { EASE_OUT_EXPO } from "../../utils/motion";
+import { useSkin } from "../../utils/theme";
 import SectionHeader from "../atoms/SectionHeader";
 import Arrow from "../atoms/Arrow";
 
-// "What I do" as the bounty board outside the sheriff's office: each service
+// "What I do" as the bounty board outside the sheriff's office (in the lab, a
+// shelf of reagent labels: "SERVICE 01", "available", "yield: let's talk"): each service
 // is a WANTED poster nailed to the planks, "for hire", with the best proof
 // from the record and the reward: let's talk. Picking a poster pins its full
 // detail (every proof line and the stack) under the board.
@@ -41,6 +43,7 @@ const TILT = [-2.2, 1.4, -0.8];
 
 const Services = () => {
   const reduce = useReducedMotion();
+  const lab = useSkin() === "bb";
   const [open, setOpen] = useState(0);
   const picked = services[open];
 
@@ -50,7 +53,13 @@ const Services = () => {
         <SectionHeader index="02" label="What I do" labelAr="بعمل إيه" title="What I Do" />
 
         {/* The board: dark planks, the posters nailed on. */}
-        <div className="relative mt-12 overflow-hidden rounded-[10px] bg-[repeating-linear-gradient(180deg,#1B2823_0_108px,#0F1714_108px_110px,#17231E_110px_218px,#0F1714_218px_220px)] px-4 py-8 shadow-[inset_0_0_0_10px_#101A16,0_20px_40px_-20px_rgba(0,0,0,0.8)] sm:mt-14 sm:px-8 sm:py-10">
+        <div
+          className={`relative mt-12 overflow-hidden rounded-[10px] px-4 py-8 sm:mt-14 sm:px-8 sm:py-10 ${
+            lab
+              ? "lab-grid bg-graphite shadow-[inset_0_0_0_10px_rgb(var(--ink)),0_20px_40px_-20px_rgba(0,0,0,0.8)]"
+              : "bg-[repeating-linear-gradient(180deg,#1B2823_0_108px,#0F1714_108px_110px,#17231E_110px_218px,#0F1714_218px_220px)] shadow-[inset_0_0_0_10px_#101A16,0_20px_40px_-20px_rgba(0,0,0,0.8)]"
+          }`}
+        >
           <ul className="m-0 flex list-none flex-col items-center gap-10 p-0 lg:flex-row lg:items-start lg:justify-center lg:gap-8">
             {services.map((service, i) => {
               const isOpen = open === i;
@@ -72,8 +81,8 @@ const Services = () => {
                   >
                     <span className="torn-3 relative flex flex-col items-center gap-2.5 bg-[#ECEFEA] px-6 pb-7 pt-8 text-center text-[#1A1F1C]">
                       <span aria-hidden="true" className="paper-grain absolute inset-0" />
-                      <span className="font-western text-[clamp(44px,5vw,58px)] leading-[0.9]">WANTED</span>
-                      <span className="font-fellsc text-[15px] tracking-[0.3em]">— For hire —</span>
+                      <span className={`font-western leading-[0.9] ${lab ? "text-[clamp(38px,4vw,48px)]" : "text-[clamp(44px,5vw,58px)]"}`}>{lab ? `SERVICE 0${i + 1}` : "WANTED"}</span>
+                      <span className="font-fellsc text-[15px] tracking-[0.3em]">{lab ? "— Available —" : "— For hire —"}</span>
                       <span className="my-1.5 flex h-[118px] w-[118px] items-center justify-center border-[2.5px] border-current">
                         <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[76px] w-[76px] fill-current">
                           {CUTS[service.icon]}
@@ -83,10 +92,10 @@ const Services = () => {
                       <span className="font-fell text-[15.5px] leading-[1.45]">{service.description}</span>
                       <span className="font-fell text-[14px] italic leading-[1.4] text-[#3A423E]">Known for: {service.details[0]}</span>
                       <span aria-hidden="true" className="my-1.5 w-full border-t-[1.5px] border-current" />
-                      <span className="font-fellsc text-[15px] tracking-[0.3em]">Reward</span>
+                      <span className="font-fellsc text-[15px] tracking-[0.3em]">{lab ? "Yield" : "Reward"}</span>
                       <span className="font-western text-[30px] leading-none">Let&apos;s talk</span>
                       <span lang="ar" className="font-arabic text-[20px] leading-tight">
-                        المكافأة: نتكلم
+                        {lab ? "الناتج: نتكلم" : "المكافأة: نتكلم"}
                       </span>
                       {service.stamp && (
                         <span
@@ -97,11 +106,15 @@ const Services = () => {
                         </span>
                       )}
                     </span>
-                    {/* The nail. */}
-                    <span
-                      aria-hidden="true"
-                      className="absolute left-1/2 top-2.5 h-3.5 w-3.5 -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_35%_35%,#C9D1CC,#5E6A64_60%,#2B332F)] shadow-[0_2px_3px_rgba(0,0,0,0.6)]"
-                    />
+                    {/* The nail, or in the lab a strip of tape. */}
+                    {lab ? (
+                      <span aria-hidden="true" className="tape-thin absolute inset-x-0 top-0 h-3" />
+                    ) : (
+                      <span
+                        aria-hidden="true"
+                        className="absolute left-1/2 top-2.5 h-3.5 w-3.5 -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_35%_35%,#C9D1CC,#5E6A64_60%,#2B332F)] shadow-[0_2px_3px_rgba(0,0,0,0.6)]"
+                      />
+                    )}
                   </motion.button>
                 </li>
               );
@@ -121,7 +134,7 @@ const Services = () => {
             className="torn-2 mt-8 grid gap-6 bg-graphite p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-end"
           >
             <div className="flex flex-col gap-3.5">
-              <p className="m-0 font-fellsc text-[15px] tracking-[0.16em] text-frost">{picked.title} · the record</p>
+              <p className="m-0 font-fellsc text-[15px] tracking-[0.16em] text-frost">{picked.title} · {lab ? "the lab notes" : "the record"}</p>
               <ul className="m-0 flex list-none flex-col gap-2 p-0 font-fell text-[18px] leading-[1.5] text-paper">
                 {picked.details.map((detail) => (
                   <li key={detail} className="flex gap-3">

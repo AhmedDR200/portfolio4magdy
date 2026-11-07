@@ -1,4 +1,4 @@
-// A keyboard key in RDR2's prompt style: a small outlined box. With `ring`,
+// A keyboard key: RDR2's prompt style (a small outlined box) or, in the lab, a raised key. With `ring`,
 // a circle around it fills on hover, like the game's hold-to-confirm prompts.
 import type { ReactNode } from "react";
 
@@ -6,7 +6,7 @@ type Props = { children: ReactNode; ring?: boolean; className?: string };
 
 const KeyCap = ({ children, ring = false, className = "" }: Props) => {
   const key = (
-    <kbd className="inline-flex h-7 min-w-[28px] items-center justify-center rounded-[5px] border-[1.6px] border-paper bg-ink/50 px-1.5 font-mono text-[12px] font-bold not-italic leading-none text-paper">
+    <kbd className="inline-flex h-7 min-w-[28px] items-center justify-center rounded-[5px] border-[1.6px] border-paper bg-ink/50 px-1.5 font-mono bb:rounded-[4px] bb:border-smoke bb:bg-graphite bb:shadow-[0_3px_0_rgb(var(--dim)/0.55)] text-[12px] font-bold not-italic leading-none text-paper">
       {children}
     </kbd>
   );

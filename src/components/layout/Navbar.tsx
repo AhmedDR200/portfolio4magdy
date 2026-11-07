@@ -1,6 +1,6 @@
 import { navLinks } from "../../constants";
 import { config } from "../../constants/config";
-import { toggleTheme, useTheme } from "../../utils/theme";
+import { SKINS, toggleSkin, toggleTheme, useSkin, useTheme } from "../../utils/theme";
 import { travelOnClick } from "../../utils/travel";
 import Icon from "../atoms/Icon";
 import Brush from "../atoms/Brush";
@@ -27,6 +27,25 @@ const ThemeButton = () => {
   );
 };
 
+// The theme: the lab (Breaking Bad) or the frontier (Red Dead); T does the same.
+const SkinButton = () => {
+  const skin = useSkin();
+  const next = skin === "bb" ? "rdr2" : "bb";
+  const seg = (on: boolean) => `flex items-center px-3 transition-colors ${on ? "bg-frost text-ink" : "text-paper/70"}`;
+  return (
+    <button
+      type="button"
+      onClick={toggleSkin}
+      aria-label={`Switch to the ${SKINS[next].name} theme (T)`}
+      title={`${SKINS[next].name} theme · T`}
+      className="flex h-11 shrink-0 items-stretch overflow-hidden rounded-full border border-paper/30 font-fellsc text-[14px] tracking-[0.12em] transition-colors hover:border-frost"
+    >
+      <span className={seg(skin === "bb")}>BB</span>
+      <span className={seg(skin === "rdr2")}>RD</span>
+    </button>
+  );
+};
+
 const Navbar = ({ onMenu, ready }: { onMenu: () => void; ready: boolean }) => (
   <header className="relative z-10 flex items-center justify-between gap-5 px-5 py-4 sm:px-12 sm:py-6">
     <a href="#top" aria-label="Ahmed Magdy, home">
@@ -48,7 +67,8 @@ const Navbar = ({ onMenu, ready }: { onMenu: () => void; ready: boolean }) => (
           <span className="relative">{link.title}</span>
         </a>
       ))}
-      <span className="ml-2">
+      <span className="ml-2 flex items-center gap-2">
+        <SkinButton />
         <ThemeButton />
       </span>
       <a

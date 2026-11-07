@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { experiences } from "../../constants";
 import { styles } from "../../constants/styles";
 import { fadeUp } from "../../utils/motion";
+import { useSkin } from "../../utils/theme";
 import SectionHeader from "../atoms/SectionHeader";
 import Arrow from "../atoms/Arrow";
 
@@ -11,7 +12,9 @@ import Arrow from "../atoms/Arrow";
 const pad = "pl-[76px] pr-5 sm:pl-[96px] sm:pr-7";
 const since = experiences[experiences.length - 1].date.split(" – ")[0];
 
-const Experience = () => (
+const Experience = () => {
+  const lab = useSkin() === "bb";
+  return (
   <section id="experience" className="py-24 sm:py-32">
     <div className={`${styles.container} max-w-[1200px]`}>
       <SectionHeader index="05" label="Experience" labelAr="مشواري" title="Experience" />
@@ -28,9 +31,9 @@ const Experience = () => (
 
         <div className={`flex flex-wrap items-baseline justify-between gap-3 border-b-2 border-frost/30 py-6 ${pad}`}>
           <h3 className="m-0 flex flex-wrap items-baseline gap-x-3.5 font-normal">
-            <span className="font-fellsc text-[20px] tracking-[0.24em] sm:text-[22px]">Camp Ledger</span>
+            <span className="font-fellsc text-[20px] tracking-[0.24em] sm:text-[22px]">{lab ? "Lab Notebook" : "Camp Ledger"}</span>
             <span lang="ar" className="font-ruqaa text-[24px] text-smoke">
-              دفتر المعسكر
+              {lab ? "دفتر المعمل" : "دفتر المعسكر"}
             </span>
           </h3>
           <span className="hidden font-fellsc text-[13px] tracking-[0.12em] text-smoke sm:block">Date · Entry · Paid in</span>
@@ -62,14 +65,15 @@ const Experience = () => (
         </ol>
 
         <div className={`flex flex-wrap items-baseline justify-between gap-3 py-5 ${pad}`}>
-          <span className="font-fellsc text-[15px] tracking-[0.12em] text-smoke">On the trail since {since}</span>
+          <span className="font-fellsc text-[15px] tracking-[0.12em] text-smoke">{lab ? "In the lab since" : "On the trail since"} {since}</span>
           <span lang="ar" dir="rtl" className="font-ruqaa text-[26px]">
-            والرحلة لسه مكملة
+            {lab ? "والتجربة لسه شغّالة" : "والرحلة لسه مكملة"}
           </span>
         </div>
       </motion.div>
     </div>
   </section>
-);
+  );
+};
 
 export default Experience;

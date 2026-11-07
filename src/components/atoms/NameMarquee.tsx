@@ -3,21 +3,27 @@ import { useReducedMotion } from "framer-motion";
 
 const LOOP_MS = 26000; // one full loop at rest
 
+// A star on the frontier, an element-tile square in the lab.
+const Bullet = () => (
+  <>
+    <span aria-hidden="true" className="rdr2:inline bb:hidden text-[0.4em]">
+      ✦
+    </span>
+    <span aria-hidden="true" className="hidden h-[0.26em] w-[0.26em] bg-frost bb:inline-block" />
+  </>
+);
+
 const NameCopy = ({ hidden }: { hidden?: boolean }) => (
   <span
     aria-hidden={hidden || undefined}
     className="inline-flex items-center gap-[0.22em] pr-[0.22em]"
   >
     Ahmed Magdy
-    <span aria-hidden="true" className="text-[0.4em]">
-      ✦
-    </span>
+    <Bullet />
     <span lang="ar" dir="rtl" className="font-arabic text-[0.8em]">
       أحمد مجدي
     </span>
-    <span aria-hidden="true" className="text-[0.4em]">
-      ✦
-    </span>
+    <Bullet />
   </span>
 );
 

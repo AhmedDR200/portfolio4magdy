@@ -6,13 +6,15 @@ import SectionHeader from "../atoms/SectionHeader";
 import KeyCap from "../atoms/KeyCap";
 import { openSatchel } from "../layout/Satchel";
 import { SKILL_HIGHLIGHT_EVENT } from "../layout/SkillWheel";
+import { useSkin } from "../../utils/theme";
+import PeriodicStack from "./PeriodicStack";
 
 const total = skillGroups.reduce((n, group) => n + group.items.length, 0);
 
 // The stack as a numbered index: one row per group, daily tools in frost.
 // Hovering a row fills it with frost, like the menu links; so does picking
 // its group on the skill wheel, for a moment.
-const Skills = () => {
+const SkillsFrontier = () => {
   const [lit, setLit] = useState<number | null>(null);
 
   useEffect(() => {
@@ -119,5 +121,8 @@ const Skills = () => {
     </section>
   );
 };
+
+// The lab shows the stack as a periodic table; the frontier keeps its index.
+const Skills = () => (useSkin() === "bb" ? <PeriodicStack /> : <SkillsFrontier />);
 
 export default Skills;

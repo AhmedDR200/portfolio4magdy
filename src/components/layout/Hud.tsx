@@ -1,5 +1,7 @@
+import { useSkin } from "../../utils/theme";
 import { useCairo } from "../atoms/CairoClock";
 import { deadEye } from "./DeadEye";
+import HudLab from "./HudLab";
 
 // Bottom left of the hero, like RDR2's HUD: a minimap that is the Cairo clock
 // (time and temperature under it, the way the game shows them) beside three
@@ -86,10 +88,10 @@ const Minimap = () => (
   </svg>
 );
 
-const coffeeAt = (h: number) => (h < 6 ? 12 : Math.max(10, 100 - Math.max(0, h - 7) * 7));
-const focusAt = (h: number) => (h >= 9 && h < 18 ? 92 : (h >= 7 && h < 9) || (h >= 18 && h < 23) ? 55 : 15);
+export const coffeeAt = (h: number) => (h < 6 ? 12 : Math.max(10, 100 - Math.max(0, h - 7) * 7));
+export const focusAt = (h: number) => (h >= 9 && h < 18 ? 92 : (h >= 7 && h < 9) || (h >= 18 && h < 23) ? 55 : 15);
 
-const Hud = ({ className = "" }: { className?: string }) => {
+const HudFrontier = ({ className = "" }: { className?: string }) => {
   const { hour, weather, time } = useCairo();
   return (
     <div data-xray="hud" className={`items-end gap-5 ${className}`}>
@@ -115,5 +117,11 @@ const Hud = ({ className = "" }: { className?: string }) => {
     </div>
   );
 };
+
+type HudProps = { className?: string; /** Opens the collection (the lab's purity ring is a button). */ onJournal?: () => void };
+
+// The frontier's minimap and cores, or the lab's purity ring and clock.
+const Hud = ({ className = "", onJournal }: HudProps) =>
+  useSkin() === "bb" ? <HudLab className={className} onJournal={onJournal} /> : <HudFrontier className={className} />;
 
 export default Hud;

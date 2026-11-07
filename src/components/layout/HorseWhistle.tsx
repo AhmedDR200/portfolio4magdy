@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState, type FormEvent } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { addWhistle, nameHorse, NAME_IDEAS, useBond } from "../../utils/bond";
+import { honk, labAudio, RV_HONK_EVENT } from "../../utils/labfx";
+import { useSkin } from "../../utils/theme";
 import Horse, { HORSE_FRAMES } from "../atoms/Horse";
 
 // Press H (or "Whistle" in the menu): a two-note whistle, made with the Web
@@ -10,6 +12,9 @@ import Horse, { HORSE_FRAMES } from "../atoms/Horse";
 // horse comes differently at each level: a trot, a canter, a gallop with
 // dust, and at level 4 a full gallop that rears up halfway, after which the
 // visitor names it. With reduced motion there's only the whistle.
+// In the lab skin the same key and the same `whistle()` honk the RV instead
+// (Honk below): a two-tone horn, a "HONK" tag, and the RV on the scroll rail
+// (RideAlong) answers.
 
 const WHISTLE_EVENT = "horse:whistle";
 export const whistle = () => window.dispatchEvent(new Event(WHISTLE_EVENT));
@@ -119,7 +124,7 @@ const NameCard = ({ onDone }: { onDone: () => void }) => {
   );
 };
 
-const HorseWhistle = () => {
+const HorseWhistleFrontier = () => {
   const reduce = useReducedMotion();
   const bond = useBond();
   const [ride, setRide] = useState<Level | null>(null);
@@ -204,5 +209,80 @@ const HorseWhistle = () => {
     </>
   );
 };
+
+
+// ---- The lab: the RV's horn ----
+
+const Honk = () => {
+  const reduce = useReducedMotion();
+  const [count, setCount] = useState(0);
+  const [shown, setShown] = useState(false);
+  const last = useRef(0);
+
+  const call = useCallback(() => {
+    const now = performance.now();
+    if (now - last.current < 300) return;
+    last.current = now;
+    const ctx = labAudio();
+    if (ctx) {
+      try {
+        honk(ctx);
+      } catch {
+        // No audio (blocked or unsupported): the tag still shows.
+      }
+    }
+    window.dispatchEvent(new Event(RV_HONK_EVENT));
+    setCount((n) => n + 1);
+    setShown(true);
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey || e.repeat) return;
+      if ((e.target as HTMLElement).closest?.("input, textarea, select, [contenteditable='true']")) return;
+      if (e.key === "h" || e.key === "H") call();
+    };
+    window.addEventListener("keydown", onKey);
+    window.addEventListener(WHISTLE_EVENT, call);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener(WHISTLE_EVENT, call);
+    };
+  }, [call]);
+
+  useEffect(() => {
+    if (!shown) return;
+    const id = window.setTimeout(() => setShown(false), 950);
+    return () => window.clearTimeout(id);
+  }, [shown, count]);
+
+  return (
+    <div aria-hidden="true" className="pointer-events-none fixed inset-x-0 bottom-14 z-[62] flex justify-center">
+      <AnimatePresence>
+        {shown && (
+          <motion.div
+            key="honk"
+            initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6, rotate: -6 }}
+            animate={reduce ? { opacity: 1 } : { opacity: 1, scale: [0.6, 1.12, 1], rotate: -2 }}
+            exit={{ opacity: 0, transition: { duration: 0.25 } }}
+            transition={{ duration: 0.22 }}
+            className="theme-dark flex flex-col overflow-hidden border-2 border-bandana bg-ink shadow-[0_18px_40px_-14px_rgba(0,0,0,0.9)]"
+          >
+            <span className="tape-thin h-2" />
+            <span className="flex items-baseline gap-3 px-5 py-1.5">
+              <span className="font-fellsc text-[30px] leading-none tracking-[0.14em] text-bandana sm:text-[38px]">HONK HONK</span>
+              <span lang="ar" className="font-arabic text-[18px] text-smoke">
+                بيييب بيييب
+              </span>
+            </span>
+            <span className="tape-thin h-2" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const HorseWhistle = () => (useSkin() === "bb" ? <Honk /> : <HorseWhistleFrontier />);
 
 export default HorseWhistle;

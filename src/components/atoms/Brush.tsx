@@ -1,5 +1,7 @@
 import { useId } from "react";
 
+import { useSkin } from "../../utils/theme";
+
 // A dry brush stroke: the highlight behind the selected item in RDR2's menus.
 // Three strokes (generated once, then fixed) so neighbouring items differ. The
 // streaks run along the edges and the dry tail, never across the words.
@@ -22,7 +24,15 @@ type Props = { variant?: number; className?: string };
 
 const Brush = ({ variant = 0, className = "" }: Props) => {
   const id = `brush-${useId().replace(/:/g, "")}`;
+  const skin = useSkin();
   const stroke = STROKES[variant % STROKES.length];
+  // In the lab the highlight is a plain bar, not a brush stroke.
+  if (skin === "bb")
+    return (
+      <svg viewBox="0 0 240 46" preserveAspectRatio="none" aria-hidden="true" className={className}>
+        <rect width="240" height="46" fill="currentColor" />
+      </svg>
+    );
   return (
     <svg viewBox="0 0 240 46" preserveAspectRatio="none" aria-hidden="true" className={className}>
       <defs>

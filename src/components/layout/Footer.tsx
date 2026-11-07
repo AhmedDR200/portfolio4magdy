@@ -1,9 +1,11 @@
 import { navLinks } from "../../constants";
 import { config } from "../../constants/config";
 import { styles } from "../../constants/styles";
+import { useSkin } from "../../utils/theme";
 import Wordmark from "../atoms/Wordmark";
 import Icon from "../atoms/Icon";
 import { HORSE_CREDIT } from "../atoms/Horse";
+import EndCredits from "./EndCredits";
 import StatusPanel from "./StatusPanel";
 import Arrow from "../atoms/Arrow";
 
@@ -11,11 +13,17 @@ const label = "mb-2 text-[12px] uppercase tracking-[0.14em] text-smoke";
 
 type Props = { xray: boolean; onXray: () => void; powerCut: boolean; onPowerCut: () => void };
 
-const Footer = ({ xray, onXray, powerCut, onPowerCut }: Props) => (
+const PHOTOS =
+  "Photos via Wikimedia Commons. Gas mask: Dollardollardollar3 (CC0). Motorhome: Renée Kools (CC BY 4.0). Crystals: Дарья Могилевцева (CC BY 4.0). Survey meter: Tim Vickers (public domain). Saguaro: Gentry George, U.S. Fish and Wildlife Service (public domain).";
+
+const Footer = ({ xray, onXray, powerCut, onPowerCut }: Props) => {
+  const lab = useSkin() === "bb";
+  return (
   <footer className="relative overflow-hidden border-t border-paper/15 pt-[72px]">
     <div className={`${styles.container} mb-16`}>
       <StatusPanel />
     </div>
+    {lab && <EndCredits />}
     <div className={`${styles.container} grid gap-8 sm:grid-cols-2 lg:grid-cols-4`}>
       <div className="flex flex-col gap-2">
         <Wordmark className="w-fit text-[37px]" />
@@ -48,8 +56,17 @@ const Footer = ({ xray, onXray, powerCut, onPowerCut }: Props) => (
       </nav>
       <div className="flex flex-col items-start gap-3">
         <span className="text-[12px] uppercase tracking-[0.14em] text-smoke">© {new Date().getFullYear()} Ahmed Magdy</span>
-        <span className="-mt-2 max-w-[240px] text-[11px] leading-snug text-dim">Horse: {HORSE_CREDIT}</span>
-        <span className="-mt-2 max-w-[240px] text-[11px] leading-snug text-dim">Intro sound: Red Dead Redemption 2 © Rockstar Games, used with permission</span>
+        {lab ? (
+          <>
+            <span className="-mt-2 max-w-[260px] text-[11px] leading-snug text-dim">{PHOTOS}</span>
+            <span className="-mt-2 max-w-[260px] text-[11px] leading-snug text-dim">Intro music: Breaking Bad main title theme, used with permission</span>
+          </>
+        ) : (
+          <>
+            <span className="-mt-2 max-w-[240px] text-[11px] leading-snug text-dim">Horse: {HORSE_CREDIT}</span>
+            <span className="-mt-2 max-w-[240px] text-[11px] leading-snug text-dim">Intro sound: Red Dead Redemption 2 © Rockstar Games, used with permission</span>
+          </>
+        )}
         <a href="#top" className="flex h-11 items-center torn bg-frost px-[18px] text-[13px] font-semibold uppercase tracking-[0.08em] text-ink">
           Back to top <Arrow dir="up" className="ml-1.5" />
         </a>
@@ -86,7 +103,13 @@ const Footer = ({ xray, onXray, powerCut, onPowerCut }: Props) => (
     >
       Ahmedmagdy
     </p>
+    {lab && (
+      <div className="tape relative flex h-10 items-center justify-center overflow-hidden">
+        <span className="whitespace-nowrap bg-ink px-4 py-0.5 font-fellsc text-[15px] tracking-[0.12em] text-bandana sm:text-[18px]">Caution · end of episode<span className="hidden sm:inline"> · do not cross the scrollbar</span></span>
+      </div>
+    )}
   </footer>
-);
+  );
+};
 
 export default Footer;

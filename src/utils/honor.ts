@@ -1,14 +1,16 @@
-import { useSyncExternalStore } from "react";
+import { useSyncExternalStore } from 'react';
 
-import { showToast } from "./toast";
+import { showToast } from './toast';
+import { currentSkin } from './theme';
 
 // Honor, like the game: good deeds raise it, mischief lowers it. It runs from
 // −5 to +5 and is saved in the visitor's browser. Nothing here is serious.
+// It belongs to the frontier skin: in the lab, changeHonor does nothing.
 export const HONOR_MIN = -5;
 export const HONOR_MAX = 5;
 
-const KEY = "honor";
-const ONCE_KEY = "honor-once";
+const KEY = 'honor';
+const ONCE_KEY = 'honor-once';
 
 const read = () => {
   try {
@@ -23,7 +25,7 @@ const read = () => {
 const counted = new Set<string>(
   (() => {
     try {
-      return JSON.parse(sessionStorage.getItem(ONCE_KEY) ?? "[]") as string[];
+      return JSON.parse(sessionStorage.getItem(ONCE_KEY) ?? '[]') as string[];
     } catch {
       return [];
     }
@@ -41,6 +43,8 @@ const listeners = new Set<() => void>();
  * visit. Returns whether it counted.
  */
 export const changeHonor = (delta: number, action: string) => {
+  // The lab has purity instead (utils/purity): honor is the frontier's.
+  if (currentSkin() === 'bb') return false;
   if (counted.has(action)) return false;
   counted.add(action);
   try {
@@ -57,12 +61,24 @@ export const changeHonor = (delta: number, action: string) => {
     // Ignored: honor then lasts for the visit.
   }
   lastChange = { delta, value: honor, at: Date.now() };
-  listeners.forEach((listener) => listener());
+  listeners.forEach(listener => listener());
 
   if (honor === HONOR_MAX && before < HONOR_MAX) {
-    showToast({ icon: "star", kicker: "Honor maxed", title: "Sheriff", ar: "شريف المدينة — انت من أهل الخير", tone: "legend" });
+    showToast({
+      icon: 'star',
+      kicker: 'Honor maxed',
+      title: 'Sheriff',
+      ar: 'شريف المدينة — انت من أهل الخير',
+      tone: 'legend',
+    });
   } else if (honor === HONOR_MIN && before > HONOR_MIN) {
-    showToast({ icon: "hat", kicker: "Honor at rock bottom", title: "Wanted", ar: "انت مطلوب! ارجع عن طريق الشر", tone: "paper" });
+    showToast({
+      icon: 'hat',
+      kicker: 'Honor at rock bottom',
+      title: 'Wanted',
+      ar: 'انت مطلوب! ارجع عن طريق الشر',
+      tone: 'paper',
+    });
   }
   return true;
 };
@@ -78,7 +94,7 @@ export const resetHonor = () => {
   } catch {
     // Ignored.
   }
-  listeners.forEach((listener) => listener());
+  listeners.forEach(listener => listener());
 };
 
 const subscribe = (listener: () => void) => {

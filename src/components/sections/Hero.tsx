@@ -5,23 +5,36 @@ import { mePhoto } from "../../assets";
 import { heroRoles } from "../../constants";
 import { config } from "../../constants/config";
 import { EASE_OUT_CUBIC } from "../../utils/motion";
+import { useSkin } from "../../utils/theme";
+import LabBadge from "../atoms/LabBadge";
 import CairoClock from "../atoms/CairoClock";
 import KeyCap from "../atoms/KeyCap";
 import NameMarquee from "../atoms/NameMarquee";
 import WaxSeal from "../atoms/WaxSeal";
 import Hud from "../layout/Hud";
+import { deadEye } from "../layout/DeadEye";
 import { whistle } from "../layout/HorseWhistle";
 import Navbar from "../layout/Navbar";
 
 
-// RDR2's prompts, bottom right: the site's real hotkeys, and clickable too.
+// The prompts, bottom right: the site's real hotkeys, and clickable too. The
+// frontier's are RDR2's; the lab's are its own.
 const Prompts = ({ onMap, onWheel, onJournal }: Pick<Props, "onMap" | "onWheel" | "onJournal">) => {
-  const prompts = [
-    { key: "H", label: "Whistle", run: whistle },
-    { key: "M", label: "Map", run: onMap },
-    { key: "Tab", label: "Skills", run: onWheel },
-    { key: "J", label: "Journal", run: onJournal, ring: true },
-  ];
+  const lab = useSkin() === "bb";
+  const prompts = lab
+    ? [
+        { key: "G", label: "Geiger", run: deadEye, ring: false },
+        { key: "H", label: "Honk", run: whistle, ring: false },
+        { key: "M", label: "The table", run: onMap, ring: false },
+        { key: "Tab", label: "Skills", run: onWheel, ring: false },
+        { key: "J", label: "Collection", run: onJournal, ring: true },
+      ]
+    : [
+        { key: "H", label: "Whistle", run: whistle, ring: false },
+        { key: "M", label: "Map", run: onMap, ring: false },
+        { key: "Tab", label: "Skills", run: onWheel, ring: false },
+        { key: "J", label: "Journal", run: onJournal, ring: true },
+      ];
   return (
     <ul aria-label="Keyboard shortcuts" className="m-0 flex list-none flex-col items-end gap-2.5 p-0 [text-shadow:0_1px_10px_rgba(0,0,0,0.9)]">
       {prompts.map((p) => (
@@ -49,6 +62,7 @@ type Props = {
 
 const Hero = ({ startHidden, revealed, onMenu, onMap, onWheel, onJournal }: Props) => {
   const reduce = useReducedMotion();
+  const lab = useSkin() === "bb";
   const [roleIndex, setRoleIndex] = useState(0);
 
   useEffect(() => {
@@ -70,19 +84,23 @@ const Hero = ({ startHidden, revealed, onMenu, onMap, onWheel, onJournal }: Prop
       animate={revealed ? { y: 0, scale: 1 } : undefined}
       transition={{ duration: 0.9, ease: EASE_OUT_CUBIC }}
     >
-      {/* The photo as a print pinned up: black and white, a halftone screen, a
-          snow-white border and a slight tilt, like a WANTED poster's portrait. */}
+      {lab && <div aria-hidden="true" className="lab-grid absolute inset-0" />}
       <div aria-hidden="true" className="grain absolute inset-0" />
-      <figure className="absolute left-1/2 top-[124px] m-0 aspect-[38/45] w-[min(62vw,300px)] -translate-x-1/2 -rotate-[1.4deg] border-[6px] border-paper bg-paper shadow-[0_30px_60px_-20px_rgba(0,0,0,0.85)] sm:top-[150px] sm:w-[clamp(260px,40vw,440px)] lg:top-[104px] lg:w-[22vw] xl:w-[clamp(300px,30vw,440px)]">
-        <div className="relative h-full w-full overflow-hidden">
-          <img
-            src={mePhoto}
-            alt="Portrait of Ahmed Magdy"
-            className="h-full w-full object-cover object-[51%_30%] contrast-[1.35] brightness-[1.12] grayscale"
-          />
-          <div aria-hidden="true" className="halftone absolute inset-0" />
-        </div>
-      </figure>
+      {lab ? (
+        // The photo as a dosimeter ID badge, pinned up with a slight tilt.
+        <LabBadge className="absolute left-1/2 top-[124px] z-[1] aspect-[34/48] w-[min(54vw,228px)] -translate-x-1/2 rotate-[2deg] sm:top-[150px] sm:w-[clamp(240px,34vw,320px)] lg:top-[100px] lg:w-[19vw] xl:w-[clamp(260px,22vw,320px)]" />
+      ) : (
+        <figure className="absolute left-1/2 top-[124px] m-0 aspect-[38/45] w-[min(62vw,300px)] -translate-x-1/2 -rotate-[1.4deg] border-[6px] border-paper bg-paper shadow-[0_30px_60px_-20px_rgba(0,0,0,0.85)] sm:top-[150px] sm:w-[clamp(260px,40vw,440px)] lg:top-[104px] lg:w-[22vw] xl:w-[clamp(300px,30vw,440px)]">
+          <div className="relative h-full w-full overflow-hidden">
+            <img
+              src={mePhoto}
+              alt="Portrait of Ahmed Magdy"
+              className="h-full w-full object-cover object-[51%_30%] contrast-[1.35] brightness-[1.12] grayscale"
+            />
+            <div aria-hidden="true" className="halftone absolute inset-0" />
+          </div>
+        </figure>
+      )}
 
       <Navbar onMenu={onMenu} ready={revealed} />
       {/* Below lg there's no room for the HUD, so the clock sits under the navbar. */}
@@ -107,7 +125,7 @@ const Hero = ({ startHidden, revealed, onMenu, onMap, onWheel, onJournal }: Prop
             </span>
             <span aria-hidden="true" className="animate-pulse-ink h-3 w-3 rounded-full bg-ink" />
           </a>
-          <Hud className="hidden pl-12 lg:flex" />
+          <Hud className="hidden pl-12 lg:flex" onJournal={onJournal} />
         </div>
 
         {/* The title sizes to the room beside the print (see the lg/xl font sizes). */}
@@ -145,6 +163,15 @@ const Hero = ({ startHidden, revealed, onMenu, onMap, onWheel, onJournal }: Prop
       </div>
 
       <NameMarquee className="worn relative pb-3 font-display text-[clamp(120px,17.4vw,250px)] uppercase leading-none text-frost sm:pb-4" />
+      {lab && (
+        <div aria-hidden="true" className="tape relative flex h-10 items-center justify-center gap-6 overflow-hidden">
+          {["Caution", "Low latency", "Real-time", "Clean APIs ahead"].map((t, i) => (
+            <span key={t} className={`bg-ink px-4 py-0.5 font-fellsc text-[17px] tracking-[0.12em] text-bandana ${i > 1 ? "hidden sm:inline" : ""} ${i > 2 ? "hidden md:inline" : ""}`}>
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
     </motion.section>
   );
 };

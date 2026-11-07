@@ -4,11 +4,13 @@ import { MotionConfig, motion } from "framer-motion";
 import { config } from "../../constants/config";
 import { unlock } from "../../utils/achievements";
 import { changeHonor } from "../../utils/honor";
+import { currentSkin } from "../../utils/theme";
 import Wordmark from "../atoms/Wordmark";
 import Cursor from "../layout/Cursor";
 import HonorMeter from "../layout/HonorMeter";
 import Toasts from "../layout/Toasts";
 import Arrow from "../atoms/Arrow";
+import NotFoundLab from "./NotFoundLab";
 
 // The torn top and bottom edges of the poster.
 const TORN =
@@ -77,7 +79,7 @@ const WantedBug = () => (
 
 // The 404 page: the missing page is a wanted outlaw. Served as 404.html on
 // Vercel, and by the app itself for any unknown path in dev.
-const NotFound = () => {
+const NotFoundFrontier = () => {
   const path = window.location.pathname;
 
   useEffect(() => {
@@ -170,5 +172,8 @@ const NotFound = () => {
     </MotionConfig>
   );
 };
+
+// The 404 of whichever skin is on: the lab's Notfoundium or the frontier's poster.
+const NotFound = () => (currentSkin() === "bb" ? <NotFoundLab /> : <NotFoundFrontier />);
 
 export default NotFound;

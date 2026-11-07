@@ -6,14 +6,15 @@ import { config } from "../../constants/config";
 import { ACHIEVEMENTS, useUnlocked } from "../../utils/achievements";
 import { levelOf, useBond } from "../../utils/bond";
 import { EASE_OUT_EXPO } from "../../utils/motion";
-import { toggleTheme, useTheme } from "../../utils/theme";
+import { toggleSkin, toggleTheme, useSkin, useTheme } from "../../utils/theme";
 import { travelOnClick, travelTo } from "../../utils/travel";
 import Arrow from "../atoms/Arrow";
 import Brush from "../atoms/Brush";
 import Icon, { type IconName } from "../atoms/Icon";
 import KeyCap from "../atoms/KeyCap";
 import Ornament from "../atoms/Ornament";
-import { CHAPTERS, chapterAr, roman } from "../atoms/SectionHeader";
+import ElementTile from "../atoms/ElementTile";
+import { CHAPTERS, chapterAr, episodeAr, roman } from "../atoms/SectionHeader";
 import Wordmark from "../atoms/Wordmark";
 import { deadEye } from "./DeadEye";
 import { whistle } from "./HorseWhistle";
@@ -31,7 +32,7 @@ type Props = {
   onJournal: () => void;
 };
 
-type Mode = { icon: IconName; name: string; desc: string; keyName: string; run: () => void; state?: string; pressed?: boolean };
+type Mode = { icon: IconName; /** The lab's tile symbol. */ tile: string; name: string; desc: string; keyName: string; run: () => void; state?: string; pressed?: boolean };
 
 const CHAPTER_IDS = Object.keys(CHAPTERS);
 const label = "m-0 font-fellsc text-[13px] tracking-[0.24em] text-smoke";
@@ -66,6 +67,7 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
   const unlocked = useUnlocked();
   const bond = useBond();
   const theme = useTheme();
+  const lab = useSkin() === "bb";
   const [scrolledPastHero, setScrolledPastHero] = useState(false);
   const [picked, setPicked] = useState(0);
   const links = useRef<(HTMLAnchorElement | null)[]>([]);
@@ -104,49 +106,95 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
     links.current[next]?.focus();
   };
 
-  const groups: { name: string; modes: Mode[] }[] = [
-    {
-      name: "Look",
-      modes: [
-        theme === "dark"
-          ? { icon: "sun", name: "Light mode", desc: "Wanted: paper and ink", keyName: "L", run: toggleTheme }
-          : { icon: "moon", name: "Dark mode", desc: "Ambarino: the snowy night", keyName: "L", run: toggleTheme },
+  const modeToggle: Mode =
+    theme === "dark"
+      ? { icon: "sun", tile: "Lt", name: "Light mode", desc: lab ? "Class · day: a pale classroom" : "Wanted: paper and ink", keyName: "L", run: toggleTheme }
+      : { icon: "moon", tile: "Dk", name: "Dark mode", desc: lab ? "Lab · night: the dark lab" : "Ambarino: the snowy night", keyName: "L", run: toggleTheme };
+  const skinToggle: Mode = lab
+    ? { icon: "star", tile: "Th", name: "Red Dead theme", desc: "To the frontier: Ambarino and Wanted", keyName: "T", run: toggleSkin }
+    : { icon: "star", tile: "Th", name: "Breaking Bad theme", desc: "Back to the lab: Lab · night, Class · day", keyName: "T", run: toggleSkin };
+  const powerMode: Mode = {
+    icon: "bulb-off",
+    tile: "Pc",
+    name: "Power cut",
+    desc: "Lights out, a lantern follows you",
+    keyName: "P",
+    run: onPowerCut,
+    state: powerCut ? "On" : "Off",
+    pressed: powerCut,
+  };
+  const xrayMode: Mode = { icon: "eye", tile: "Xr", name: "X-ray", desc: "The code behind every part", keyName: "X", run: onXray, state: xray ? "On" : "Off", pressed: xray };
+
+  const groups: { name: string; modes: Mode[] }[] = lab
+    ? [
         {
-          icon: "bulb-off",
-          name: "Power cut",
-          desc: "Lights out, a lantern follows you",
-          keyName: "P",
-          run: onPowerCut,
-          state: powerCut ? "On" : "Off",
-          pressed: powerCut,
+          name: "Look",
+          modes: [
+            modeToggle,
+            skinToggle,
+            powerMode,
+            xrayMode,
+            { icon: "stopwatch", tile: "Gg", name: "Geiger", desc: "Clicks speed up near anything you can press", keyName: "G", run: deadEye },
+          ],
         },
-        { icon: "eye", name: "X-ray", desc: "The code behind every part", keyName: "X", run: onXray, state: xray ? "On" : "Off", pressed: xray },
-        { icon: "stopwatch", name: "Dead Eye", desc: "Mark everything you can press", keyName: "E", run: deadEye },
-      ],
-    },
-    {
-      name: "Ride",
-      modes: [
-        { icon: "compass", name: "Map", desc: "Fast travel between chapters", keyName: "M", run: onMap },
-        { icon: "whistle", name: "Whistle", desc: "Call your horse", keyName: "H", run: whistle, state: `Bond ${levelOf(bond.whistles).level}/4` },
-      ],
-    },
-    {
-      name: "Records",
-      modes: [
-        { icon: "briefcase", name: "Satchel", desc: "What I carry", keyName: "I", run: openSatchel },
-        { icon: "cylinder", name: "Skill wheel", desc: "Hold Tab to pick a skill", keyName: "Tab", run: onWheel },
         {
-          icon: "star",
-          name: "Achievements",
-          desc: "Badges hidden around the site",
-          keyName: "J",
-          run: onJournal,
-          state: `${unlocked.length}/${ACHIEVEMENTS.length}`,
+          name: "Explore",
+          modes: [
+            { icon: "compass", tile: "Tb", name: "The table", desc: "Fast forward between episodes", keyName: "M", run: onMap },
+            { icon: "whistle", tile: "Hk", name: "Honk", desc: "Beep the motorhome", keyName: "H", run: whistle },
+          ],
         },
-      ],
-    },
-  ];
+        {
+          name: "Records",
+          modes: [
+            { icon: "cylinder", tile: "Sk", name: "Skills", desc: "Hold Tab to pick a skill", keyName: "Tab", run: onWheel },
+            {
+              icon: "star",
+              tile: "Co",
+              name: "Collection",
+              desc: "Elements hidden around the site",
+              keyName: "J",
+              run: onJournal,
+              state: `${unlocked.length}/${ACHIEVEMENTS.length}`,
+            },
+          ],
+        },
+      ]
+    : [
+        {
+          name: "Look",
+          modes: [
+            modeToggle,
+            skinToggle,
+            powerMode,
+            xrayMode,
+            { icon: "stopwatch", tile: "De", name: "Dead Eye", desc: "Mark everything you can press", keyName: "E", run: deadEye },
+          ],
+        },
+        {
+          name: "Ride",
+          modes: [
+            { icon: "compass", tile: "Mp", name: "Map", desc: "Fast travel between chapters", keyName: "M", run: onMap },
+            { icon: "whistle", tile: "Wh", name: "Whistle", desc: "Call your horse", keyName: "H", run: whistle, state: `Bond ${levelOf(bond.whistles).level}/4` },
+          ],
+        },
+        {
+          name: "Records",
+          modes: [
+            { icon: "briefcase", tile: "Sa", name: "Satchel", desc: "What I carry", keyName: "I", run: openSatchel },
+            { icon: "cylinder", tile: "Sw", name: "Skill wheel", desc: "Hold Tab to pick a skill", keyName: "Tab", run: onWheel },
+            {
+              icon: "star",
+              tile: "Ac",
+              name: "Achievements",
+              desc: "Badges hidden around the site",
+              keyName: "J",
+              run: onJournal,
+              state: `${unlocked.length}/${ACHIEVEMENTS.length}`,
+            },
+          ],
+        },
+      ];
 
   const id = CHAPTER_IDS[picked];
   const chapter = CHAPTERS[id];
@@ -200,13 +248,13 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
                   <Wordmark className="text-[24px] sm:text-[32px]" />
                 </a>
                 <span aria-hidden="true" className="h-6 w-px bg-paper/25" />
-                <span className="font-fellsc text-[13px] tracking-[0.3em] text-smoke sm:text-[15px]">Paused</span>
+                <span className="font-fellsc text-[13px] tracking-[0.3em] text-smoke sm:text-[15px]">{lab ? "Episode select" : "Paused"}</span>
               </div>
 
               <div className="mt-6 grid flex-1 gap-x-12 gap-y-9 sm:mt-7 lg:grid-cols-[minmax(0,1fr)_330px] xl:grid-cols-[400px_minmax(0,1fr)_330px]">
                 {/* Chapters. */}
                 <section aria-label="Chapters" className="lg:col-start-1 lg:row-start-1">
-                  <p className={`${label} mb-3 ml-3.5`}>Chapters</p>
+                  <p className={`${label} mb-3 ml-3.5`}>{lab ? "Episodes" : "Chapters"}</p>
                   <ol className="m-0 flex list-none flex-col p-0" onKeyDown={onChapterKey}>
                     {CHAPTER_IDS.map((cid, i) => {
                       const c = CHAPTERS[cid];
@@ -233,7 +281,7 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
                               }`}
                             />
                             <span className={`relative w-10 text-[12px] tracking-[0.1em] sm:text-[14px] ${on ? "text-ink" : "text-smoke"}`}>
-                              {roman(c.index)}
+                              {lab ? `E${Number(c.index)}` : roman(c.index)}
                             </span>
                             <span className="relative text-[clamp(24px,2.4vw,34px)] tracking-[0.06em]">{c.title}</span>
                           </a>
@@ -254,12 +302,12 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
                       transition={{ duration: 0.18 }}
                       className="flex max-w-[420px] flex-col gap-3.5"
                     >
-                      <p className={label}>Chapter {roman(chapter.index)} · fast travel to</p>
-                      <p className="m-0 font-western text-[clamp(44px,4vw,58px)] leading-none text-frost">{town?.name}</p>
+                      <p className={label}>{lab ? `Episode ${roman(chapter.index)} · fast forward to` : `Chapter ${roman(chapter.index)} · fast travel to`}</p>
+                      <p className="m-0 font-western text-[clamp(44px,4vw,58px)] leading-none text-frost">{lab ? chapter.title : town?.name}</p>
                       <p lang="ar" dir="rtl" className="m-0 text-left font-arabic text-[24px] text-paper/80">
-                        {chapterAr(chapter.index, chapter.labelAr)}
+                        {lab ? episodeAr(chapter.index, chapter.labelAr) : chapterAr(chapter.index, chapter.labelAr)}
                       </p>
-                      <Ornament className="my-1 max-w-[380px] text-paper/45" />
+                      {lab ? <span aria-hidden="true" className="my-1 block h-[3px] w-28 bg-frost" /> : <Ornament className="my-1 max-w-[380px] text-paper/45" />}
                       <p className="m-0 font-fell text-[21px] italic leading-[1.45] text-paper/85">{withBee3a(town?.blurb ?? "")}</p>
                       <div className="mt-2 flex flex-wrap items-center gap-6">
                         <button
@@ -281,7 +329,7 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
                           className="flex items-center gap-2.5 font-fellsc text-[15px] tracking-[0.12em] hover:text-frost"
                         >
                           <KeyCap>M</KeyCap>
-                          Open the map
+                          {lab ? "Open the table" : "Open the map"}
                         </button>
                       </div>
                     </motion.div>
@@ -304,7 +352,11 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
                                 aria-pressed={m.pressed}
                                 className="group flex h-full w-full flex-col items-center gap-1.5 rounded-[10px] border border-paper/15 px-1 py-3 text-center transition-colors hover:border-frost lg:grid lg:grid-cols-[30px_minmax(0,1fr)_auto] lg:items-center lg:gap-3 lg:rounded-none lg:border-0 lg:border-b lg:border-paper/10 lg:px-0 lg:py-[5px] lg:text-left"
                               >
-                                <Icon name={m.icon} size={22} className={`transition-colors group-hover:text-frost ${m.pressed ? "text-frost" : ""}`} />
+                                {lab ? (
+                                  <ElementTile symbol={m.tile} size={28} tone={m.pressed ? "solid" : "outline"} className="[&>span]:!text-[inherit]" />
+                                ) : (
+                                  <Icon name={m.icon} size={22} className={`transition-colors group-hover:text-frost ${m.pressed ? "text-frost" : ""}`} />
+                                )}
                                 <span className="flex min-w-0 flex-col gap-0.5">
                                   <span className="flex flex-wrap items-baseline justify-center gap-x-2.5 font-fellsc text-[12px] leading-tight tracking-[0.08em] transition-colors group-hover:text-frost sm:text-[13px] lg:justify-start lg:text-[17px]">
                                     {m.name}

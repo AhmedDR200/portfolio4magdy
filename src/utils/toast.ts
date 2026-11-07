@@ -1,6 +1,6 @@
-import { useSyncExternalStore } from "react";
+import { useSyncExternalStore } from 'react';
 
-import type { IconName } from "../components/atoms/Icon";
+import type { IconName } from '../components/atoms/Icon';
 
 export type Toast = {
   id: number;
@@ -10,24 +10,26 @@ export type Toast = {
   title: string;
   ar: string;
   /** frost: good news; paper: secrets and warnings; ink-on-frost: the big one. */
-  tone?: "frost" | "paper" | "legend";
+  tone?: 'frost' | 'paper' | 'legend';
   /** Shown on the right, like "5 / 12". */
   meta?: string;
+  /** The lab shows an element tile in place of the icon. */
+  tile?: { symbol: string; number?: number | string };
 };
 
 // Notifications shown at the top right (achievements, honor milestones).
 let toasts: Toast[] = [];
 let nextId = 1;
 const listeners = new Set<() => void>();
-const emit = () => listeners.forEach((listener) => listener());
+const emit = () => listeners.forEach(listener => listener());
 
-export const showToast = (toast: Omit<Toast, "id">) => {
+export const showToast = (toast: Omit<Toast, 'id'>) => {
   toasts = [...toasts, { ...toast, id: nextId++ }].slice(-3);
   emit();
 };
 
 export const dismissToast = (id: number) => {
-  toasts = toasts.filter((t) => t.id !== id);
+  toasts = toasts.filter(t => t.id !== id);
   emit();
 };
 

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { scrollToSection } from "../../utils/lenis";
+import { useSkin } from "../../utils/theme";
 import { onTravel, setTravelListening } from "../../utils/travel";
 import { CHAPTERS, ChapterCard } from "../atoms/SectionHeader";
 
@@ -14,6 +15,7 @@ const HOLD_MS = 1100;
 
 const ChapterTravel = () => {
   const reduce = useReducedMotion();
+  const lab = useSkin() === "bb";
   const [current, setCurrent] = useState<string | null>(null);
   const timers = useRef<number[]>([]);
   const jumped = useRef(false);
@@ -83,7 +85,7 @@ const ChapterTravel = () => {
             <ChapterCard {...chapter} />
           </motion.div>
           <span className="absolute bottom-8 left-6 font-fellsc text-[13px] tracking-[0.14em] text-paper/50 sm:left-10">
-            Fast travel
+            {lab ? "Fast forward" : "Fast travel"}
           </span>
           <span className="absolute bottom-8 right-6 flex items-center gap-2.5 font-fellsc text-[13px] tracking-[0.14em] text-paper/60 sm:right-10">
             Skip

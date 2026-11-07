@@ -5,11 +5,14 @@ import { skillGroups } from "../../constants";
 import { unlock } from "../../utils/achievements";
 import { pauseScroll, scrollToSection } from "../../utils/lenis";
 import { EASE_OUT_EXPO } from "../../utils/motion";
+import { useSkin } from "../../utils/theme";
 
 // Hold Tab for a weapon wheel of skill groups, like the game. Point (or use
 // the arrows) to pick, let go to "equip": the page goes to Skills and lights
 // that row. A quick Tab still moves focus as usual; only a hold opens it.
 // From the menu (or on touch) it stays open until a slice is tapped.
+// In the lab the wheel is a selector instead: one element-style tile per group,
+// picked the same ways (point or the arrows, let go to equip).
 
 export const SKILL_HIGHLIGHT_EVENT = "skills:highlight";
 
@@ -19,6 +22,19 @@ const C = SIZE / 2;
 const R = 300;
 const r = 128;
 const SLICE = 360 / skillGroups.length;
+const COLUMNS = 4;
+
+// The lab's tile for each group: two letters, like a symbol.
+const GROUP_SYMBOLS: Record<string, string> = {
+  Languages: "Lg",
+  Backend: "Bk",
+  Data: "Da",
+  "Real-time": "Rt",
+  "Cloud & DevOps": "Cd",
+  "AI & automation": "Ai",
+  Tools: "Tl",
+  "Beyond backend": "Bb",
+};
 
 const polar = (radius: number, deg: number) => {
   const a = (deg * Math.PI) / 180;
@@ -44,6 +60,7 @@ const sliceAt = (x: number, y: number) => {
 type Props = { open: boolean; onOpenChange: Dispatch<SetStateAction<boolean>> };
 
 const SkillWheel = ({ open, onOpenChange }: Props) => {
+  const lab = useSkin() === "bb";
   const [selected, setSelected] = useState(1);
   const held = useRef(false);
   const selectedRef = useRef(selected);
@@ -81,8 +98,11 @@ const SkillWheel = ({ open, onOpenChange }: Props) => {
       if (e.key === "Escape") {
         held.current = false;
         onOpenChange(false);
-      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") setSelected((s) => (s + 1) % skillGroups.length);
-      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") setSelected((s) => (s - 1 + skillGroups.length) % skillGroups.length);
+      } else if (e.key === "ArrowRight" || (e.key === "ArrowDown" && !lab)) setSelected((s) => (s + 1) % skillGroups.length);
+      else if (e.key === "ArrowLeft" || (e.key === "ArrowUp" && !lab)) setSelected((s) => (s - 1 + skillGroups.length) % skillGroups.length);
+      // A grid has rows: down and up move a whole row.
+      else if (e.key === "ArrowDown") setSelected((s) => (s + COLUMNS) % skillGroups.length);
+      else if (e.key === "ArrowUp") setSelected((s) => (s - COLUMNS + skillGroups.length) % skillGroups.length);
       else if (e.key === "Enter") equip(selectedRef.current);
       else return;
       e.preventDefault();
@@ -103,7 +123,7 @@ const SkillWheel = ({ open, onOpenChange }: Props) => {
       window.removeEventListener("keydown", onDown);
       window.removeEventListener("keyup", onUp);
     };
-  }, [open, onOpenChange, equip]);
+  }, [open, onOpenChange, equip, lab]);
 
   useEffect(() => {
     if (!open) return;
@@ -130,16 +150,76 @@ const SkillWheel = ({ open, onOpenChange }: Props) => {
           key="wheel"
           role="dialog"
           aria-modal="true"
-          aria-label="Skill wheel"
+          aria-label={lab ? "Skill selector" : "Skill wheel"}
           data-lenis-prevent
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          onPointerMove={onPointerMove}
+          onPointerMove={lab ? undefined : onPointerMove}
           onClick={(e) => e.target === e.currentTarget && onOpenChange(false)}
           className="fixed inset-0 z-[88] flex flex-col items-center justify-center gap-6 bg-ink/80 px-4 text-paper backdrop-blur-md"
         >
+          {lab ? (
+            <motion.div
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
+              className="flex max-h-[80vh] w-[min(940px,94vw)] flex-col gap-4 overflow-y-auto"
+            >
+              <p className="m-0 flex items-baseline justify-between font-mono text-[12px] tracking-[0.16em] text-smoke">
+                <span>THE STACK · PICK A GROUP</span>
+                <span>
+                  {selected + 1} / {skillGroups.length}
+                </span>
+              </p>
+              <ul className="m-0 grid list-none grid-cols-2 gap-2.5 p-0 sm:grid-cols-4 sm:gap-3">
+                {skillGroups.map((g, i) => {
+                  const on = i === selected;
+                  return (
+                    <li key={g.title} className="flex">
+                      <button
+                        type="button"
+                        aria-pressed={on}
+                        aria-label={`${g.title}, ${g.items.length} tools`}
+                        onClick={() => (on ? equip(i) : setSelected(i))}
+                        // A mouse points; a finger taps once to pick and again to equip.
+                        onPointerEnter={(e) => e.pointerType === "mouse" && setSelected(i)}
+                        data-cursor-target
+                        className={`relative flex aspect-[2/1] w-full flex-col items-start justify-between border-2 p-2.5 text-left font-archivo transition-colors sm:aspect-square sm:p-3.5 ${
+                          on ? "border-frost bg-frost text-ink" : "border-dim/60 bg-graphite/90 text-paper hover:border-frost"
+                        }`}
+                      >
+                        <span className={`font-mono text-[11px] font-bold leading-none ${on ? "text-ink" : "text-smoke"}`}>{String(i + 1).padStart(2, "0")}</span>
+                        <span className="text-[clamp(30px,6vw,60px)] font-extrabold leading-none tracking-[-0.03em]">{GROUP_SYMBOLS[g.title] ?? g.title.slice(0, 2)}</span>
+                        <span className="flex w-full items-end justify-between gap-2">
+                          <span className="text-[11px] font-bold uppercase leading-tight tracking-[0.06em] sm:text-[12px]">{g.title}</span>
+                          <span className={`font-mono text-[10px] ${on ? "text-ink" : "text-smoke"}`}>{g.items.length}</span>
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+              <div aria-live="polite" className="flex flex-col gap-2 border border-paper/15 bg-graphite/95 p-4 sm:flex-row sm:items-baseline sm:gap-6">
+                <div className="flex shrink-0 items-baseline gap-3">
+                  <span className="font-display text-[clamp(26px,4vw,34px)] uppercase leading-none text-frost">{group.title}</span>
+                  <span lang="ar" dir="rtl" className="font-arabic text-[18px] text-smoke">
+                    {group.titleAr}
+                  </span>
+                </div>
+                <p className="m-0 text-[13px] leading-snug">
+                  {group.daily.length > 0 && <b className="font-bold text-frost">{group.daily.join(" · ")}</b>}
+                  {others.length > 0 && (
+                    <span className="text-smoke">
+                      {group.daily.length ? " + " : ""}
+                      {others.join(", ")}
+                    </span>
+                  )}
+                </p>
+              </div>
+            </motion.div>
+          ) : (
           <motion.div
             ref={wheel}
             initial={{ scale: 0.92 }}
@@ -196,6 +276,7 @@ const SkillWheel = ({ open, onOpenChange }: Props) => {
               )}
             </div>
           </motion.div>
+          )}
 
           <p className="m-0 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-center text-[12px] uppercase tracking-[0.1em] text-mist">
             <span className="hidden items-center gap-2 md:flex">
@@ -210,7 +291,7 @@ const SkillWheel = ({ open, onOpenChange }: Props) => {
               Close
             </button>
             <span lang="ar" className="font-arabic text-[19px] normal-case tracking-normal text-frost">
-              اختار سلاحك
+              {lab ? "اختار المجموعة" : "اختار سلاحك"}
             </span>
           </p>
         </motion.div>

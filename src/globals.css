@@ -3,9 +3,16 @@
 @tailwind utilities;
 
 
-/* The two themes. Dark is Ambarino (the default); light is Wanted, chosen in
-   the menu or by the system. A .theme-dark element stays dark inside the
-   light theme: the map, the skills wheel, the RDR2 toasts and the posters. */
+/* Two skins, each with a dark and a light mode. data-skin is "bb" (the lab, the
+   default) or "rdr2" (the frontier); data-theme is "dark" or "light". A
+   .theme-dark element stays dark inside the light mode: the intro, the map,
+   the skills wheel, the toasts and the posters.
+   --frost is the accent in both skins (element green in the lab), --bandana
+   the warning colour (hazard yellow in the lab) and --crystal the colour of
+   purity (the same as frost on the frontier). */
+
+/* Red Dead · Ambarino (dark) and Wanted (light). The base: it applies until the
+   lab's rules below override it. */
 :root,
 .theme-dark {
   --ink: 14 25 22;
@@ -16,6 +23,7 @@
   --dim: 97 116 109;
   --frost: 191 224 236;
   --bandana: 179 32 42;
+  --crystal: 191 224 236;
 }
 :root[data-theme="light"] {
   --ink: 233 229 220;
@@ -26,6 +34,33 @@
   --dim: 138 131 120;
   --frost: 163 22 28;
   --bandana: 142 18 24;
+  --crystal: 163 22 28;
+  color-scheme: light;
+}
+/* The lab · night. */
+:root[data-skin="bb"],
+[data-skin="bb"] .theme-dark {
+  --ink: 10 16 13;
+  --graphite: 19 28 23;
+  --paper: 233 240 228;
+  --mist: 192 203 190;
+  --smoke: 138 154 140;
+  --dim: 94 110 98;
+  --frost: 79 209 127;
+  --bandana: 230 220 58;
+  --crystal: 127 211 240;
+}
+/* The lab · day (a classroom: pale ground, near-black text, deeper green). */
+:root[data-skin="bb"][data-theme="light"] {
+  --ink: 237 240 231;
+  --graphite: 221 227 214;
+  --paper: 14 24 18;
+  --mist: 46 59 49;
+  --smoke: 86 102 90;
+  --dim: 134 150 138;
+  --frost: 15 107 59;
+  --bandana: 122 112 0;
+  --crystal: 28 110 147;
   color-scheme: light;
 }
 .theme-dark {
@@ -227,4 +262,58 @@ body {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
   opacity: 0.16;
   mix-blend-mode: multiply;
+}
+
+
+/* ---- The lab: Breaking Bad, the default skin ---- */
+
+/* The frontier's old print becomes the lab's type, everywhere at once:
+   small caps become stencil tags, italic serif becomes plain Archivo, woodtype
+   becomes Anton. Arabic stays Rakkas. */
+[data-skin="bb"] .font-fellsc {
+  font-family: "Big Shoulders Stencil", Impact, "Arial Narrow", sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+[data-skin="bb"] .font-fell {
+  font-family: Archivo, Helvetica, Arial, sans-serif;
+  font-style: normal;
+}
+[data-skin="bb"] .font-western {
+  font-family: Anton, Impact, "Arial Narrow", sans-serif;
+  text-transform: uppercase;
+}
+/* No torn paper, worn woodtype, halftone or paper grain in a lab. */
+[data-skin="bb"] .torn,
+[data-skin="bb"] .torn-2,
+[data-skin="bb"] .torn-3 {
+  clip-path: none;
+}
+[data-skin="bb"] .worn {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+[data-skin="bb"] .halftone,
+[data-skin="bb"] .paper-grain {
+  display: none;
+}
+[data-skin="bb"] .grain {
+  opacity: 0.05;
+}
+
+/* Hazard tape. */
+.tape {
+  background: repeating-linear-gradient(-45deg, #e6dc3a 0 14px, #0a100d 14px 28px);
+}
+.tape-thin {
+  background: repeating-linear-gradient(-45deg, #e6dc3a 0 8px, #0a100d 8px 16px);
+}
+/* Faint lab graph paper. */
+.lab-grid {
+  background-image: linear-gradient(rgb(var(--frost) / 0.05) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--frost) / 0.05) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+/* A phosphor screen's scanlines, over the Geiger view. */
+.scanlines {
+  background-image: repeating-linear-gradient(0deg, rgb(0 0 0 / 0.22) 0 1px, transparent 1px 3px);
 }

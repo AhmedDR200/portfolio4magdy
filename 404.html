@@ -5,23 +5,29 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
-    <meta name="theme-color" content="#0E1916" />
-    <!-- The theme before the first paint: the saved choice, else the system's. -->
+    <meta name="theme-color" content="#0A100D" />
+    <!-- The skin (lab by default) and the mode, before the first paint. -->
     <script>
       try {
         var t = localStorage.getItem("theme");
         if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        var k = localStorage.getItem("skin");
+        if (k !== "bb" && k !== "rdr2") k = "bb";
         document.documentElement.dataset.theme = t;
-        if (t === "light") document.querySelector('meta[name="theme-color"]').setAttribute("content", "#E9E5DC");
-      } catch (e) {}
+        document.documentElement.dataset.skin = k;
+        var c = { bb: { dark: "#0A100D", light: "#EDF0E7" }, rdr2: { dark: "#0E1916", light: "#E9E5DC" } }[k][t];
+        document.querySelector('meta[name="theme-color"]').setAttribute("content", c);
+      } catch (e) {
+        document.documentElement.dataset.skin = "bb";
+      }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Anton&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=JetBrains+Mono:wght@300..800&family=Rakkas&family=Rye&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=Big+Shoulders+Stencil:wght@700;800&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=JetBrains+Mono:wght@300..800&family=Rakkas&family=Rye&display=swap"
     />
-    <title>404 — This page rode off · Ahmed Magdy</title>
+    <title>404 — Page not found · Ahmed Magdy</title>
   </head>
   <body>
     <div id="root"></div>

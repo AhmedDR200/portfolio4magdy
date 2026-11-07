@@ -1,16 +1,21 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 import { unlock } from "../../utils/achievements";
 import { pauseScroll } from "../../utils/lenis";
 import { travelTo } from "../../utils/travel";
 import { EASE_OUT_EXPO } from "../../utils/motion";
+import { useSkin } from "../../utils/theme";
 import Arrow from "../atoms/Arrow";
+import ElementTile from "../atoms/ElementTile";
+import { CHAPTERS } from "../atoms/SectionHeader";
 import { towns as TOWNS } from "../../constants";
 
 // Press M: the page as a western map. Each section is a town on a railway
 // that runs in page order; pick one and fast-travel there. The town names
 // are the game's (Red Dead Redemption 2), as a nod for fans.
+// In the lab skin M opens the table instead (TableOverlay below): the eight
+// chapters as elements of a periodic table.
 
 // Town positions for a wide map and a tall (phone) map, in viewBox units.
 const LAYOUTS = {
@@ -105,7 +110,7 @@ const currentTown = () => {
 
 type Props = { open: boolean; onOpenChange: Dispatch<SetStateAction<boolean>> };
 
-const MapOverlay = ({ open, onOpenChange }: Props) => {
+const MapFrontier = ({ open, onOpenChange }: Props) => {
   const wide = useWide();
   const layout = wide ? LAYOUTS.wide : LAYOUTS.tall;
   const [here, setHere] = useState(0);
@@ -306,5 +311,223 @@ const MapOverlay = ({ open, onOpenChange }: Props) => {
     </AnimatePresence>
   );
 };
+
+
+// ---- The lab: the table ----
+
+// One symbol per chapter, in page order.
+const SYMBOLS: Record<string, string> = {
+  about: "Ab",
+  services: "Wd",
+  skills: "St",
+  work: "Wk",
+  experience: "Ex",
+  principles: "Hw",
+  channel: "Ch",
+  contact: "Ct",
+};
+
+const GAP = 12;
+
+/** How many tiles fit in a row, and how big each one is. */
+const useTable = () => {
+  const measure = () => {
+    const w = window.innerWidth;
+    const cols = w >= 1100 ? 8 : w >= 640 ? 4 : 2;
+    const pad = w >= 640 ? 96 : 40;
+    return { cols, size: Math.floor(Math.min(156, (w - pad - GAP * (cols - 1)) / cols)) };
+  };
+  const [table, setTable] = useState(measure);
+  useEffect(() => {
+    const onResize = () => setTable(measure());
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  return table;
+};
+
+const TableOverlay = ({ open, onOpenChange }: Props) => {
+  const reduce = useReducedMotion();
+  const { cols, size } = useTable();
+  const [here, setHere] = useState(0);
+  const [selected, setSelected] = useState(0);
+  const tiles = useRef<(HTMLButtonElement | null)[]>([]);
+  const selectedRef = useRef(selected);
+  selectedRef.current = selected;
+  const touch = useRef(false);
+
+  const travel = useCallback(
+    (index: number) => {
+      onOpenChange(false);
+      unlock("fast-traveler");
+      // Let the table fade first, then glide there.
+      window.setTimeout(() => travelTo(TOWNS[index].id), 260);
+    },
+    [onOpenChange],
+  );
+
+  // M toggles from anywhere; inside the table, arrows pick and Enter travels.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if ((e.target as HTMLElement).closest?.("input, textarea, select, [contenteditable='true']")) return;
+      if (e.key === "m" || e.key === "M") onOpenChange((v) => !v);
+      if (!open) return;
+      const count = TOWNS.length;
+      const move = (to: number) => {
+        const next = Math.max(0, Math.min(count - 1, to));
+        setSelected(next);
+        tiles.current[next]?.focus();
+      };
+      if (e.key === "Escape") onOpenChange(false);
+      else if (e.key === "ArrowRight") move(selectedRef.current + 1);
+      else if (e.key === "ArrowLeft") move(selectedRef.current - 1);
+      else if (e.key === "ArrowDown") move(selectedRef.current + cols);
+      else if (e.key === "ArrowUp") move(selectedRef.current - cols);
+      else if (e.key === "Enter") {
+        // On a focused tile Enter presses it; anywhere else it travels.
+        if ((e.target as HTMLElement).closest?.("button")) return;
+        travel(selectedRef.current);
+      } else return;
+      e.preventDefault();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, cols, onOpenChange, travel]);
+
+  useEffect(() => {
+    if (!open) return;
+    const now = currentTown();
+    setHere(now);
+    setSelected(now);
+    pauseScroll(true);
+    const focus = window.setTimeout(() => tiles.current[now]?.focus({ preventScroll: true }), 80);
+    return () => {
+      window.clearTimeout(focus);
+      pauseScroll(false);
+    };
+  }, [open]);
+
+  const town = TOWNS[selected];
+  const chapter = CHAPTERS[town.id];
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          key="table"
+          role="dialog"
+          aria-modal="true"
+          aria-label="The table: every section of the site"
+          data-lenis-prevent
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="theme-dark fixed inset-0 z-[88] flex flex-col overflow-y-auto bg-ink text-paper"
+        >
+          <div aria-hidden="true" className="lab-grid pointer-events-none fixed inset-0" />
+          <div aria-hidden="true" className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_40%,transparent_35%,rgb(0_0_0/0.55)_100%)]" />
+
+          <div className="relative flex items-start justify-between gap-4 px-5 pt-5 sm:px-12 sm:pt-10">
+            <p className="m-0 flex flex-col gap-1">
+              <span className="flex items-baseline gap-4">
+                <span className="font-display text-[34px] uppercase leading-none sm:text-[46px]">The table</span>
+                <span lang="ar" className="font-arabic text-[22px] text-smoke">
+                  الجدول
+                </span>
+              </span>
+              <span className="font-mono text-[11px] tracking-[0.16em] text-smoke">8 ELEMENTS · EVERY SECTION OF THE SITE</span>
+            </p>
+            <div className="flex items-center gap-4 text-[12px] uppercase tracking-[0.1em] text-mist">
+              <span className="hidden items-center gap-2 md:flex">
+                <kbd className="flex items-center rounded-[3px] border border-paper/40 border-b-[3px] px-2 py-1 font-mono">
+                  <Arrow dir="left-right" />
+                </kbd>
+                Pick
+                <kbd className="ml-2 rounded-[3px] border border-paper/40 border-b-[3px] px-2 py-0.5 font-mono">Enter</kbd> Travel
+              </span>
+              <button type="button" onClick={() => onOpenChange(false)} className="whitespace-nowrap border border-paper/25 px-3.5 py-2 hover:border-frost hover:text-frost">
+                Close<span className="hidden sm:inline"> · M</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="relative mx-auto flex w-full max-w-[1344px] flex-1 flex-col justify-center gap-8 px-5 pb-8 pt-10 sm:px-12">
+            <ul className="m-0 grid list-none justify-center p-0" style={{ gridTemplateColumns: `repeat(${cols}, ${size}px)`, gap: GAP }}>
+              {TOWNS.map((t, i) => {
+                const c = CHAPTERS[t.id];
+                const on = i === selected;
+                return (
+                  <li key={t.id} className="relative">
+                    <motion.button
+                      ref={(el) => {
+                        tiles.current[i] = el;
+                      }}
+                      type="button"
+                      aria-label={`${c.title}: ${t.section}`}
+                      aria-current={i === here ? "location" : undefined}
+                      data-cursor-target
+                      initial={reduce ? false : { opacity: 0, scale: 0.88 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: reduce ? 0 : 0.04 * i, duration: 0.25 }}
+                      onPointerDown={(e) => {
+                        touch.current = e.pointerType === "touch";
+                      }}
+                      onMouseEnter={() => setSelected(i)}
+                      onFocus={() => setSelected(i)}
+                      // On a touch screen the first tap picks (to read what's there), the second travels.
+                      onClick={() => (touch.current && !on ? setSelected(i) : travel(i))}
+                      className={`block transition-transform duration-200 focus-visible:outline-none ${on ? "-translate-y-1" : ""}`}
+                    >
+                      <ElementTile symbol={SYMBOLS[t.id]} number={c.index} name={c.title} size={size} tone={on ? "solid" : "outline"} className={on ? "shadow-[0_0_0_4px_rgb(var(--ink)),0_0_0_6px_rgb(var(--frost))]" : ""} />
+                    </motion.button>
+                    {i === here && (
+                      <span className="pointer-events-none absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-bandana px-2 py-0.5 font-fellsc text-[11px] leading-none tracking-[0.16em] text-ink">
+                        YOU ARE HERE
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+
+            <motion.div
+              key={town.id}
+              initial={reduce ? false : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.25, ease: EASE_OUT_EXPO }}
+              aria-live="polite"
+              className="mx-auto flex w-full max-w-[640px] flex-col gap-2.5 border border-frost/45 bg-ink/90 p-5 sm:p-6"
+            >
+              <span className="font-mono text-[11px] tracking-[0.16em] text-smoke">
+                ELEMENT {chapter.index} · {SYMBOLS[town.id].toUpperCase()} · {selected === here ? "YOU ARE HERE" : "SELECTED"}
+              </span>
+              <span className="font-display text-[34px] uppercase leading-none text-frost sm:text-[44px]">{chapter.title}</span>
+              <span lang="ar" className="font-arabic text-[18px] text-mist">
+                {town.ar}
+              </span>
+              <span className="text-[13px] leading-relaxed text-smoke">{town.blurb}</span>
+              <button
+                type="button"
+                onClick={() => travel(selected)}
+                className="mt-1 flex h-[48px] items-center justify-between bg-frost px-6 text-[13px] font-extrabold uppercase tracking-[0.1em] text-ink transition-transform hover:scale-[1.02]"
+              >
+                Fast travel <Arrow dir="right" className="text-[18px]" />
+              </button>
+              <span lang="ar" className="font-arabic text-[16px] text-mist">
+                ودّيني هناك
+              </span>
+            </motion.div>
+          </div>
+
+          <div aria-hidden="true" className="tape-thin relative mt-auto h-3 shrink-0" />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const MapOverlay = (props: Props) => (useSkin() === "bb" ? <TableOverlay {...props} /> : <MapFrontier {...props} />);
 
 export default MapOverlay;

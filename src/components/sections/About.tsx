@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 
-import { mePhoto } from "../../assets";
+import { bbMe, mePhoto } from "../../assets";
 import { config } from "../../constants/config";
 import { styles } from "../../constants/styles";
 import { fadeUp } from "../../utils/motion";
+import { useSkin } from "../../utils/theme";
 import { travelOnClick } from "../../utils/travel";
 import coffeeSketch from "../../assets/journal/coffee.webp";
 import serversSketch from "../../assets/journal/servers.webp";
@@ -43,7 +44,9 @@ const Statement = () => {
   );
 };
 
-const About = () => (
+const About = () => {
+  const lab = useSkin() === "bb";
+  return (
   <section id="about" className="py-24 sm:py-32">
     <div className={styles.container}>
       <motion.div
@@ -61,7 +64,7 @@ const About = () => (
           <div className={`${PAGE} gap-5 bg-[linear-gradient(90deg,#E7ECE6_82%,#D3DAD3)] px-6 pb-8 pt-8 sm:px-12 sm:pb-10 sm:pt-12`}>
             <span aria-hidden="true" className="paper-grain absolute inset-0" />
             <div className="relative flex flex-wrap items-baseline justify-between gap-2">
-              <span className="font-fellsc text-[14px] tracking-[0.12em] text-[#6A746F]">Chapter I · About</span>
+              <span className="font-fellsc text-[14px] tracking-[0.12em] text-[#6A746F]">{lab ? "Lab notes · About" : "Chapter I · About"}</span>
               <span className="font-fell text-[17px] italic">Cairo, {cairoDate()}</span>
             </div>
             <div className="relative">
@@ -78,7 +81,7 @@ const About = () => (
                 onClick={travelOnClick("experience")}
                 className="border-b-[1.5px] border-current pb-0.5 font-fell text-[22px] italic transition-colors hover:text-[#3B4A6B]"
               >
-                Turn the page <Arrow dir="right" className="mx-0.5" /> Chapter V
+                {lab ? "Next page" : "Turn the page"} <Arrow dir="right" className="mx-0.5" /> {lab ? "Episode V" : "Chapter V"}
               </a>
               <span aria-hidden="true" className="font-fell text-[16px] text-[#6A746F]">
                 1
@@ -97,7 +100,7 @@ const About = () => (
             <div className="relative flex flex-wrap items-start gap-8">
               <figure className="relative m-0 h-[212px] w-[176px] shrink-0 -rotate-3 bg-[#F4F7F3] p-1.5 shadow-[0_14px_22px_-12px_rgba(0,0,0,0.5)]">
                 <div className="relative h-full w-full overflow-hidden">
-                  <img src={mePhoto} alt="Ahmed Magdy" className="h-full w-full object-cover object-[51%_30%] brightness-[1.12] contrast-[1.35] grayscale" />
+                  <img src={lab ? bbMe : mePhoto} alt="Ahmed Magdy" className={`h-full w-full object-cover object-[51%_30%] ${lab ? "" : "brightness-[1.12] contrast-[1.35] grayscale"}`} />
                   <span aria-hidden="true" className="halftone absolute inset-0" />
                 </div>
                 <span aria-hidden="true" className="torn absolute -left-7 -top-2.5 h-[26px] w-[86px] -rotate-[24deg] bg-[rgba(214,226,220,0.62)]" />
@@ -108,7 +111,7 @@ const About = () => (
                 <figcaption className="font-fell text-[15px] italic">The servers: kept warm, kept fast.</figcaption>
               </figure>
             </div>
-            <figure className="relative m-0 flex flex-col gap-1">
+            <figure className="relative m-0 flex flex-col gap-1 bb:hidden">
               <img src={telegraphSketch} alt="Pencil sketch of telegraph poles along a trail, a bird on the wire" loading="lazy" width={900} height={721} className="h-auto w-full max-w-[400px]" />
               <figcaption className="font-fell text-[15px] italic">Real-time: WebSockets are only telegraph lines with better manners.</figcaption>
               <span lang="ar" dir="rtl" className="text-left font-ruqaa text-[20px]">
@@ -134,6 +137,7 @@ const About = () => (
       </motion.div>
     </div>
   </section>
-);
+  );
+};
 
 export default About;

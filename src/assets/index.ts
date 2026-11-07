@@ -15,6 +15,14 @@ import bee3aLockup from "./products/bee3a-lockup-on-dark.svg";
 import bee3aLockupLight from "./products/bee3a-lockup-on-light.svg";
 import tamamAvatar from "./channel/tamam-avatar.png";
 
+// The lab's real photographs, cut out and graded cold (credits in the footer).
+import bbMask from "./bb/mask.webp";
+import bbRv from "./bb/rv.webp";
+import bbGeiger from "./bb/geiger.webp";
+import bbSaguaro from "./bb/saguaro.webp";
+import bbCrystal from "./bb/crystal.webp";
+import bbMe from "./bb/me-green.webp";
+
 export {
   mePhoto,
   madkhol,
@@ -29,4 +37,10 @@ export {
   bee3aLockup,
   bee3aLockupLight,
   tamamAvatar,
+  bbMask,
+  bbRv,
+  bbGeiger,
+  bbSaguaro,
+  bbCrystal,
+  bbMe,
 };

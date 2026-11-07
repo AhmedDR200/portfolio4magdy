@@ -39,3 +39,6 @@ public/local/
 
 # Raw art dropped in for processing (finished assets go in src/assets).
 /art-inbox/
+
+# Audio dropped in the project root (the shipped copy is public/audio/).
+/*.mp3

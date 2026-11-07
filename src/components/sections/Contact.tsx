@@ -1,14 +1,19 @@
 import { mePhoto } from "../../assets";
 import { config } from "../../constants/config";
 import { styles } from "../../constants/styles";
+import { useSkin } from "../../utils/theme";
 import Icon from "../atoms/Icon";
 import Magnetic from "../atoms/Magnetic";
 import HatTip from "./HatTip";
 import RevealText from "../atoms/RevealText";
 import { Eyebrow } from "../atoms/SectionHeader";
 import Arrow from "../atoms/Arrow";
+import SpellName from "../atoms/SpellName";
 
 const pill = "flex h-14 items-center gap-3 rounded-full border border-paper/30 px-6 transition-colors hover:border-frost hover:text-frost";
+
+// The lab's contact episode adds a toy: spell your name in elements.
+const LabToy = () => (useSkin() === "bb" ? <SpellName /> : null);
 
 const Contact = () => (
   <section id="contact" className="pb-20 pt-24 sm:pb-28 sm:pt-40">
@@ -65,6 +70,7 @@ const Contact = () => (
           YouTube <Arrow dir="up-right" />
         </a>
       </div>
+      <LabToy />
       <HatTip />
     </div>
   </section>

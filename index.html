@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;600;700&family=Anton&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Aref+Ruqaa:wght@400;700&family=JetBrains+Mono:wght@300..800&family=Rakkas&family=Reem+Kufi:wght@700&family=Rye&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;600;700&family=Anton&family=Archivo:wght@400;500;600;700;800&family=Big+Shoulders+Stencil:wght@700;800&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Aref+Ruqaa:wght@400;700&family=JetBrains+Mono:wght@300..800&family=Rakkas&family=Reem+Kufi:wght@700&family=Rye&display=swap"
     />
 
     <title>Ahmed Magdy — Software Engineer</title>
@@ -23,15 +23,21 @@
       content="Ahmed Magdy, backend engineer, software engineer, Node.js, NestJS, microservices, APIs, real-time systems, system design, portfolio"
     />
     <meta name="author" content="Ahmed Magdy" />
-    <meta name="theme-color" content="#0E1916" />
-    <!-- The theme before the first paint: the saved choice, else the system's. -->
+    <meta name="theme-color" content="#0A100D" />
+    <!-- The skin (lab by default) and the mode, before the first paint: the saved choice, else the system's. -->
     <script>
       try {
         var t = localStorage.getItem("theme");
         if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        var k = localStorage.getItem("skin");
+        if (k !== "bb" && k !== "rdr2") k = "bb";
         document.documentElement.dataset.theme = t;
-        if (t === "light") document.querySelector('meta[name="theme-color"]').setAttribute("content", "#E9E5DC");
-      } catch (e) {}
+        document.documentElement.dataset.skin = k;
+        var c = { bb: { dark: "#0A100D", light: "#EDF0E7" }, rdr2: { dark: "#0E1916", light: "#E9E5DC" } }[k][t];
+        document.querySelector('meta[name="theme-color"]').setAttribute("content", c);
+      } catch (e) {
+        document.documentElement.dataset.skin = "bb";
+      }
     </script>
     <link rel="canonical" href="https://magdy.digital/" />
 
