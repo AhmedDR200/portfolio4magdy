@@ -39,6 +39,13 @@ const CUTS: Record<string, ReactNode> = {
   ),
 };
 
+// Glassware, molecules and a signal trace give each service its own lab mark.
+const LAB_MARKS: Record<string, ReactNode> = {
+  gear: <><path d="M9 2h6M10 2v6L5 18a3 3 0 0 0 2.7 4h8.6a3 3 0 0 0 2.7-4L14 8V2M7.5 15h9" /><circle cx="10" cy="18" r=".7" fill="currentColor" stroke="none" /><circle cx="14" cy="17" r=".7" fill="currentColor" stroke="none" /></>,
+  divider: <><path d="M12 4 5 8v8l7 4 7-4V8zM12 4v8m-7-4 7 4 7-4m-7 4v8" /><circle cx="12" cy="4" r="2" fill="#ECEFEA" /><circle cx="5" cy="16" r="2" fill="#ECEFEA" /><circle cx="19" cy="16" r="2" fill="#ECEFEA" /></>,
+  bolt: <><path d="M2 12h4l2-5 4 10 3-7 2 2h5" /><circle cx="12" cy="12" r="10" strokeDasharray="2 3" /></>,
+};
+
 const TILT = [-2.2, 1.4, -0.8];
 
 const Services = () => {
@@ -72,20 +79,20 @@ const Services = () => {
                     aria-controls="service-detail"
                     aria-label={`${service.title}: show the detail`}
                     initial={false}
-                    animate={{ rotate: reduce ? 0 : isOpen ? 0 : TILT[i % TILT.length], y: isOpen ? -6 : 0 }}
+                    animate={{ rotate: reduce || lab ? 0 : isOpen ? 0 : TILT[i % TILT.length], y: isOpen ? -6 : 0 }}
                     whileHover={reduce ? undefined : { rotate: 0, y: -10 }}
                     transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
-                    className={`relative block w-full p-0 text-left ${
+                    className={`service-card relative block w-full p-0 text-left ${
                       isOpen ? "drop-shadow-[0_30px_30px_rgba(0,0,0,0.75)]" : "drop-shadow-[0_22px_22px_rgba(0,0,0,0.6)]"
                     }`}
                   >
-                    <span className="torn-3 relative flex flex-col items-center gap-2.5 bg-[#ECEFEA] px-6 pb-7 pt-8 text-center text-[#1A1F1C]">
+                    <span className="service-card__label torn-3 relative flex flex-col items-center gap-2.5 bg-[#ECEFEA] px-6 pb-7 pt-8 text-center text-[#1A1F1C]">
                       <span aria-hidden="true" className="paper-grain absolute inset-0" />
                       <span className={`font-western leading-[0.9] ${lab ? "text-[clamp(38px,4vw,48px)]" : "text-[clamp(44px,5vw,58px)]"}`}>{lab ? `SERVICE 0${i + 1}` : "WANTED"}</span>
                       <span className="font-fellsc text-[15px] tracking-[0.3em]">{lab ? "— Available —" : "— For hire —"}</span>
                       <span className="my-1.5 flex h-[118px] w-[118px] items-center justify-center border-[2.5px] border-current">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[76px] w-[76px] fill-current">
-                          {CUTS[service.icon]}
+                        <svg viewBox="0 0 24 24" aria-hidden="true" className={`h-[76px] w-[76px] ${lab ? "fill-none stroke-current" : "fill-current"}`} strokeWidth={lab ? 1.25 : undefined} strokeLinecap="round" strokeLinejoin="round">
+                          {lab ? LAB_MARKS[service.icon] : CUTS[service.icon]}
                         </svg>
                       </span>
                       <span className="font-western text-[26px] leading-[1.05]">{service.poster}</span>
