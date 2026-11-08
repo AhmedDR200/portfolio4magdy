@@ -49,28 +49,32 @@ const LabBadge = ({ className = "" }: { className?: string }) => {
             number={12}
             size={62}
             tone="solid"
-            className="!absolute -bottom-3.5 -right-6 rotate-[-4deg] !border-[3px] !border-[#0a100d] shadow-[0_6px_0_rgba(0,0,0,0.25)]"
+            className="!absolute bottom-2 -right-5 rotate-[-4deg] !border-[3px] !border-[#0a100d] shadow-[0_6px_0_rgba(0,0,0,0.25)]"
           />
         </div>
         <div className="flex flex-col gap-0.5 px-[7%] pt-[4%]">
           <span className="font-display text-[clamp(24px,2.5vw,34px)] uppercase leading-none">Ahmed Magdy</span>
-          <span className="flex items-baseline justify-between">
-            <span className="font-fellsc text-[11px] tracking-[0.18em] text-[#0f6b3b] sm:text-[12px]">Backend engineer</span>
-            <span lang="ar" dir="rtl" className="font-arabic text-[18px] leading-none">
+          <span className="flex flex-wrap items-baseline justify-between gap-x-2">
+            <span className="whitespace-nowrap font-fellsc text-[11px] tracking-[0.18em] text-[#0f6b3b] sm:text-[12px]">Backend engineer</span>
+            <span lang="ar" dir="rtl" className="whitespace-nowrap font-arabic text-[18px] leading-none">
               أحمد مجدي
             </span>
           </span>
         </div>
-        <div className="flex items-end justify-between gap-3 px-[7%] pb-[4%] pt-[3%]">
-          <div className="flex flex-col gap-1.5">
+        <div className="flex items-end justify-between gap-2.5 px-[7%] pb-[4%] pt-[3%]">
+          {/* The barcode side gives way first, so the three cores always fit. */}
+          <div className="flex min-w-0 shrink flex-col gap-1.5">
             <span
               aria-hidden="true"
               className="block h-[22px] w-[110px] max-w-full"
               style={{ background: "repeating-linear-gradient(90deg,#0e1812 0 2px,transparent 2px 4px,#0e1812 4px 5px,transparent 5px 8px,#0e1812 8px 11px,transparent 11px 12px,#0e1812 12px 13px,transparent 13px 16px)" }}
             />
-            <span className="font-mono text-[9px] font-bold tracking-[0.1em]">ID 0012 · CAIRO</span>
+            {/* Wraps to two lines on a narrow card rather than clipping. */}
+            <span className="font-mono text-[9px] font-bold leading-snug tracking-[0.1em]">
+              <span className="whitespace-nowrap">ID 0012 ·</span> <span className="whitespace-nowrap">CAIRO</span>
+            </span>
           </div>
-          <div className="flex gap-2.5">
+          <div className="flex shrink-0 gap-2">
             <Window label="UP" level={100} tint="radial-gradient(circle at 35% 30%,#bfeaf8,#1c6e93)" />
             <Window label="FOCUS" level={focusAt(hour)} tint="radial-gradient(circle at 35% 30%,#8ff0b0,#0f6b3b)" />
             <Window label="COFFEE" level={coffeeAt(hour)} tint="radial-gradient(circle at 35% 30%,#fffbb0,#e6dc3a)" />

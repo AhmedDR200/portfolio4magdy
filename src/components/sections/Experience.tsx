@@ -6,7 +6,9 @@ import { fadeUp } from "../../utils/motion";
 import { useSkin } from "../../utils/theme";
 import SectionHeader from "../atoms/SectionHeader";
 import Arrow from "../atoms/Arrow";
+import ExperienceLab from "./ExperienceLab";
 
+// The lab skin gets its own notebook (ExperienceLab); Red Dead keeps the ledger.
 // Experience as the camp ledger: a torn page with ruled lines and a red double
 // margin. Each job is an entry: the dates, who and what, and what it paid in.
 const pad = "pl-[76px] pr-5 sm:pl-[96px] sm:pr-7";
@@ -19,6 +21,9 @@ const Experience = () => {
     <div className={`${styles.container} max-w-[1200px]`}>
       <SectionHeader index="05" label="Experience" labelAr="مشواري" title="Experience" />
 
+      {lab ? (
+        <ExperienceLab />
+      ) : (
       <motion.div
         variants={fadeUp(0.05)}
         initial="hidden"
@@ -71,6 +76,7 @@ const Experience = () => {
           </span>
         </div>
       </motion.div>
+      )}
     </div>
   </section>
   );

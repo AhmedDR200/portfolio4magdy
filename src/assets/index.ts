@@ -21,7 +21,7 @@ import bbRv from "./bb/rv.webp";
 import bbGeiger from "./bb/geiger.webp";
 import bbSaguaro from "./bb/saguaro.webp";
 import bbCrystal from "./bb/crystal.webp";
-import bbMe from "./bb/me-green.webp";
+import bbMe from "./bb/me-bw.webp";
 
 export {
   mePhoto,
