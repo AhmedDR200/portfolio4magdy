@@ -9,8 +9,8 @@ import ElementTile from "../atoms/ElementTile";
 import SmokeCanvas from "../atoms/SmokeCanvas";
 import Wordmark from "../atoms/Wordmark";
 
-// The lab's cold open, on the Breaking Bad main title theme. A real gas mask
-// breathes in the dark, its filter glowing with the music; on the swell (6.3 s
+// The lab's cold open, on the Breaking Bad main title theme. An illustrated gas
+// mask breathes in the dark, its filter glowing with the music; on the swell (6.3 s
 // into the theme) it fogs away and the Mg tile slams in; on the theme's last hit
 // (11.4 s) the curtain lifts and the tail of the music rings out under the page.
 // Browsers only allow sound after the visitor does something, so it starts on
@@ -205,7 +205,7 @@ const IntroLab = ({ onReveal, onDone }: Props) => {
         )}
       </AnimatePresence>
 
-      {/* The mask: a real photograph, breathing in the dark. */}
+      {/* The mask: a cut-out illustration (amber pulled to lemon), breathing in the dark. */}
       <AnimatePresence>
         {phase === "mask" && (
           <motion.div
@@ -224,7 +224,7 @@ const IntroLab = ({ onReveal, onDone }: Props) => {
               transition={{ duration: BB_BEATS.swell + 0.4, ease: "linear" }}
             >
               {/* The filter canister's glow, driven by the music. */}
-              <div className="absolute left-[80%] top-[33%] h-[66%] w-[48%] -translate-x-1/2 -translate-y-1/2">
+              <div className="absolute left-[81%] top-[36%] h-[62%] w-[44%] -translate-x-1/2 -translate-y-1/2">
                 <div
                   ref={glow}
                   className="h-full w-full rounded-full bg-[radial-gradient(circle,rgb(79_209_127/0.85),rgb(79_209_127/0.25)_45%,transparent_70%)] mix-blend-screen blur-[14px]"

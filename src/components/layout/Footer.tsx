@@ -14,7 +14,7 @@ const label = "mb-2 text-[12px] uppercase tracking-[0.14em] text-smoke";
 type Props = { xray: boolean; onXray: () => void; powerCut: boolean; onPowerCut: () => void };
 
 const PHOTOS =
-  "Photos via Wikimedia Commons. Gas mask: Dollardollardollar3 (CC0). Motorhome: Renée Kools (CC BY 4.0). Crystals: Дарья Могилевцева (CC BY 4.0). Survey meter: Tim Vickers (public domain). Saguaro: Gentry George, U.S. Fish and Wildlife Service (public domain).";
+  "Photos via Wikimedia Commons. Motorhome: Renée Kools (CC BY 4.0). Crystals: Дарья Могилевцева (CC BY 4.0). Survey meter: Tim Vickers (public domain). Saguaro: Gentry George, U.S. Fish and Wildlife Service (public domain).";
 
 const Footer = ({ xray, onXray, powerCut, onPowerCut }: Props) => {
   const lab = useSkin() === "bb";
