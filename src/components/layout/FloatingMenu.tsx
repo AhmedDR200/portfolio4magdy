@@ -82,11 +82,27 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
   useEffect(() => {
     if (!open) return;
     setPicked(currentChapter());
+    const previousFocus = document.activeElement as HTMLElement | null;
+    const frame = window.requestAnimationFrame(() => links.current[currentChapter()]?.focus());
     const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.key === "Escape") onOpenChange(false);
+      if (e.key === "Tab") {
+        const menu = document.getElementById("site-menu");
+        const focusable = Array.from(menu?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])') ?? [])
+          .filter((element) => element.getClientRects().length > 0);
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
     };
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      document.removeEventListener("keydown", onKey);
+      previousFocus?.focus();
+    };
   }, [open, onOpenChange]);
 
   const close = () => onOpenChange(false);
@@ -215,7 +231,7 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
             aria-expanded={open}
             aria-controls="site-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="fixed right-5 top-5 z-[80] flex h-[68px] w-[68px] flex-col items-center justify-center gap-[7px] rounded-full bg-frost text-ink shadow-[0_10px_40px_-10px_rgb(var(--frost)/0.6)] sm:right-8 sm:top-8 sm:h-20 sm:w-20"
+            className={`fixed right-5 top-5 z-[80] flex h-[68px] w-[68px] flex-col items-center justify-center gap-[7px] rounded-full bg-frost text-ink shadow-[0_10px_40px_-10px_rgb(var(--frost)/0.6)] sm:right-8 sm:top-8 sm:h-20 sm:w-20 ${open ? "pointer-events-none invisible" : ""}`}
           >
             <span className={`block h-[2px] w-6 bg-ink transition-transform duration-300 ${open ? "translate-y-[4.5px] rotate-45" : ""}`} />
             <span className={`block h-[2px] w-6 bg-ink transition-transform duration-300 ${open ? "-translate-y-[4.5px] -rotate-45" : ""}`} />
@@ -229,6 +245,8 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
             key="menu"
             id="site-menu"
             aria-label="Menu"
+            role="dialog"
+            aria-modal="true"
             data-lenis-prevent
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -243,12 +261,13 @@ const FloatingMenu = ({ open, onOpenChange, xray, onXray, powerCut, onPowerCut, 
               transition={{ duration: 0.5, ease: EASE_OUT_EXPO, delay: 0.05 }}
               className="relative mx-auto flex min-h-full max-w-[1440px] flex-col px-6 pb-8 pt-7 sm:px-12 sm:pt-11 xl:px-[84px]"
             >
-              <div className="flex h-[68px] items-center gap-5 sm:h-20">
+              <div className="flex h-[68px] items-center gap-5 pr-16 sm:h-20 sm:pr-20">
                 <a href="#top" onClick={close} aria-label="Ahmed Magdy, home">
                   <Wordmark className="text-[24px] sm:text-[32px]" />
                 </a>
                 <span aria-hidden="true" className="h-6 w-px bg-paper/25" />
                 <span className="font-fellsc text-[13px] tracking-[0.3em] text-smoke sm:text-[15px]">{lab ? "Episode select" : "Paused"}</span>
+                <button type="button" onClick={close} aria-label="Close menu" className="absolute right-6 top-7 z-10 flex h-11 w-11 items-center justify-center border border-paper/40 text-2xl text-paper transition-colors hover:border-frost hover:text-frost sm:right-12 sm:top-11 xl:right-[84px]">×</button>
               </div>
 
               <div className="mt-6 grid flex-1 gap-x-12 gap-y-9 sm:mt-7 lg:grid-cols-[minmax(0,1fr)_330px] xl:grid-cols-[400px_minmax(0,1fr)_330px]">

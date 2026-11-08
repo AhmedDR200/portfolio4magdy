@@ -336,3 +336,36 @@ body {
 .scanlines {
   background-image: repeating-linear-gradient(0deg, rgb(0 0 0 / 0.22) 0 1px, transparent 1px 3px);
 }
+
+/* Laboratory controls: clean specimen labels and instrument-like feedback. */
+[data-skin="bb"] .service-card__label {
+  border: 1px solid #a8b7a8;
+  box-shadow: inset 0 0 0 5px #ecefea, inset 0 0 0 6px #bbc9bb;
+}
+[data-skin="bb"] .service-card[aria-pressed="true"] .service-card__label {
+  box-shadow: inset 0 0 0 5px #ecefea, inset 0 0 0 7px #197344, 0 0 0 2px rgb(var(--frost));
+}
+[data-skin="bb"] .service-card:focus-visible {
+  outline-offset: 6px;
+}
+[data-skin="bb"] #service-detail {
+  border-left: 3px solid rgb(var(--frost));
+  background-image: linear-gradient(90deg, rgb(var(--frost) / 0.06), transparent 45%);
+}
+[data-skin="bb"] #site-menu {
+  background-image: linear-gradient(rgb(var(--frost) / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--frost) / 0.035) 1px, transparent 1px),
+    radial-gradient(ellipse at 30% 20%, rgb(var(--graphite)), rgb(var(--ink)) 70%);
+  background-size: 36px 36px, 36px 36px, auto;
+}
+[data-skin="bb"] #site-menu button:focus-visible,
+[data-skin="bb"] #site-menu a:focus-visible {
+  outline: 2px solid rgb(var(--frost));
+  outline-offset: 3px;
+}
+@media (max-width: 639px) {
+  [data-skin="bb"] #top { min-height: max(900px, 100svh); }
+  [data-skin="bb"] #top .font-display { overflow-wrap: anywhere; }
+  [data-skin="bb"] #site-menu { overscroll-behavior: contain; }
+  [data-skin="bb"] #services .service-card { max-width: 100%; }
+}
