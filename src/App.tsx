@@ -135,7 +135,7 @@ const App = () => {
         onJournal={openJournal}
       />
       <RequestTrace />
-      <main className="overflow-x-hidden">
+      <main className="site-main">
         <Hero
           startHidden={playIntro}
           revealed={heroRevealed}

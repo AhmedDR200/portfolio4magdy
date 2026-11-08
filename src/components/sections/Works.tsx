@@ -12,6 +12,8 @@ import KeyCap from "../atoms/KeyCap";
 import SectionHeader from "../atoms/SectionHeader";
 import { Bee3aCard } from "./FeaturedProducts";
 import Arrow from "../atoms/Arrow";
+import { useSkin } from "../../utils/theme";
+import WorkLab from "./WorkLab";
 
 const linkLabel = (url: string) => {
   if (url.includes("apps.apple.com")) return "Open in App Store";
@@ -223,6 +225,7 @@ const ProjectList = ({ onOpenCase }: { onOpenCase: (p: TProject) => void }) => {
 };
 
 const Works = () => {
+  const lab = useSkin() === "bb";
   const [activeProject, setActiveProject] = useState<TProject | null>(null);
   const closeCaseStudy = useCallback(() => setActiveProject(null), []);
   const openCaseStudy = useCallback((project: TProject) => {
@@ -237,7 +240,7 @@ const Works = () => {
         <SectionHeader index="04" label="Selected work" labelAr="أعمالي" title="Selected Work" />
 
         <Bee3aCard />
-        <ProjectList onOpenCase={openCaseStudy} />
+        {lab ? <WorkLab onOpenCase={openCaseStudy} /> : <ProjectList onOpenCase={openCaseStudy} />}
       </div>
 
       <CaseStudyModal project={activeProject} onClose={closeCaseStudy} />

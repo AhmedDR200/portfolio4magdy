@@ -5,6 +5,7 @@ import App from "./App";
 import NotFound from "./components/pages/NotFound";
 import "lenis/dist/lenis.css";
 import "./globals.css";
+import "./lab-sections.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
