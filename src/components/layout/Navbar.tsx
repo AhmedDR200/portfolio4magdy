@@ -1,8 +1,7 @@
 import { navLinks } from "../../constants";
 import { config } from "../../constants/config";
-import { SKINS, toggleSkin, toggleTheme, useSkin, useTheme } from "../../utils/theme";
 import { travelOnClick } from "../../utils/travel";
-import Icon from "../atoms/Icon";
+import { ModeSwitch, SkinSwitch } from "../atoms/ThemeControls";
 import Brush from "../atoms/Brush";
 import Wordmark from "../atoms/Wordmark";
 import Arrow from "../atoms/Arrow";
@@ -11,43 +10,8 @@ import Arrow from "../atoms/Arrow";
 // sweeps a white brush stroke behind it. On small screens they collapse into
 // the Menu button, which opens the same full-screen menu as the floating one.
 // Dark (Ambarino) or light (Wanted); L does the same.
-const ThemeButton = () => {
-  const theme = useTheme();
-  const next = theme === "dark" ? "light" : "dark";
-  return (
-    <button
-      type="button"
-      onClick={toggleTheme}
-      aria-label={`Switch to ${next} mode (L)`}
-      title={`${next === "light" ? "Light" : "Dark"} mode · L`}
-      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-paper/30 text-paper transition-colors hover:border-frost hover:text-frost"
-    >
-      <Icon name={theme === "dark" ? "sun" : "moon"} size={20} />
-    </button>
-  );
-};
-
-// The theme: the lab (Breaking Bad) or the frontier (Red Dead); T does the same.
-const SkinButton = () => {
-  const skin = useSkin();
-  const next = skin === "bb" ? "rdr2" : "bb";
-  const seg = (on: boolean) => `flex items-center px-3 transition-colors ${on ? "bg-frost text-ink" : "text-paper/70"}`;
-  return (
-    <button
-      type="button"
-      onClick={toggleSkin}
-      aria-label={`Switch to the ${SKINS[next].name} theme (T)`}
-      title={`${SKINS[next].name} theme · T`}
-      className="flex h-11 shrink-0 items-stretch overflow-hidden rounded-full border border-paper/30 font-fellsc text-[14px] tracking-[0.12em] transition-colors hover:border-frost"
-    >
-      <span className={seg(skin === "bb")}>BB</span>
-      <span className={seg(skin === "rdr2")}>RD</span>
-    </button>
-  );
-};
-
 const Navbar = ({ onMenu, ready }: { onMenu: () => void; ready: boolean }) => (
-  <header className="relative z-10 flex items-center justify-between gap-5 px-5 py-4 sm:px-12 sm:py-6">
+  <header className="site-navbar relative z-10 flex items-center justify-between gap-5 px-5 py-4 sm:px-12 sm:py-6">
     <a href="#top" aria-label="Ahmed Magdy, home">
       <Wordmark typing ready={ready} className="text-[27px] sm:text-[32px]" />
     </a>
@@ -68,8 +32,8 @@ const Navbar = ({ onMenu, ready }: { onMenu: () => void; ready: boolean }) => (
         </a>
       ))}
       <span className="ml-2 flex items-center gap-2">
-        <SkinButton />
-        <ThemeButton />
+        <SkinSwitch />
+        <ModeSwitch />
       </span>
       <a
         href={config.cvUrl}
@@ -81,10 +45,12 @@ const Navbar = ({ onMenu, ready }: { onMenu: () => void; ready: boolean }) => (
       </a>
     </nav>
 
-    <span className="flex items-center gap-3 md:hidden">
-      <ThemeButton />
-      <button type="button" onClick={onMenu} className="torn flex h-11 items-center bg-frost px-5 font-fellsc text-[16px] tracking-[0.12em] text-ink">
-        Menu
+    <span className="nav-compact-controls flex items-center gap-3 md:hidden">
+      <SkinSwitch />
+      <ModeSwitch />
+      <button type="button" onClick={onMenu} aria-label="Open menu" className="nav-menu-button torn flex h-11 items-center bg-frost px-5 font-fellsc text-[16px] tracking-[0.12em] text-ink">
+        <span className="nav-menu-label">Menu</span>
+        <svg className="nav-menu-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M4 8h16M4 16h16" /></svg>
       </button>
     </span>
   </header>

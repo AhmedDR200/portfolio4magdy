@@ -11,6 +11,7 @@ import serversSketch from "../../assets/journal/servers.webp";
 import telegraphSketch from "../../assets/journal/telegraph.webp";
 import { Underline } from "../atoms/Sketches";
 import Arrow from "../atoms/Arrow";
+import AboutLab from "./AboutLab";
 
 // About as two pages of a journal, like the one Arthur keeps in RDR2: the date
 // in Cairo, the statement and bio written in, the Arabic in Ruqaa, a note in
@@ -46,6 +47,7 @@ const Statement = () => {
 
 const About = () => {
   const lab = useSkin() === "bb";
+  if (lab) return <AboutLab date={cairoDate()} />;
   return (
   <section id="about" className="py-24 sm:py-32">
     <div className={styles.container}>

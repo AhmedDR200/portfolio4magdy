@@ -15,6 +15,7 @@ import Hud from "../layout/Hud";
 import { deadEye } from "../layout/DeadEye";
 import { whistle } from "../layout/HorseWhistle";
 import Navbar from "../layout/Navbar";
+import HeroLab from "./HeroLab";
 
 
 // The prompts, bottom right: the site's real hotkeys, and clickable too. The
@@ -73,6 +74,8 @@ const Hero = ({ startHidden, revealed, onMenu, onMap, onWheel, onJournal }: Prop
     );
     return () => window.clearInterval(id);
   }, [reduce]);
+
+  if (lab) return <HeroLab startHidden={startHidden} revealed={revealed} role={heroRoles[roleIndex]} onMenu={onMenu} onMap={onMap} onWheel={onWheel} onJournal={onJournal} />;
 
   return (
     <motion.section
